@@ -1,19 +1,21 @@
 package com.company.qldp.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+@AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "family_member")
 @Access(AccessType.FIELD)
 public class FamilyMember {
+    
+    @Id
+    @GeneratedValue
+    private Integer id;
     
     @OneToOne(
         optional = false,

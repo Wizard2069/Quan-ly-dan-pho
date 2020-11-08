@@ -124,9 +124,11 @@ CREATE TABLE `temp_absent`
 
 CREATE TABLE `family_member`
 (
+    `ID` INT NOT NULL AUTO_INCREMENT,
     `person_id` INT NOT NULL,
     `household_id` INT NOT NULL,
-    `host_relation` varchar(100) COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
+    `host_relation` varchar(100) COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+    Primary Key (`ID`)
 ) ENGINE = InnoDB;
 
 CREATE TABLE `story`
