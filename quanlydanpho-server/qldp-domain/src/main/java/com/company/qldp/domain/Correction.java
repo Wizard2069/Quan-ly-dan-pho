@@ -24,26 +24,26 @@ public class Correction {
         optional = false,
         fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "household_id", nullable = false)
+    @JoinColumn(name = "household_id")
     private Household household;
     
-    @Column(name = "change_info", nullable = false)
+    @Column(name = "change_info")
     private String changeInfo;
     
-    @Column(name = "change_from", nullable = false)
+    @Column(name = "change_from")
     private String changeFrom;
     
-    @Column(name = "change_to", nullable = false)
+    @Column(name = "change_to")
     private String changeTo;
     
     @Temporal(TemporalType.DATE)
-    @Column(name = "change_day", nullable = false)
+    @Column(name = "change_day")
     private Date changeDay;
     
     @ManyToOne(
         optional = false,
         fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "performer_id", nullable = false)
+    @JoinColumn(name = "performer_id")
     private Manager performer;
 }

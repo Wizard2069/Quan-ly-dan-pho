@@ -1,4 +1,8 @@
 
-include 'qldp-common'
+include 'qldp-flyway'
 
+include 'qldp-common'
 include 'qldp-domain'
+
+include 'qldp-application'
+

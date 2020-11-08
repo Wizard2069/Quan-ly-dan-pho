@@ -1,0 +1,10 @@
+plugins {
+    id "org.flywaydb.flyway" version "7.1.1"
+}
+
+flyway {
+    url = 'jdbc:mysql://localhost:3306/qldp?useSSL=false'
+    user = 'user'
+    password = 'test'
+    schemas = ['qldp']
+}

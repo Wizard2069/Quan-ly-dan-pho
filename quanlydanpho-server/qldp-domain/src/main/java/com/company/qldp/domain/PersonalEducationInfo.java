@@ -17,19 +17,19 @@ import javax.persistence.Embeddable;
 @Access(AccessType.FIELD)
 public class PersonalEducationInfo {
     
-    @Column(name = "academic_level", nullable = false)
+    @Column(name = "academic_level")
     private String academicLevel;
     
-    @Column(name = "qualification", nullable = false)
+    @Column(name = "qualification")
     private String qualification;
     
-    @Column(name = "ethnic_language", nullable = false)
+    @Column(name = "ethnic_language")
     private String ethnicLanguage;
     
-    @Column(name = "languageLevel", nullable = false)
+    @Column(name = "language_level")
     private String languageLevel;
     
-    @Column(name = "workplace", nullable = false)
+    @Column(name = "workplace")
     private String workplace;
     
     @Column(name = "criminal_record")

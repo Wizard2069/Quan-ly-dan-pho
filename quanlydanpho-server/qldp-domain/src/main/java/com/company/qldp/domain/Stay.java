@@ -24,18 +24,18 @@ public class Stay {
         optional = false,
         fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "person_id", nullable = false)
+    @JoinColumn(name = "person_id")
     private People person;
     
-    @Column(name = "temp_residence_code", nullable = false)
+    @Column(name = "temp_residence_code")
     private String tempResidenceCode;
     
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "phone_number")
     private String phoneNumber;
     
     @Embedded
     private DateInterval interval;
     
-    @Column(name = "reason", nullable = false)
+    @Column(name = "reason")
     private String reason;
 }

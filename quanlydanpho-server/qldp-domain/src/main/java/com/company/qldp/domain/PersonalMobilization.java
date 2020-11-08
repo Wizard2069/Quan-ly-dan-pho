@@ -16,10 +16,10 @@ import java.util.Date;
 public class PersonalMobilization {
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "arrival_date", nullable = false)
+    @Column(name = "arrival_date")
     private Date arrivalDate;
     
-    @Column(name = "arrival_reason", nullable = false)
+    @Column(name = "arrival_reason")
     private String arrivalReason;
     
     @Temporal(TemporalType.DATE)

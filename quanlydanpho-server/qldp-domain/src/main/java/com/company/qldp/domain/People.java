@@ -23,14 +23,17 @@ public class People {
     @GeneratedValue
     private Integer id;
     
-    @Column(name = "people_code", nullable = false)
+    @Column(name = "people_code")
     private String peopleCode;
     
     @Embedded
     private PeopleInfo info;
     
-    @Column(name = "alias", nullable = false)
+    @Column(name = "alias")
     private String alias;
+    
+    @Column(name = "birth_place")
+    private String birthPlace;
     
     @Embedded
     private PersonalExtraInfo extraInfo;
@@ -38,15 +41,15 @@ public class People {
     @Column(name = "passport_number")
     private String passportNumber;
     
-    @Column(name = "permanent_address", nullable = false)
+    @Column(name = "permanent_address")
     private String permanentAddress;
     
     @Embedded
     private PersonalMobilization mobilization;
     
     @Temporal(TemporalType.DATE)
-    @Column(name = "created_day", nullable = false)
-    private Date createdDay = new Date();
+    @Column(name = "created_date")
+    private Date createdDate;
     
     @ManyToOne(
         optional = false,
@@ -54,10 +57,6 @@ public class People {
     )
     @JoinColumn(name = "created_manager_id")
     private Manager createdManager;
-    
-    @Temporal(TemporalType.DATE)
-    @Column(name = "created_date", nullable = false)
-    private Date createdDate;
     
     @ManyToOne(
         optional = false,

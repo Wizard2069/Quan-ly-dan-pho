@@ -24,18 +24,18 @@ public class TempAbsent {
         optional = false,
         fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "person_id", nullable = false)
+    @JoinColumn(name = "person_id")
     private People person;
     
-    @Column(name = "temp_absent_code", nullable = false)
+    @Column(name = "temp_absent_code")
     private String tempAbsentCode;
     
-    @Column(name = "temp_residence_place", nullable = false)
+    @Column(name = "temp_residence_place")
     private String tempResidencePlace;
     
     @Embedded
     private DateInterval interval;
     
-    @Column(name = "reason", nullable = false)
+    @Column(name = "reason")
     private String reason;
 }

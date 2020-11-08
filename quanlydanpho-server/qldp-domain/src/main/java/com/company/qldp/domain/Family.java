@@ -30,6 +30,6 @@ public class Family {
     @Embedded
     private PeopleInfo info;
     
-    @Column(name = "person_relation", nullable = false)
+    @Column(name = "person_relation")
     private String personRelation;
 }

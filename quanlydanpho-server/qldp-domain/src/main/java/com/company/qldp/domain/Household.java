@@ -20,7 +20,7 @@ public class Household {
     @GeneratedValue
     private Integer id;
     
-    @Column(name = "household_code", nullable = false)
+    @Column(name = "household_code")
     private String householdCode;
     
     @OneToOne(
@@ -30,14 +30,14 @@ public class Household {
     @JoinColumn(name = "host_id")
     private People host;
     
-    @Column(name = "area_code", nullable = false)
+    @Column(name = "area_code")
     private String areaCode;
     
     @Column(name = "address", nullable = false)
     private String address;
     
     @Temporal(TemporalType.DATE)
-    @Column(name = "created_day", nullable = false)
+    @Column(name = "created_day")
     private Date createdDay;
     
     @Temporal(TemporalType.DATE)

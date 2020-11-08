@@ -26,9 +26,9 @@ public class FamilyMember {
         optional = false,
         fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "household_id")
+    @JoinColumn(name = "household_id", nullable = false)
     private Household household;
     
-    @Column(name = "host_relation", nullable = false)
+    @Column(name = "host_relation")
     private String hostRelation;
 }

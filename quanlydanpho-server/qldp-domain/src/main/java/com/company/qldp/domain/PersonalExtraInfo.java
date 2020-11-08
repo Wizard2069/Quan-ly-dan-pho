@@ -17,15 +17,15 @@ import javax.persistence.Embeddable;
 @Access(AccessType.FIELD)
 public class PersonalExtraInfo {
     
-    @Column(name = "domicile", nullable = false)
+    @Column(name = "domicile")
     private String domicile;
     
-    @Column(name = "nation", nullable = false)
+    @Column(name = "nation")
     private String nation;
     
-    @Column(name = "religion", nullable = false)
+    @Column(name = "religion")
     private String religion;
     
-    @Column(name = "nationality", nullable = false)
+    @Column(name = "nationality")
     private String nationality;
 }

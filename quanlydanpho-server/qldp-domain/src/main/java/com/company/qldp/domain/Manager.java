@@ -19,12 +19,12 @@ public class Manager {
     @GeneratedValue
     private Integer id;
     
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
     private String username;
     
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
     
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 }

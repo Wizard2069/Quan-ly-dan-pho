@@ -24,18 +24,18 @@ public class Story {
         optional = false,
         fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "person_id", nullable = false)
+    @JoinColumn(name = "person_id")
     private People person;
     
     @Embedded
     private DateInterval interval;
     
-    @Column(name = "address", nullable = false)
+    @Column(name = "address")
     private String address;
     
-    @Column(name = "job", nullable = false)
+    @Column(name = "job")
     private String job;
     
-    @Column(name = "workplace", nullable = false)
+    @Column(name = "workplace")
     private String workplace;
 }

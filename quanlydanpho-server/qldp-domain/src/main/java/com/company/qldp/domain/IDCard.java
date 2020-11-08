@@ -24,14 +24,14 @@ public class IDCard {
         optional = false,
         fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "person_id", nullable = false)
+    @JoinColumn(name = "person_id")
     private People person;
     
     @Column(name = "id_card_number", nullable = false, length = 12)
     private String idCardNumber;
     
     @Temporal(TemporalType.DATE)
-    @Column(name = "issued_day", nullable = false)
+    @Column(name = "issued_day")
     private Date issuedDay;
     
     @Column(name = "issued_place", nullable = false)

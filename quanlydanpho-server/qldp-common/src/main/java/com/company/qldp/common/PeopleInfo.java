@@ -15,21 +15,21 @@ import java.util.Date;
 @Access(AccessType.FIELD)
 public class PeopleInfo {
     
-    @Column(name = "full_name", nullable = false)
+    @Column(name = "full_name")
     private String fullName;
     
     @Temporal(TemporalType.DATE)
-    @Column(name = "birthday", nullable = false)
+    @Column(name = "birthday")
     private Date birthday;
     
-    @Column(name = "sex", nullable = false)
+    @Column(name = "sex")
     @Enumerated(EnumType.STRING)
     private SEX sex;
     
-    @Column(name = "job", nullable = false)
+    @Column(name = "job")
     private String job;
     
-    @Column(name = "current_address", nullable = false)
+    @Column(name = "current_address")
     private String currentAddress;
     
     enum SEX {
