@@ -143,7 +143,7 @@ CREATE TABLE `story`
     PRIMARY KEY (`ID`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE `managers`
+CREATE TABLE `users`
 (
     `ID` INT NOT NULL AUTO_INCREMENT,
     `username` varchar(100) COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
@@ -152,13 +152,42 @@ CREATE TABLE `managers`
     PRIMARY KEY (`ID`)
 ) ENGINE = InnoDB;
 
+CREATE TABLE `roles`
+(
+    `ID` INT NOT NULL AUTO_INCREMENT,
+    `name` varchar(100) COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+    PRIMARY KEY (`ID`)
+) ENGINE = InnoDB;
+
+CREATE TABLE `privileges`
+(
+    `ID` INT NOT NULL AUTO_INCREMENT,
+    `name` varchar(100) COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+    PRIMARY KEY (`ID`)
+) ENGINE = InnoDB;
+
+CREATE TABLE `users_roles`
+(
+    `ID` INT NOT NULL AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
+    `role_id` INT NOT NULL,
+    PRIMARY KEY (`ID`)
+) ENGINE = InnoDB;
+
+CREATE TABLE `roles_privileges`
+(
+    `ID` INT NOT NULL AUTO_INCREMENT,
+    `role_id` INT NOT NULL,
+    `privilege_id` INT NOT NULL,
+    PRIMARY KEY (`ID`)
+) ENGINE = InnoDB;
 
 ALTER TABLE `id_card`
     ADD CONSTRAINT `id_card_person_id` FOREIGN KEY (`person_id`) REFERENCES `people` (`ID`);
 
 ALTER TABLE `corrections`
     ADD CONSTRAINT `corrections_household_id` FOREIGN KEY (`household_id`) REFERENCES `household` (`ID`),
-    ADD CONSTRAINT `corrections_performer_id` FOREIGN KEY (`performer_id`) REFERENCES `managers` (`ID`);
+    ADD CONSTRAINT `corrections_performer_id` FOREIGN KEY (`performer_id`) REFERENCES `users` (`ID`);
 
 ALTER TABLE `family`
     ADD CONSTRAINT `family_person_id` FOREIGN KEY (`person_id`) REFERENCES `people` (`ID`);
@@ -171,8 +200,8 @@ ALTER TABLE `death`
     ADD CONSTRAINT `death_death_person_id` FOREIGN KEY (`death_person_id`) REFERENCES `people` (`ID`);
 
 ALTER TABLE `people`
-    ADD CONSTRAINT `people_created_manager_id` FOREIGN KEY (`created_manager_id`) REFERENCES `managers` (`ID`),
-    ADD CONSTRAINT `people_deleted_manager_id` FOREIGN KEY (`deleted_manager_id`) REFERENCES `managers` (`ID`);
+    ADD CONSTRAINT `people_created_manager_id` FOREIGN KEY (`created_manager_id`) REFERENCES `users` (`ID`),
+    ADD CONSTRAINT `people_deleted_manager_id` FOREIGN KEY (`deleted_manager_id`) REFERENCES `users` (`ID`);
 
 ALTER TABLE `stay`
     ADD CONSTRAINT `stay_person_id` FOREIGN KEY (`person_id`) REFERENCES `people` (`ID`);
@@ -187,7 +216,10 @@ ALTER TABLE `family_member`
 ALTER TABLE `story`
     ADD CONSTRAINT `story_person_id` FOREIGN KEY (`person_id`) REFERENCES `people` (`ID`);
 
+ALTER TABLE `users_roles`
+    ADD CONSTRAINT `users_roles_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`ID`),
+    ADD CONSTRAINT `users_roles_role_id` FOREIGN KEY (`role_id`) REFERENCES `roles` (`ID`);
 
-
-
-
+ALTER TABLE `roles_privileges`
+    ADD CONSTRAINT `roles_privileges_role_id` FOREIGN KEY (`role_id`) REFERENCES `roles` (`ID`),
+    ADD CONSTRAINT `role_privileges_privilege_id` FOREIGN KEY (`privilege_id`) REFERENCES `privileges` (`ID`);
