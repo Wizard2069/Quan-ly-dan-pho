@@ -166,6 +166,9 @@ CREATE TABLE `roles`
     PRIMARY KEY (`ID`)
 ) ENGINE = InnoDB;
 
+INSERT INTO `roles`
+VALUES (1, 'president'), (2, 'manager'), (3, 'user');
+
 CREATE TABLE `users_roles`
 (
     `ID` INT NOT NULL AUTO_INCREMENT,
