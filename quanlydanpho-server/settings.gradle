@@ -7,3 +7,6 @@ include 'qldp-domain'
 
 include 'qldp-application'
 
+include 'qldp-oauth-authorization-server'
+include 'qldp-oauth-resource-server'
+include 'qldp-user-service'

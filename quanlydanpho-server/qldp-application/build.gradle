@@ -8,5 +8,8 @@ configurations {
 dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
 	implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+
 	developmentOnly "org.springframework.boot:spring-boot-devtools:$springBootVersion"
+
+    implementation project(":qldp-oauth-resource-server")
 }

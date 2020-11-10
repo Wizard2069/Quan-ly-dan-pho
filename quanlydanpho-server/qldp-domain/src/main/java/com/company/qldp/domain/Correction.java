@@ -1,15 +1,13 @@
 package com.company.qldp.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+@AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "corrections")
@@ -45,5 +43,5 @@ public class Correction {
         fetch = FetchType.LAZY
     )
     @JoinColumn(name = "performer_id")
-    private Manager performer;
+    private User performer;
 }

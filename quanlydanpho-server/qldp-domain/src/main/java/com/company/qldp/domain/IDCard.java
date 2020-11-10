@@ -1,15 +1,13 @@
 package com.company.qldp.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+@AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "id_card")

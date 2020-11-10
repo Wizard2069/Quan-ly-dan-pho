@@ -1,9 +1,6 @@
 package com.company.qldp.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -12,6 +9,7 @@ import javax.persistence.Embeddable;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+@AllArgsConstructor
 @Builder
 @Embeddable
 @Access(AccessType.FIELD)

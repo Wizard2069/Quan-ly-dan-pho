@@ -1,10 +1,7 @@
 package com.company.qldp.domain;
 
 import com.company.qldp.common.PeopleInfo;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -12,6 +9,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+@AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "people")
@@ -56,14 +54,14 @@ public class People {
         fetch = FetchType.LAZY
     )
     @JoinColumn(name = "created_manager_id")
-    private Manager createdManager;
+    private User createdManager;
     
     @ManyToOne(
         optional = false,
         fetch = FetchType.LAZY
     )
     @JoinColumn(name = "deleted_manager_id")
-    private Manager deletedManager;
+    private User deletedManager;
     
     @Temporal(TemporalType.DATE)
     @Column(name = "deleted_date")
