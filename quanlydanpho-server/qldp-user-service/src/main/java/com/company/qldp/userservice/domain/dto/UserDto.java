@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
@@ -23,4 +24,13 @@ public class UserDto {
     
     @ValidPassword
     private String password;
+    
+    @NotNull
+    private String roles;
+    
+    public String[] getRoles() {
+        return Arrays.stream(roles.split(","))
+                .map(String::trim)
+                .toArray(String[]::new);
+    }
 }
