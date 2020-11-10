@@ -166,26 +166,11 @@ CREATE TABLE `roles`
     PRIMARY KEY (`ID`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE `privileges`
-(
-    `ID` INT NOT NULL AUTO_INCREMENT,
-    `name` varchar(100) COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-    PRIMARY KEY (`ID`)
-) ENGINE = InnoDB;
-
 CREATE TABLE `users_roles`
 (
     `ID` INT NOT NULL AUTO_INCREMENT,
     `user_id` INT NOT NULL,
     `role_id` INT NOT NULL,
-    PRIMARY KEY (`ID`)
-) ENGINE = InnoDB;
-
-CREATE TABLE `roles_privileges`
-(
-    `ID` INT NOT NULL AUTO_INCREMENT,
-    `role_id` INT NOT NULL,
-    `privilege_id` INT NOT NULL,
     PRIMARY KEY (`ID`)
 ) ENGINE = InnoDB;
 
@@ -226,7 +211,3 @@ ALTER TABLE `story`
 ALTER TABLE `users_roles`
     ADD CONSTRAINT `users_roles_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`ID`),
     ADD CONSTRAINT `users_roles_role_id` FOREIGN KEY (`role_id`) REFERENCES `roles` (`ID`);
-
-ALTER TABLE `roles_privileges`
-    ADD CONSTRAINT `roles_privileges_role_id` FOREIGN KEY (`role_id`) REFERENCES `roles` (`ID`),
-    ADD CONSTRAINT `role_privileges_privilege_id` FOREIGN KEY (`privilege_id`) REFERENCES `privileges` (`ID`);
