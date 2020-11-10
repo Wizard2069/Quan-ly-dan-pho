@@ -61,10 +61,7 @@ public class UserController {
             .credentials(credentials.toArray(CredentialRepresentation[]::new))
             .build();
         
-        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-        formData.add("client_id", "qldp-resource-server");
-        formData.add("client_secret", "4d557c5d-8126-4020-9235-fc5a7ec2b48f");
-        formData.add("grant_type", "password");
+        MultiValueMap<String, String> formData = makeLoginBody();
         formData.add("username", "admin");
         formData.add("password", "admin");
         
@@ -148,6 +145,15 @@ public class UserController {
                             .error(new RuntimeException("An error occurred " + responseEntity.getStatusCodeValue()));
                     });
             });
+    }
+    
+    private MultiValueMap<String, String> makeLoginBody() {
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add("client_id", "qldp-resource-server");
+        formData.add("client_secret", "4d557c5d-8126-4020-9235-fc5a7ec2b48f");
+        formData.add("grant_type", "password");
+        
+        return formData;
     }
     
     private CreateUserResponse makeCreateUserResponse(Integer id) {
