@@ -23,8 +23,6 @@ public class SecurityConfig {
         http.cors()
                 .and()
                     .authorizeExchange()
-                        .pathMatchers(HttpMethod.POST, "/api/login")
-                            .permitAll()
                         .pathMatchers(HttpMethod.GET, "/api/admin/**")
                             .hasRole("admin")
                         .pathMatchers(HttpMethod.POST, "/api/admin/**")

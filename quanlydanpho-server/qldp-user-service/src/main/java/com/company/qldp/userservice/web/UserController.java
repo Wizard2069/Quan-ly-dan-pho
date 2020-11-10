@@ -150,7 +150,7 @@ public class UserController {
     private MultiValueMap<String, String> makeLoginBody() {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("client_id", "qldp-resource-server");
-        formData.add("client_secret", "4d557c5d-8126-4020-9235-fc5a7ec2b48f");
+        formData.add("client_secret", "22ece3af-c38e-4eb1-9481-5530ddd37694");
         formData.add("grant_type", "password");
         
         return formData;
