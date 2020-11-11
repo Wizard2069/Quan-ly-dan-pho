@@ -1,6 +1,6 @@
 {
   "themes": [{
     "name": "demo",
-    "types": ["login"]
+    "types": ["login", "email"]
   }]
 }

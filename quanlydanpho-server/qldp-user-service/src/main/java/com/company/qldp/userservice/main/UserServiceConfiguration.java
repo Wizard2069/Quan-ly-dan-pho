@@ -16,11 +16,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class UserServiceConfiguration {
     
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    
-    @Bean
     public WebClient webClient() {
         return WebClient.create("http://localhost:8081/auth");
     }
