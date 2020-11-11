@@ -155,7 +155,6 @@ CREATE TABLE `users`
     `ID` INT NOT NULL AUTO_INCREMENT,
     `username` varchar(100) COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
     `email` varchar(100) COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-    `password` varchar(100) COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
     PRIMARY KEY (`ID`)
 ) ENGINE = InnoDB;
 
