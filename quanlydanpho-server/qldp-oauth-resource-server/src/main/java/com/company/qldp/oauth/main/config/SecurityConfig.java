@@ -1,6 +1,6 @@
 package com.company.qldp.oauth.main.config;
 
-import com.company.qldp.oauth.converter.KeycloakRealmRoleConverter;
+import com.company.qldp.oauth.domain.converter.KeycloakRealmRoleConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
@@ -23,6 +23,8 @@ public class SecurityConfig {
         http.cors()
                 .and()
                     .authorizeExchange()
+                        .pathMatchers(HttpMethod.POST, "/api/login")
+                            .permitAll()
                         .pathMatchers(HttpMethod.GET, "/api/admin/**")
                             .hasRole("admin")
                         .pathMatchers(HttpMethod.POST, "/api/admin/**")

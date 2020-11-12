@@ -5,6 +5,8 @@ import com.company.qldp.domain.User;
 import com.company.qldp.userservice.domain.dto.GetRolesDto;
 import com.company.qldp.userservice.domain.dto.KeycloakUserDto;
 import com.company.qldp.userservice.domain.dto.UserDto;
+import com.company.qldp.userservice.domain.exception.UnknownException;
+import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.service.UserService;
 import com.company.qldp.userservice.domain.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +77,7 @@ public class UserController {
                     String userId = responseEntity.getHeaders().getLocation()
                         .toString()
                         .replace("http://localhost:8081/auth/admin/realms/master/users/", "");
-                    User user = userService.createUser(userDto);
+                    User user = userService.createUser(userDto, userId);
                 
                     return webClient.get()
                         .uri("/admin/realms/master/roles")
@@ -119,16 +121,13 @@ public class UserController {
                                         ));
                                     }
                                 
-                                    return Mono.just(new ResponseEntity<>(
-                                        makeCreateUserResponse(-1),
-                                        HttpStatus.BAD_REQUEST
-                                    ));
+                                    return Mono.error(new UnknownException(entity.getStatusCode().getReasonPhrase()));
                                 });
                         });
                 }
             
                 return Mono
-                    .error(new RuntimeException("An error occurred " + responseEntity.getStatusCodeValue()));
+                    .error(new UnknownException(responseEntity.getStatusCode().getReasonPhrase()));
             });
     }
     
@@ -138,7 +137,8 @@ public class UserController {
     
     @GetMapping(path = "/users/{id}")
     public ResponseEntity<GetUserResponse> getUser(@PathVariable Integer id) {
-        User user = userService.findUserById(id).get();
+        User user = userService.findUserById(id)
+            .orElseThrow(UserNotFoundException::new);
         
         return new ResponseEntity<>(
             makeGetUserResponse(user.getId(), user.getUsername(), user.getEmail()),

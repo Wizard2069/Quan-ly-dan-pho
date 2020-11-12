@@ -29,9 +29,13 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
     
-    public User createUser(UserDto userDto) {
+    public User createUser(UserDto userDto, String keycloakUid) {
         if (emailExists(userDto.getEmail())) {
-            throw new UserAlreadyExistException(userDto.getEmail());
+            throw new UserAlreadyExistException("email");
+        }
+        
+        if (usernameExists(userDto.getUsername())) {
+            throw new UserAlreadyExistException("name");
         }
         
         List<Role> roleList = getRoleList(userDto);
@@ -39,6 +43,7 @@ public class UserService {
         User user = User.builder()
             .username(userDto.getUsername())
             .email(userDto.getEmail())
+            .keycloakUid(keycloakUid)
             .roles(roleList)
             .build();
         
@@ -47,6 +52,10 @@ public class UserService {
     
     private boolean emailExists(String email) {
         return userRepository.findByEmail(email) != null;
+    }
+    
+    private boolean usernameExists(String username) {
+        return userRepository.findByUsername(username) != null;
     }
     
     private List<Role> getRoleList(UserDto userDto) {

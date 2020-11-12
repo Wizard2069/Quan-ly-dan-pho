@@ -38,7 +38,7 @@ keycloak:
 
     adminUser:
       username: admin
-      password: admin
+      password: Admin123@
       create-admin-user-enabled: true
 
     migration:
