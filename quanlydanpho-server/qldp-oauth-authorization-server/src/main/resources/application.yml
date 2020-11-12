@@ -36,16 +36,16 @@ keycloak:
     infinispan:
       configLocation: "classpath:infinispan.xml"
 
-    adminUser:
-      username: admin
-      password: Admin123@
-      create-admin-user-enabled: true
-
     migration:
       importProvider: singleFile
       importLocation: "classpath:keycloak-realm-config.json"
     # -Dkeycloak.migration.strategy=OVERWRITE_EXISTING
     # -Dkeycloak.migration.strategy=IGNORE_EXISTING
+
+    adminUser:
+      username: admin
+      password: Admin123@
+      create-admin-user-enabled: true
 
   hostname:
     provider: "default"
