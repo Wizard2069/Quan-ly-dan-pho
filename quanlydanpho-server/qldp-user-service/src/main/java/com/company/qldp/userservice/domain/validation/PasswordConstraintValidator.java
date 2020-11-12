@@ -1,5 +1,6 @@
 package com.company.qldp.userservice.domain.validation;
 
+import com.company.qldp.userservice.domain.exception.NullPasswordException;
 import org.passay.*;
 
 import javax.validation.ConstraintValidator;
@@ -25,18 +26,22 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
                 new IllegalSequenceRule(EnglishSequenceData.USQwerty),
                 new WhitespaceRule())
         );
-        RuleResult result = validator.validate(new PasswordData(password));
-        
-        if (result.isValid()) {
-            return true;
-        }
-        
-        context.disableDefaultConstraintViolation();
-        context.buildConstraintViolationWithTemplate(
+        try {
+            RuleResult result = validator.validate(new PasswordData(password));
+    
+            if (result.isValid()) {
+                return true;
+            }
+    
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(
                 String.join(",", validator.getMessages(result))
-        )
+            )
                 .addConstraintViolation();
-        
-        return false;
+    
+            return false;
+        } catch (Exception e) {
+            throw new NullPasswordException();
+        }
     }
 }
