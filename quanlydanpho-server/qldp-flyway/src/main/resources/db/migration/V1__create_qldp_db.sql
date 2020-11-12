@@ -5,7 +5,7 @@ CREATE TABLE `hibernate_sequence`
     `next_val` BIGINT
 ) ENGINE = InnoDB;
 
-INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (2);
 
 CREATE TABLE `id_card`
 (
