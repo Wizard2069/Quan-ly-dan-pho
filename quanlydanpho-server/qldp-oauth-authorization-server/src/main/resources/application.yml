@@ -36,10 +36,10 @@ keycloak:
     infinispan:
       configLocation: "classpath:infinispan.xml"
 
-    migration:
-      importProvider: singleFile
-      importLocation: "classpath:keycloak-realm-config.json"
-    # -Dkeycloak.migration.strategy=OVERWRITE_EXISTING
+#    migration:
+#      importProvider: singleFile
+#      importLocation: "classpath:keycloak-realm-config.json"
+#      strategy: OVERWRITE_EXISTING
     # -Dkeycloak.migration.strategy=IGNORE_EXISTING
 
     adminUser:
