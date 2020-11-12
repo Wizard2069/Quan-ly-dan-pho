@@ -25,6 +25,8 @@ public class SecurityConfig {
                     .authorizeExchange()
                         .pathMatchers(HttpMethod.POST, "/api/login")
                             .permitAll()
+                        .pathMatchers(HttpMethod.PUT, "/api/reset-password")
+                            .permitAll()
                         .pathMatchers(HttpMethod.GET, "/api/admin/**")
                             .hasRole("admin")
                         .pathMatchers(HttpMethod.POST, "/api/admin/**")
