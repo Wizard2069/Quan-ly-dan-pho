@@ -159,6 +159,8 @@ CREATE TABLE `users`
     PRIMARY KEY (`ID`)
 ) ENGINE = InnoDB;
 
+INSERT INTO `users` (ID, username, email) VALUES (0, 'admin', 'wizard201366@gmail.com');
+
 CREATE TABLE `roles`
 (
     `ID` INT NOT NULL AUTO_INCREMENT,
