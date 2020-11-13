@@ -18,21 +18,7 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:$springBootVersion"
-
     implementation "com.github.thomasdarimont.embedded-spring-boot-keycloak-server:embedded-keycloak-server-spring-boot-starter:2.4.0"
 
     developmentOnly "org.springframework.boot:spring-boot-devtools:$springBootVersion"
-
-    api project(':qldp-domain')
-
-    testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-    testImplementation "org.springframework.security:spring-security-test:$springSecurityVersion"
-}
-
-test {
-    useJUnitPlatform()
 }
