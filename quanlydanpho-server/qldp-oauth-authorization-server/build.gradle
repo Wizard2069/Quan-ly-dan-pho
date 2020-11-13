@@ -22,5 +22,5 @@ dependencies {
 
     developmentOnly "org.springframework.boot:spring-boot-devtools:$springBootVersion"
 
-    api "mysql:mysql-connector-java:8.0.22"
+    implementation "mysql:mysql-connector-java:8.0.22"
 }
