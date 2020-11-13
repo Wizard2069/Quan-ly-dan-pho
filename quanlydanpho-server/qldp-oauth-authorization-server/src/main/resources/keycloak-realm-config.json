@@ -1452,15 +1452,18 @@
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },
   "smtpServer": {
-    "password": "**********",
+    "replyToDisplayName": "No Reply",
     "starttls": "true",
     "auth": "true",
+    "envelopeFrom": "noreply@qldp.com",
+    "ssl": "false",
+    "password": "**********",
     "port": "587",
     "host": "smtp.gmail.com",
+    "replyTo": "noreply@qldp.com",
     "from": "noreply@qldp.com",
     "fromDisplayName": "QLDP",
-    "ssl": "false",
-    "user": "wizard201366@gmail.com"
+    "user": "noreply.qldp@gmail.com"
   },
   "emailTheme": "demo",
   "eventsEnabled": true,
