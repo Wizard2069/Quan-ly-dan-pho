@@ -29,3 +29,10 @@ logging:
           jpa: INFO
       hibernate:
         SQL: DEBUG
+
+qldp:
+  app:
+    clientId: "qldp-resource-server"
+    clientSecret: "22ece3af-c38e-4eb1-9481-5530ddd37694"
+    adminName: admin
+    adminPassword: Admin123@

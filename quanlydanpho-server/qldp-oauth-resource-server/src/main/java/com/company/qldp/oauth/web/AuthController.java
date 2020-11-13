@@ -7,6 +7,7 @@ import com.company.qldp.oauth.domain.util.GenericResponse;
 import com.company.qldp.oauth.domain.util.GetTokenResponse;
 import com.company.qldp.oauth.domain.util.LoginRequest;
 import com.company.qldp.oauth.domain.util.LoginResponse;
+import com.company.qldp.oauth.main.properties.ResourceServerProperties;
 import com.company.qldp.userservice.domain.exception.UnknownException;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.service.UserService;
@@ -24,7 +25,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +39,17 @@ public class AuthController {
     
     private WebClient webClient;
     
+    private ResourceServerProperties properties;
+    
     @Autowired
-    public AuthController(UserService userService, WebClient webClient) {
+    public AuthController(
+        UserService userService,
+        WebClient webClient,
+        ResourceServerProperties properties
+    ) {
         this.userService = userService;
         this.webClient = webClient;
+        this.properties = properties;
     }
     
     @PostMapping(
@@ -98,7 +105,10 @@ public class AuthController {
         
         String keycloakUid = user.getKeycloakUid();
         
-        MultiValueMap<String, String> loginForm = formLogin("admin", "Admin123@");
+        MultiValueMap<String, String> loginForm = formLogin(
+            properties.getAdminName(),
+            properties.getAdminPassword()
+        );
         List<String> actions = new ArrayList<>();
         actions.add("UPDATE_PASSWORD");
         
@@ -135,8 +145,8 @@ public class AuthController {
     private MultiValueMap<String, String> formLogin(String username, String password) {
         MultiValueMap<String, String> loginForm = new LinkedMultiValueMap<>();
         loginForm.add("grant_type", "password");
-        loginForm.add("client_id", "qldp-resource-server");
-        loginForm.add("client_secret", "22ece3af-c38e-4eb1-9481-5530ddd37694");
+        loginForm.add("client_id", properties.getClientId());
+        loginForm.add("client_secret", properties.getClientSecret());
         loginForm.add("username", username);
         loginForm.add("password", password);
         

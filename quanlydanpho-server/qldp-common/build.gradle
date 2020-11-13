@@ -1,5 +1,6 @@
 dependencies {
 	api "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
+	api "org.springframework.boot:spring-boot-configuration-processor:$springBootVersion"
 
 	api "mysql:mysql-connector-java:8.0.22"
 }
