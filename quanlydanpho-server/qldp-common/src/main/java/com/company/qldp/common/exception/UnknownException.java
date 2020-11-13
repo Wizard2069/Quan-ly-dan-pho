@@ -1,4 +1,4 @@
-package com.company.qldp.userservice.domain.exception;
+package com.company.qldp.common.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

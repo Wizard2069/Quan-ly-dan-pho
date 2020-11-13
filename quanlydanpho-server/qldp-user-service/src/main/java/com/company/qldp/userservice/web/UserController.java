@@ -5,7 +5,7 @@ import com.company.qldp.domain.User;
 import com.company.qldp.userservice.domain.dto.GetRolesDto;
 import com.company.qldp.userservice.domain.dto.KeycloakUserDto;
 import com.company.qldp.userservice.domain.dto.UserDto;
-import com.company.qldp.userservice.domain.exception.UnknownException;
+import com.company.qldp.common.exception.UnknownException;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.service.UserService;
 import com.company.qldp.userservice.domain.util.*;

@@ -8,7 +8,7 @@ import com.company.qldp.oauth.domain.util.GetTokenResponse;
 import com.company.qldp.oauth.domain.util.LoginRequest;
 import com.company.qldp.oauth.domain.util.LoginResponse;
 import com.company.qldp.oauth.main.properties.ResourceServerProperties;
-import com.company.qldp.userservice.domain.exception.UnknownException;
+import com.company.qldp.common.exception.UnknownException;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
