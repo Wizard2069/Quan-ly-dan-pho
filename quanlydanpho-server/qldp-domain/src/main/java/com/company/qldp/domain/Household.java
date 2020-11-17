@@ -3,6 +3,7 @@ package com.company.qldp.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 
 @Data
@@ -51,4 +52,7 @@ public class Household {
     )
     @JoinColumn(name = "performer_id")
     private People performer;
+    
+    @OneToMany(mappedBy = "household")
+    private Collection<People> people;
 }

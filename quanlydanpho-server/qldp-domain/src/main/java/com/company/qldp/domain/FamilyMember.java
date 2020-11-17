@@ -12,14 +12,15 @@ import java.io.Serializable;
 @Entity
 @Table(name = "family_member")
 @Access(AccessType.FIELD)
-public class FamilyMember implements Serializable {
+@IdClass(HouseholdPeopleId.class)
+public class FamilyMember {
     
     @Id
     @OneToOne(
         optional = false,
         fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "person_id", nullable = false)
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
     private People person;
     
     @Id
@@ -27,7 +28,7 @@ public class FamilyMember implements Serializable {
         optional = false,
         fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "household_id", nullable = false)
+    @JoinColumn(name = "household_id", referencedColumnName = "id")
     private Household household;
     
     @Column(name = "host_relation")
