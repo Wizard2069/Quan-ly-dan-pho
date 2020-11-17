@@ -31,7 +31,7 @@ public class Household {
     @Column(name = "area_code")
     private String areaCode;
     
-    @Column(name = "address", nullable = false)
+    @Column(name = "address")
     private String address;
     
     @Temporal(TemporalType.DATE)

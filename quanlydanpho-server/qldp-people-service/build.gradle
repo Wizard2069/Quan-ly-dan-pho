@@ -1,6 +1,6 @@
 dependencies {
     api project(':qldp-domain')
-    api project(':qldp-people-service')
+    api project(':qldp-user-service')
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -10,4 +10,3 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-

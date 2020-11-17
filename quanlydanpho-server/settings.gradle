@@ -2,7 +2,6 @@
 include 'qldp-flyway'
 
 include 'qldp-common'
-
 include 'qldp-domain'
 
 include 'qldp-application'
@@ -12,3 +11,4 @@ include 'qldp-oauth-resource-server'
 include 'qldp-user-service'
 
 include 'qldp-household-service'
+include 'qldp-people-service'

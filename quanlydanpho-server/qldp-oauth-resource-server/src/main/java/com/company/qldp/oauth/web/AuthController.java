@@ -3,7 +3,7 @@ package com.company.qldp.oauth.web;
 import com.company.qldp.domain.User;
 import com.company.qldp.oauth.domain.dto.ResetPasswordDto;
 import com.company.qldp.oauth.domain.exception.InvalidCredentialException;
-import com.company.qldp.oauth.domain.util.GenericResponse;
+import com.company.qldp.common.util.GenericResponse;
 import com.company.qldp.oauth.domain.util.GetTokenResponse;
 import com.company.qldp.oauth.domain.util.LoginRequest;
 import com.company.qldp.oauth.domain.util.LoginResponse;

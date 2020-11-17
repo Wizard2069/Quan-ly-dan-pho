@@ -22,7 +22,7 @@ public class PeopleInfo {
     
     @Column(name = "sex")
     @Enumerated(EnumType.STRING)
-    private SEX sex;
+    private Sex sex;
     
     @Column(name = "job")
     private String job;
@@ -30,7 +30,7 @@ public class PeopleInfo {
     @Column(name = "current_address")
     private String currentAddress;
     
-    enum SEX {
+    public enum Sex {
         MALE, FEMALE, OTHER
     }
 }
