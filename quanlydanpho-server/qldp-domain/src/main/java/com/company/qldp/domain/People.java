@@ -2,7 +2,6 @@ package com.company.qldp.domain;
 
 import com.company.qldp.common.PeopleInfo;
 import lombok.*;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,7 +13,6 @@ import java.util.Date;
 @Entity
 @Table(name = "people")
 @Access(AccessType.FIELD)
-@DynamicUpdate
 public class People {
     
     @Id

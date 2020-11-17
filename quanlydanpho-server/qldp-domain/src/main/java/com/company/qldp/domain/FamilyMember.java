@@ -14,9 +14,6 @@ import javax.persistence.*;
 public class FamilyMember {
     
     @Id
-    @GeneratedValue
-    private Integer id;
-    
     @OneToOne(
         optional = false,
         fetch = FetchType.LAZY
@@ -24,6 +21,7 @@ public class FamilyMember {
     @JoinColumn(name = "person_id", nullable = false)
     private People person;
     
+    @Id
     @ManyToOne(
         optional = false,
         fetch = FetchType.LAZY
