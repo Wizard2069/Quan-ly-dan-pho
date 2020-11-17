@@ -3,6 +3,7 @@ package com.company.qldp.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "family_member")
 @Access(AccessType.FIELD)
-public class FamilyMember {
+public class FamilyMember implements Serializable {
     
     @Id
     @OneToOne(
