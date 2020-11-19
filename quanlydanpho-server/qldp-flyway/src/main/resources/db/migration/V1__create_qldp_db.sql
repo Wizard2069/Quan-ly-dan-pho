@@ -189,7 +189,8 @@ ALTER TABLE `family`
     ADD CONSTRAINT `family_person_id` FOREIGN KEY (`person_id`) REFERENCES `people` (`ID`);
 
 ALTER TABLE `household`
-    ADD CONSTRAINT `household_host_id` FOREIGN KEY (`host_id`) REFERENCES `people` (`ID`);
+    ADD CONSTRAINT `household_host_id` FOREIGN KEY (`host_id`) REFERENCES `people` (`ID`),
+    ADD CONSTRAINT `household_performer_id` FOREIGN KEY (`performer_id`) REFERENCES `people` (`ID`);
 
 ALTER TABLE `death`
     ADD CONSTRAINT `death_declared_person_id` FOREIGN KEY (`declared_person_id`) REFERENCES `people` (`ID`),
