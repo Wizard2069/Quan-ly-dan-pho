@@ -20,9 +20,8 @@ spring:
         jwt:
           issuer-uri: http://localhost:8081/auth/realms/master
           jwk-set-uri: http://localhost:8081/auth/realms/master/protocol/openid-connect/certs
-  data:
-    rest:
-      base-path: "/api/v1"
+  webflux:
+    base-path: "/api/v1"
 
 logging:
   level:

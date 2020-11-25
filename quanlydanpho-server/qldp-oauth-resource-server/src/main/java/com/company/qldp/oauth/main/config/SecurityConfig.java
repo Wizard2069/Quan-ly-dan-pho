@@ -23,17 +23,19 @@ public class SecurityConfig {
         http.cors()
                 .and()
                     .authorizeExchange()
-                        .pathMatchers(HttpMethod.POST, "/api/login")
+                        .pathMatchers(HttpMethod.POST, "/login")
                             .permitAll()
-                        .pathMatchers(HttpMethod.PUT, "/api/reset-password")
+                        .pathMatchers(HttpMethod.PUT, "/reset-password")
                             .permitAll()
-                        .pathMatchers(HttpMethod.GET, "/api/admin/**")
+                        .pathMatchers(HttpMethod.GET, "/users**")
                             .hasRole("admin")
-                        .pathMatchers(HttpMethod.POST, "/api/admin/**")
+                        .pathMatchers(HttpMethod.POST, "/users/**")
                             .hasRole("admin")
-                        .pathMatchers(HttpMethod.GET, "/api/manager/**")
+                        .pathMatchers(HttpMethod.GET, "/people/**")
                             .hasRole("manager")
-                        .pathMatchers(HttpMethod.POST, "/api/manager/**")
+                        .pathMatchers(HttpMethod.POST, "/people/**")
+                            .hasRole("manager")
+                        .pathMatchers(HttpMethod.PATCH, "/people/**")
                             .hasRole("manager")
                         .anyExchange()
                             .authenticated()
@@ -58,7 +60,7 @@ public class SecurityConfig {
     
     private ServerWebExchangeMatcher webExchangeMatcher() {
         return new NegatedServerWebExchangeMatcher(
-            ServerWebExchangeMatchers.pathMatchers("/api/**")
+            ServerWebExchangeMatchers.pathMatchers("/**")
         );
     }
 }
