@@ -31,7 +31,7 @@ public class HouseholdController {
     
     @PostMapping(
         path = "/households",
-        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+        consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public Mono<ResponseEntity<CreateHouseholdResponse>> createHousehold(@Valid HouseholdDto householdDto) {
         Household household = householdService.createHousehold(householdDto);

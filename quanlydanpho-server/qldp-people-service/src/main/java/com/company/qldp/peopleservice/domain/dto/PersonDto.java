@@ -18,10 +18,6 @@ public class PersonDto {
     
     @NotNull
     @Length(min = 1)
-    private String peopleCode;
-    
-    @NotNull
-    @Length(min = 1)
     private String fullName;
     
     @NotNull
@@ -30,6 +26,7 @@ public class PersonDto {
     @NotNull
     private String sex;
     
+    @NotNull
     private String job;
     
     @NotNull

@@ -16,14 +16,6 @@ public class HouseholdDto {
     
     @NotNull
     @Length(min = 1)
-    private String householdCode;
-    
-    @NotNull
-    @Length(min = 1)
-    private String hostPeopleCode;
-    
-    @NotNull
-    @Length(min = 1)
     private String areaCode;
     
     @NotNull

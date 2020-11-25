@@ -5,7 +5,6 @@ import com.company.qldp.domain.People;
 import com.company.qldp.domain.PersonalExtraInfo;
 import com.company.qldp.domain.User;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
-import com.company.qldp.peopleservice.domain.exception.PersonAlreadyExistException;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.repository.UserRepository;
@@ -28,12 +27,6 @@ public class PeopleService {
     }
     
     public People createPeople(PersonDto personDto) {
-        String peopleCode = personDto.getPeopleCode();
-        
-        if (peopleCodeExist(peopleCode)) {
-            throw new PersonAlreadyExistException();
-        }
-        
         String createdManagerUsername = personDto.getCreatedManagerUsername();
         User createdManager = userRepository.findByUsername(createdManagerUsername);
         
@@ -57,7 +50,6 @@ public class PeopleService {
             .build();
         
         People people = People.builder()
-            .peopleCode(peopleCode)
             .alias(personDto.getAlias())
             .info(peopleInfo)
             .birthPlace(personDto.getBirthPlace())
@@ -65,14 +57,10 @@ public class PeopleService {
             .passportNumber(personDto.getPassportNumber())
             .permanentAddress(personDto.getPermanentAddress())
             .createdManager(createdManager)
-            .createdDate(Date.from(Instant.from(Instant.parse(personDto.getCreatedDate()))))
+            .createdDate(Date.from(Instant.parse(personDto.getCreatedDate())))
             .note(personDto.getNote())
             .build();
         
         return peopleRepository.save(people);
-    }
-    
-    private boolean peopleCodeExist(String peopleCode) {
-        return peopleRepository.findByPeopleCode(peopleCode) != null;
     }
 }

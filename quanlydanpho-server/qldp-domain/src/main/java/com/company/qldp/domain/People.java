@@ -70,7 +70,4 @@ public class People {
     
     @Column(name = "note")
     private String note;
-    
-    @ManyToOne
-    private Household household;
 }

@@ -18,7 +18,7 @@ public class IDCard {
     @GeneratedValue
     private Integer id;
     
-    @ManyToOne(
+    @OneToOne(
         optional = false,
         fetch = FetchType.LAZY
     )
@@ -29,7 +29,7 @@ public class IDCard {
     private String idCardNumber;
     
     @Temporal(TemporalType.DATE)
-    @Column(name = "issued_day")
+    @Column(name = "issued_day", nullable = false)
     private Date issuedDay;
     
     @Column(name = "issued_place", nullable = false)

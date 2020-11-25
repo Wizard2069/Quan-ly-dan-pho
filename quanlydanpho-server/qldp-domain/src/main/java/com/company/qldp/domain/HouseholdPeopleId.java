@@ -7,6 +7,6 @@ import java.io.Serializable;
 @Data
 public class HouseholdPeopleId implements Serializable {
 
-    private Integer householdId;
-    private Integer peopleId;
+    private Integer household;
+    private Integer person;
 }

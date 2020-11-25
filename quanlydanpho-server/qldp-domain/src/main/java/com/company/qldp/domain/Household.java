@@ -52,7 +52,4 @@ public class Household {
     )
     @JoinColumn(name = "performer_id")
     private People performer;
-    
-    @OneToMany(mappedBy = "household")
-    private Collection<People> people;
 }

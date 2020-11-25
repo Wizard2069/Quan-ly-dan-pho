@@ -1,8 +1,8 @@
 package com.company.qldp.peopleservice.domain.repository;
 
-import com.company.qldp.domain.People;
+import com.company.qldp.domain.IDCard;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PeopleRepository extends JpaRepository<People, Integer> {
+public interface IDCardRepository extends JpaRepository<IDCard, Integer> {
 
 }
