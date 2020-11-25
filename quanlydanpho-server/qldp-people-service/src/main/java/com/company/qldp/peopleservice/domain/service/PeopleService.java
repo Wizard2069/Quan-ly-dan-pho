@@ -6,17 +6,15 @@ import com.company.qldp.peopleservice.domain.dto.DeathDto;
 import com.company.qldp.peopleservice.domain.dto.LeaveDto;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
 import com.company.qldp.peopleservice.domain.exception.DeathAlreadyExistException;
-import com.company.qldp.peopleservice.domain.exception.PersonAlreadyExistException;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.repository.DeathRepository;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
-import com.company.qldp.peopleservice.domain.util.RandomCodeGenerator;
+import com.company.qldp.common.util.RandomCodeGenerator;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
 

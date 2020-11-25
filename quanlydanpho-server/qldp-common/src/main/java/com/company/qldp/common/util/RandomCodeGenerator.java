@@ -1,4 +1,4 @@
-package com.company.qldp.peopleservice.domain.util;
+package com.company.qldp.common.util;
 
 import java.security.SecureRandom;
 import java.util.Random;
