@@ -130,10 +130,11 @@ public class PeopleService {
             throw new PersonNotFoundException();
         }
     
-        PersonalMobilization mobilization = people.getMobilization();
-        mobilization.setLeaveDate(Date.from(Instant.parse(leaveDto.getLeaveDate())));
-        mobilization.setLeaveReason(leaveDto.getLeaveReason());
-        mobilization.setNewAddress(leaveDto.getNewAddress());
+        PersonalMobilization mobilization = PersonalMobilization.builder()
+            .leaveDate(Date.from(Instant.parse(leaveDto.getLeaveDate())))
+            .leaveReason(leaveDto.getLeaveReason())
+            .newAddress(leaveDto.getNewAddress())
+            .build();
         people.setMobilization(mobilization);
         
         return peopleRepository.save(people);

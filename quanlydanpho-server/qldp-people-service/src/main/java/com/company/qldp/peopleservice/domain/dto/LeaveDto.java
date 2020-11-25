@@ -22,7 +22,6 @@ public class LeaveDto {
     @Length(min = 1)
     private String leaveDate;
     
-    @NotNull
     private String leaveReason;
     
     @NotNull
