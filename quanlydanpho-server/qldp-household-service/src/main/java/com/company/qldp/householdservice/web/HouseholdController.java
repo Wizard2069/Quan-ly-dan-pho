@@ -16,10 +16,7 @@ import reactor.core.publisher.Mono;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(
-    path = "/api/manager",
-    produces = MediaType.APPLICATION_JSON_VALUE
-)
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class HouseholdController {
     
     private HouseholdService householdService;

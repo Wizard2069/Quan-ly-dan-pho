@@ -29,10 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(
-    path = "/api",
-    produces = MediaType.APPLICATION_JSON_VALUE
-)
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthController {
     
     private UserService userService;

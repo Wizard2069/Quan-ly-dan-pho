@@ -1,9 +1,6 @@
 package com.company.qldp.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,6 +8,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "death")
 @Access(AccessType.FIELD)

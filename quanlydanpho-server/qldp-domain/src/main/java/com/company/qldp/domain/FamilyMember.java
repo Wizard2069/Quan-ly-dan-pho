@@ -3,7 +3,6 @@ package com.company.qldp.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)

@@ -22,10 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(
-    path = "/api/admin",
-    produces = MediaType.APPLICATION_JSON_VALUE
-)
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
     
     private UserService userService;
