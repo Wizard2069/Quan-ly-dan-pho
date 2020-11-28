@@ -23,6 +23,12 @@ spring:
   webflux:
     base-path: "/api/v1"
 
+  data:
+    elasticsearch:
+      client:
+        reactive:
+          endpoints: "localhost"
+
 logging:
   level:
     org:

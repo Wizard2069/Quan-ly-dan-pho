@@ -1,17 +1,17 @@
-package com.company.qldp.peopleservice.main;
+package com.company.qldp.elasticsearchservice.main;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.repository.config.EnableReactiveElasticsearchRepositories;
 
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan(basePackages = {
-    "com.company.qldp.peopleservice",
-    "com.company.qldp.userservice",
     "com.company.qldp.elasticsearchservice"
 })
-@EntityScan(basePackages = {"com.company.qldp.domain"})
-public class PeopleServiceConfiguration {
+@EnableReactiveElasticsearchRepositories(basePackages = {
+    "com.company.qldp.elasticsearchservice"
+})
+public class ElasticsearchServiceConfiguration {
 }

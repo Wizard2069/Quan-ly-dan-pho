@@ -2,6 +2,8 @@ package com.company.qldp.peopleservice.domain.service;
 
 import com.company.qldp.common.PeopleInfo;
 import com.company.qldp.domain.*;
+import com.company.qldp.elasticsearchservice.domain.entity.PeopleSearch;
+import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
 import com.company.qldp.peopleservice.domain.dto.DeathDto;
 import com.company.qldp.peopleservice.domain.dto.LeaveDto;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
@@ -24,16 +26,19 @@ public class PeopleService {
     private PeopleRepository peopleRepository;
     private UserRepository userRepository;
     private DeathRepository deathRepository;
+    private PeopleSearchRepository peopleSearchRepository;
     
     @Autowired
     public PeopleService(
         PeopleRepository peopleRepository,
         UserRepository userRepository,
-        DeathRepository deathRepository
+        DeathRepository deathRepository,
+        PeopleSearchRepository peopleSearchRepository
     ) {
         this.peopleRepository = peopleRepository;
         this.userRepository = userRepository;
         this.deathRepository = deathRepository;
+        this.peopleSearchRepository = peopleSearchRepository;
     }
     
     public People createPeople(PersonDto personDto) {
@@ -76,8 +81,22 @@ public class PeopleService {
             .createdDate(Date.from(Instant.parse(personDto.getCreatedDate())))
             .note(personDto.getNote())
             .build();
+        People savedPeople = peopleRepository.save(people);
+    
+        PeopleSearch peopleSearch = PeopleSearch.builder()
+            .id(savedPeople.getId())
+            .peopleCode(peopleCode)
+            .birthday(Date.from(Instant.parse(personDto.getBirthday())))
+            .currentAddress(personDto.getCurrentAddress())
+            .fullName(personDto.getFullName())
+            .job(personDto.getJob())
+            .note(personDto.getNote())
+            .sex(personDto.getSex())
+            .passportNumber(personDto.getPassportNumber())
+            .build();
+        peopleSearchRepository.save(peopleSearch).subscribe();
         
-        return peopleRepository.save(people);
+        return savedPeople;
     }
     
     private boolean peopleCodeExists(String peopleCode) {
