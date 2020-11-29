@@ -1,5 +1,8 @@
-drop database if exists qldp;
+DROP DATABASE IF EXISTS dbtest;
+DROP DATABASE IF EXISTS qldp;
 
-create database qldp;
+CREATE DATABASE dbtest;
+CREATE DATABASE qldp;
 
-grant all privileges on qldp.* to 'user'@'%' with grant option;
+GRANT ALL PRIVILEGES ON qldp.* TO 'user'@'%' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON dbtest.* TO 'user'@'%' WITH GRANT OPTION;
