@@ -5,7 +5,6 @@ import com.company.qldp.elasticsearchservice.domain.entity.PeopleSearch;
 import com.company.qldp.elasticsearchservice.domain.repository.IDCardSearchRepository;
 import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 

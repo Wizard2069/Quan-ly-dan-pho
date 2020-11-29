@@ -5,11 +5,13 @@ import com.company.qldp.domain.*;
 import com.company.qldp.elasticsearchservice.domain.entity.PeopleSearch;
 import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
 import com.company.qldp.peopleservice.domain.dto.DeathDto;
+import com.company.qldp.peopleservice.domain.dto.IDCardDto;
 import com.company.qldp.peopleservice.domain.dto.LeaveDto;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
 import com.company.qldp.peopleservice.domain.exception.DeathAlreadyExistException;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.repository.DeathRepository;
+import com.company.qldp.peopleservice.domain.repository.IDCardRepository;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import com.company.qldp.common.util.RandomCodeGenerator;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
@@ -27,18 +29,21 @@ public class PeopleService {
     private UserRepository userRepository;
     private DeathRepository deathRepository;
     private PeopleSearchRepository peopleSearchRepository;
+    private IDCardRepository idCardRepository;
     
     @Autowired
     public PeopleService(
         PeopleRepository peopleRepository,
         UserRepository userRepository,
         DeathRepository deathRepository,
-        PeopleSearchRepository peopleSearchRepository
+        PeopleSearchRepository peopleSearchRepository,
+        IDCardRepository idCardRepository
     ) {
         this.peopleRepository = peopleRepository;
         this.userRepository = userRepository;
         this.deathRepository = deathRepository;
         this.peopleSearchRepository = peopleSearchRepository;
+        this.idCardRepository = idCardRepository;
     }
     
     public People createPeople(PersonDto personDto) {
@@ -155,5 +160,22 @@ public class PeopleService {
         people.setMobilization(mobilization);
         
         return peopleRepository.save(people);
+    }
+    
+    public IDCard createPeopleIDCard(IDCardDto idCardDto) {
+        People people = peopleRepository.findByPeopleCode(idCardDto.getPeopleCode());
+        
+        if (people == null) {
+            throw new PersonNotFoundException();
+        }
+        
+        IDCard idCard = IDCard.builder()
+            .person(people)
+            .idCardNumber(idCardDto.getIdCardNumber())
+            .issuedDay(Date.from(Instant.parse(idCardDto.getIssuedDay())))
+            .issuedPlace(idCardDto.getIssuedPlace())
+            .build();
+        
+        return idCardRepository.save(idCard);
     }
 }

@@ -1,4 +1,4 @@
-package com.company.qldp.elasticsearchservice.domain.assembler;
+package com.company.qldp.common.assembler;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.*;
@@ -131,7 +130,6 @@ public class SimpleIdentifiableReactiveRepresentationModelAssembler<T>
         if (page > 1) {
             resources.add(Link.of(selfLink + pageQuery + (page - 1)).withRel("prev"));
         }
-        
         if (page < lastPage) {
             resources.add(Link.of(selfLink + pageQuery + (page + 1)).withRel("next"));
         }

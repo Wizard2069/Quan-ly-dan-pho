@@ -1,11 +1,9 @@
 package com.company.qldp.elasticsearchservice.web;
 
-import com.company.qldp.elasticsearchservice.domain.assembler.PeopleRepresentationModelAssembler;
+import com.company.qldp.elasticsearchservice.domain.assembler.PeopleSearchRepresentationModelAssembler;
 import com.company.qldp.elasticsearchservice.domain.entity.PeopleSearch;
 import com.company.qldp.elasticsearchservice.domain.service.PeopleSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
@@ -25,12 +23,12 @@ public class PeopleSearchController {
     
     private PeopleSearchService peopleSearchService;
     
-    private PeopleRepresentationModelAssembler assembler;
+    private PeopleSearchRepresentationModelAssembler assembler;
     
     @Autowired
     public PeopleSearchController(
         PeopleSearchService peopleSearchService,
-        PeopleRepresentationModelAssembler assembler
+        PeopleSearchRepresentationModelAssembler assembler
     ) {
         this.peopleSearchService = peopleSearchService;
         this.assembler = assembler;
