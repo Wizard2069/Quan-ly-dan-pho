@@ -1,5 +1,6 @@
 package com.company.qldp.peopleservice.domain.dto;
 
+import com.company.qldp.peopleservice.domain.validation.idcard.ValidIDCard;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,8 +19,7 @@ public class IDCardDto {
     @Length(min = 1)
     private String peopleCode;
     
-    @NotNull
-    @Length(min = 1)
+    @ValidIDCard
     private String idCardNumber;
     
     @NotNull

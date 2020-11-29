@@ -8,6 +8,7 @@ dependencies {
 		exclude group: "org.springframework.boot", module:"spring-boot-starter-web"
 	}
 
+	api'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.11.3'
 	api 'org.atteo:evo-inflector:1.2.2'
 
 	api "mysql:mysql-connector-java:8.0.22"

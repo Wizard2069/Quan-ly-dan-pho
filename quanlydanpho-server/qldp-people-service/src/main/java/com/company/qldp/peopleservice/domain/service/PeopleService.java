@@ -2,13 +2,16 @@ package com.company.qldp.peopleservice.domain.service;
 
 import com.company.qldp.common.PeopleInfo;
 import com.company.qldp.domain.*;
+import com.company.qldp.elasticsearchservice.domain.entity.IDCardSearch;
 import com.company.qldp.elasticsearchservice.domain.entity.PeopleSearch;
+import com.company.qldp.elasticsearchservice.domain.repository.IDCardSearchRepository;
 import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
 import com.company.qldp.peopleservice.domain.dto.DeathDto;
 import com.company.qldp.peopleservice.domain.dto.IDCardDto;
 import com.company.qldp.peopleservice.domain.dto.LeaveDto;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
 import com.company.qldp.peopleservice.domain.exception.DeathAlreadyExistException;
+import com.company.qldp.peopleservice.domain.exception.IDCardNumberAlreadyExistException;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.repository.DeathRepository;
 import com.company.qldp.peopleservice.domain.repository.IDCardRepository;
@@ -16,13 +19,18 @@ import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import com.company.qldp.common.util.RandomCodeGenerator;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.util.Date;
 
 @Service
+@Slf4j
 public class PeopleService {
     
     private PeopleRepository peopleRepository;
@@ -30,6 +38,7 @@ public class PeopleService {
     private DeathRepository deathRepository;
     private PeopleSearchRepository peopleSearchRepository;
     private IDCardRepository idCardRepository;
+    private IDCardSearchRepository idCardSearchRepository;
     
     @Autowired
     public PeopleService(
@@ -37,13 +46,15 @@ public class PeopleService {
         UserRepository userRepository,
         DeathRepository deathRepository,
         PeopleSearchRepository peopleSearchRepository,
-        IDCardRepository idCardRepository
+        IDCardRepository idCardRepository,
+        IDCardSearchRepository idCardSearchRepository
     ) {
         this.peopleRepository = peopleRepository;
         this.userRepository = userRepository;
         this.deathRepository = deathRepository;
         this.peopleSearchRepository = peopleSearchRepository;
         this.idCardRepository = idCardRepository;
+        this.idCardSearchRepository = idCardSearchRepository;
     }
     
     public People createPeople(PersonDto personDto) {
@@ -91,7 +102,7 @@ public class PeopleService {
         PeopleSearch peopleSearch = PeopleSearch.builder()
             .id(savedPeople.getId())
             .peopleCode(peopleCode)
-            .birthday(Date.from(Instant.parse(personDto.getBirthday())))
+            .birthday(savedPeople.getInfo().getBirthday())
             .currentAddress(personDto.getCurrentAddress())
             .fullName(personDto.getFullName())
             .job(personDto.getJob())
@@ -164,9 +175,14 @@ public class PeopleService {
     
     public IDCard createPeopleIDCard(IDCardDto idCardDto) {
         People people = peopleRepository.findByPeopleCode(idCardDto.getPeopleCode());
+        Flux<PeopleSearch> peopleSearchFlux = peopleSearchRepository.findByPeopleCode(idCardDto.getPeopleCode());
         
         if (people == null) {
             throw new PersonNotFoundException();
+        }
+        
+        if (idCardNumberExists(idCardDto.getIdCardNumber())) {
+            throw new IDCardNumberAlreadyExistException();
         }
         
         IDCard idCard = IDCard.builder()
@@ -175,7 +191,40 @@ public class PeopleService {
             .issuedDay(Date.from(Instant.parse(idCardDto.getIssuedDay())))
             .issuedPlace(idCardDto.getIssuedPlace())
             .build();
+    
+        IDCard savedIDCard = idCardRepository.save(idCard);
         
-        return idCardRepository.save(idCard);
+        peopleSearchFlux.map(peopleSearch -> {
+            IDCardSearch idCardSearch = IDCardSearch.builder()
+                .id(savedIDCard.getId())
+                .peopleSearch(peopleSearch)
+                .idCardNumber(idCardDto.getIdCardNumber())
+                .issuedDay(savedIDCard.getIssuedDay())
+                .issuedPlace(idCardDto.getIssuedPlace())
+                .build();
+    
+            return idCardSearchRepository.save(idCardSearch);
+        }).subscribe(Mono::subscribe);
+        
+        return savedIDCard;
+    }
+    
+    private boolean idCardNumberExists(String idCardNumber) {
+        return idCardRepository.findByIdCardNumber(idCardNumber) != null;
+    }
+    
+    @Transactional
+    public People findPersonById(Integer id) {
+        People person = peopleRepository.findById(id)
+            .orElseThrow(PersonNotFoundException::new);
+        
+        if (person.getCreatedManager() != null) {
+            log.info("{}", person.getCreatedManager().getRoles().stream().count());
+        }
+        if (person.getDeletedManager() != null) {
+            log.info("{}", person.getDeletedManager().getRoles().stream().count());
+        }
+        
+        return person;
     }
 }

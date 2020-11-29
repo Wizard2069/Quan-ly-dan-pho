@@ -1,6 +1,6 @@
 package com.company.qldp.userservice.domain.dto;
 
-import com.company.qldp.userservice.domain.validation.ValidPassword;
+import com.company.qldp.userservice.domain.validation.password.ValidPassword;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 

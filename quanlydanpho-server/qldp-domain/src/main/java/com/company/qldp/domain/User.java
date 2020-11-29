@@ -1,8 +1,10 @@
 package com.company.qldp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Data
@@ -25,6 +27,7 @@ public class User {
     private String email;
     
     @Column(name = "keycloak_uid")
+    @JsonIgnore
     private String keycloakUid;
     
     @ManyToMany
@@ -39,5 +42,5 @@ public class User {
             referencedColumnName = "id"
         )
     )
-    private Collection<Role> roles;
+    private Collection<Role> roles = new ArrayList<>();
 }

@@ -1,10 +1,9 @@
 package com.company.qldp.oauth.domain.util;
 
-import com.company.qldp.userservice.domain.validation.ValidPassword;
+import com.company.qldp.userservice.domain.validation.password.ValidPassword;
 import lombok.*;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data

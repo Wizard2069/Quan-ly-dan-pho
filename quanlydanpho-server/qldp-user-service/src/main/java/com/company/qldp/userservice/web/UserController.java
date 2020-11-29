@@ -9,10 +9,13 @@ import com.company.qldp.common.exception.UnknownException;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.service.UserService;
 import com.company.qldp.userservice.domain.util.*;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -22,7 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(
+    path = "/users",
+    produces = MediaType.APPLICATION_JSON_VALUE
+)
 public class UserController {
     
     private UserService userService;
@@ -35,10 +41,7 @@ public class UserController {
         this.webClient = webClient;
     }
     
-    @PostMapping(
-        path = "/users",
-        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
-    )
+    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public Mono<ResponseEntity<CreateUserResponse>> createUser(
         @Valid UserDto userDto,
         @RequestHeader("Authorization") String bearerToken
@@ -132,15 +135,15 @@ public class UserController {
         return new CreateUserResponse(id);
     }
     
-    @GetMapping(path = "/users/{id}")
-    public ResponseEntity<GetUserResponse> getUser(@PathVariable Integer id) {
+    @GetMapping(path = "/{id}")
+    public Mono<ResponseEntity<GetUserResponse>> getUser(@PathVariable("id") Integer id) {
         User user = userService.findUserById(id)
             .orElseThrow(UserNotFoundException::new);
         
-        return new ResponseEntity<>(
+        return Mono.just(new ResponseEntity<>(
             makeGetUserResponse(user.getId(), user.getUsername(), user.getEmail()),
             HttpStatus.OK
-        );
+        ));
     }
     
     private GetUserResponse makeGetUserResponse(Integer id, String username, String email) {

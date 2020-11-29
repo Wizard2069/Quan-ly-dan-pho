@@ -98,45 +98,49 @@ public class SimpleIdentifiableReactiveRepresentationModelAssembler<T>
         PagedModel<EntityModel<T>> resources,
         ServerWebExchange exchange
     ) {
-        MultiValueMap<String, String> queryParams = exchange.getRequest().getQueryParams();
-        String pageStr = queryParams.getFirst("page");
-        
+        assert resources.getMetadata() != null;
+        long lastPage = resources.getMetadata().getTotalPages();
+    
         getCollectionLinkBuilder(exchange).withRel("base").toMono(link -> {
             resources.add(link);
-            
+        
             return link;
         }).subscribe();
         
         String self = exchange.getRequest().getURI().toString();
-        String[] paths = self.split("&");
-        
-        String selfLink = Arrays.stream(paths).filter(path -> !path.contains("page"))
-            .collect(Collectors.joining("&"));
         resources.add(Link.of(self).withSelfRel());
         
-        if (pageStr == null) {
-            pageStr = "1";
+        if (lastPage > 0) {
+            MultiValueMap<String, String> queryParams = exchange.getRequest().getQueryParams();
+            String pageStr = queryParams.getFirst("page");
+            
+            String[] paths = self.split("&");
+    
+            String selfLink = Arrays.stream(paths).filter(path -> !path.contains("page"))
+                .collect(Collectors.joining("&"));
+            
+            if (pageStr == null) {
+                pageStr = "1";
+            }
+            
+            int page = Integer.parseInt(pageStr);
+            
+            String pageQuery = "?page=";
+            if (selfLink.contains("?")) {
+                pageQuery = "&page=";
+            }
+    
+            if (page > 1) {
+                resources.add(Link.of(selfLink + pageQuery + (page - 1)).withRel("prev"));
+            }
+            if (page < lastPage) {
+                resources.add(Link.of(selfLink + pageQuery + (page + 1)).withRel("next"));
+            }
+    
+            resources.add(Link.of(selfLink + pageQuery + page).withRel("current"))
+                .add(Link.of(selfLink + pageQuery + "1").withRel("first"))
+                .add(Link.of(selfLink + pageQuery + lastPage).withRel("last"));
         }
-        
-        assert resources.getMetadata() != null;
-        long lastPage = resources.getMetadata().getTotalElements();
-        int page = Integer.parseInt(pageStr);
-        
-        String pageQuery = "?page=";
-        if (selfLink.contains("?")) {
-            pageQuery = "&page=";
-        }
-        
-        if (page > 1) {
-            resources.add(Link.of(selfLink + pageQuery + (page - 1)).withRel("prev"));
-        }
-        if (page < lastPage) {
-            resources.add(Link.of(selfLink + pageQuery + (page + 1)).withRel("next"));
-        }
-        
-        resources.add(Link.of(selfLink + pageQuery + page).withRel("current"))
-            .add(Link.of(selfLink + pageQuery + "1").withRel("first"))
-            .add(Link.of(selfLink + pageQuery + lastPage).withRel("last"));
         
         return resources;
     }
