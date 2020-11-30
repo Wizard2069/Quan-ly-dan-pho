@@ -16,6 +16,10 @@ public class HouseholdDto {
     
     @NotNull
     @Length(min = 1)
+    private String hostPersonCode;
+    
+    @NotNull
+    @Length(min = 1)
     private String areaCode;
     
     @NotNull
@@ -23,5 +27,10 @@ public class HouseholdDto {
     private String address;
     
     @NotNull
+    @Length(min = 1)
     private String createdDay;
+    
+    @NotNull
+    @Length(min = 1)
+    private String performerPersonCode;
 }

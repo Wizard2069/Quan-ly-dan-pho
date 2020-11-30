@@ -3,6 +3,7 @@ package com.company.qldp.peopleservice.domain.service;
 import com.company.qldp.common.DateInterval;
 import com.company.qldp.common.util.RandomCodeGenerator;
 import com.company.qldp.domain.People;
+import com.company.qldp.domain.PersonalMobilization;
 import com.company.qldp.domain.Stay;
 import com.company.qldp.domain.TempAbsent;
 import com.company.qldp.peopleservice.domain.dto.StayDto;
@@ -61,6 +62,14 @@ public class MobilizationService {
             .tempResidencePlace(tempAbsentDto.getTempResidentPlace())
             .reason(tempAbsentDto.getReason())
             .build();
+    
+        PersonalMobilization mobilization = PersonalMobilization.builder()
+            .leaveDate(tempAbsent.getInterval().getFrom())
+            .leaveReason(tempAbsent.getReason())
+            .newAddress(tempAbsent.getTempResidencePlace())
+            .build();
+        people.setMobilization(mobilization);
+        peopleRepository.save(people);
         
         return tempAbsentRepository.save(tempAbsent);
     }
@@ -93,6 +102,13 @@ public class MobilizationService {
             .interval(interval)
             .reason(stayDto.getReason())
             .build();
+        
+        PersonalMobilization mobilization = PersonalMobilization.builder()
+            .arrivalDate(stay.getInterval().getFrom())
+            .arrivalReason(stay.getReason())
+            .build();
+        people.setMobilization(mobilization);
+        peopleRepository.save(people);
         
         return stayRepository.save(stay);
     }

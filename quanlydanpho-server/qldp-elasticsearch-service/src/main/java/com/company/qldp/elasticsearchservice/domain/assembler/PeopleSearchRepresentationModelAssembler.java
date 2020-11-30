@@ -3,6 +3,8 @@ package com.company.qldp.elasticsearchservice.domain.assembler;
 import com.company.qldp.common.assembler.SimpleIdentifiableReactiveRepresentationModelAssembler;
 import com.company.qldp.elasticsearchservice.domain.entity.PeopleSearch;
 import com.company.qldp.elasticsearchservice.web.PeopleSearchController;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
@@ -17,8 +19,18 @@ public class PeopleSearchRepresentationModelAssembler
     }
     
     @Override
-    protected WebFluxBuilder getCollectionLinkBuilder(ServerWebExchange exchange) {
-        return initLinkBuilder(exchange);
+    public EntityModel<PeopleSearch> addLinks(EntityModel<PeopleSearch> resource, ServerWebExchange exchange) {
+        initLinkBuilder(exchange).withSelfRel().toMono(link -> {
+            Integer entityId = resource.getContent().getId();
+            String entityLink = link.getHref() + "/" + entityId;
+            
+            resource.add(Link.of(entityLink));
+            resource.add(link.withRel("people"));
+    
+            return link;
+        }).subscribe();
+        
+        return resource;
     }
     
     @Override

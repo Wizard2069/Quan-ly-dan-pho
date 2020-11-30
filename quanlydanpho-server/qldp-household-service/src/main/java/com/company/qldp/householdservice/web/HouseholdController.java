@@ -16,7 +16,10 @@ import reactor.core.publisher.Mono;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(
+    path = "/households",
+    produces = MediaType.APPLICATION_JSON_VALUE
+)
 public class HouseholdController {
     
     private HouseholdService householdService;
@@ -26,10 +29,7 @@ public class HouseholdController {
         this.householdService = householdService;
     }
     
-    @PostMapping(
-        path = "/households",
-        consumes = MediaType.APPLICATION_JSON_VALUE
-    )
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<CreateHouseholdResponse>> createHousehold(@Valid HouseholdDto householdDto) {
         Household household = householdService.createHousehold(householdDto);
         

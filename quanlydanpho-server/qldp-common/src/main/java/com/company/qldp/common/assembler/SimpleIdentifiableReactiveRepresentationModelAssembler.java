@@ -54,6 +54,17 @@ public class SimpleIdentifiableReactiveRepresentationModelAssembler<T>
     }
     
     @Override
+    public EntityModel<T> addLinks(EntityModel<T> resource, ServerWebExchange exchange) {
+        initLinkBuilder(exchange).withSelfRel().toMono(link -> {
+            resource.add(link);
+            
+            return link;
+        }).subscribe();
+        
+        return resource;
+    }
+    
+    @Override
     public Mono<CollectionModel<EntityModel<T>>> toCollectionModel(
         Flux<? extends T> entities,
         ServerWebExchange exchange
@@ -101,7 +112,7 @@ public class SimpleIdentifiableReactiveRepresentationModelAssembler<T>
         assert resources.getMetadata() != null;
         long lastPage = resources.getMetadata().getTotalPages();
     
-        getCollectionLinkBuilder(exchange).withRel("base").toMono(link -> {
+        initLinkBuilder(exchange).withRel("base").toMono(link -> {
             resources.add(link);
         
             return link;
@@ -145,25 +156,7 @@ public class SimpleIdentifiableReactiveRepresentationModelAssembler<T>
         return resources;
     }
     
-    protected WebFluxBuilder getCollectionLinkBuilder(ServerWebExchange exchange) {
-        WebFluxBuilder linkBuilder = initLinkBuilder(exchange);
-        String[] paths = (getPrefix() + relationProvider.getCollectionResourceRelFor(resourceType))
-            .split("/");
-        
-        for (String pathComponent : paths) {
-            if (!pathComponent.isEmpty()) {
-                linkBuilder = linkBuilder.slash(pathComponent);
-            }
-        }
-        
-        return linkBuilder;
-    }
-    
     protected WebFluxBuilder initLinkBuilder(ServerWebExchange exchange) {
         return null;
-    }
-    
-    private String getPrefix() {
-        return getBasePath().isEmpty() ? "" : getBasePath() + "/";
     }
 }

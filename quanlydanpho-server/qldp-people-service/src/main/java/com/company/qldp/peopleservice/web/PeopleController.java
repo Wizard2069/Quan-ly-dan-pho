@@ -3,20 +3,24 @@ package com.company.qldp.peopleservice.web;
 import com.company.qldp.domain.Death;
 import com.company.qldp.domain.IDCard;
 import com.company.qldp.domain.People;
+import com.company.qldp.peopleservice.domain.assembler.PeopleRepresentationModelAssembler;
 import com.company.qldp.peopleservice.domain.dto.DeathDto;
 import com.company.qldp.peopleservice.domain.dto.IDCardDto;
 import com.company.qldp.peopleservice.domain.dto.LeaveDto;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
 import com.company.qldp.peopleservice.domain.service.PeopleService;
 import com.company.qldp.peopleservice.domain.util.CreateIDCardResponse;
-import com.company.qldp.peopleservice.domain.util.CreatePersonResponse;
 import com.company.qldp.peopleservice.domain.util.DeathPersonResponse;
 import com.company.qldp.peopleservice.domain.util.LeavePersonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -24,29 +28,35 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(
     path = "/people",
-    produces = MediaType.APPLICATION_JSON_VALUE
+    produces = MediaTypes.HAL_JSON_VALUE
 )
 public class PeopleController {
     
     private PeopleService peopleService;
     
+    private PeopleRepresentationModelAssembler assembler;
+    
     @Autowired
-    public PeopleController(PeopleService peopleService) {
+    public PeopleController(
+        PeopleService peopleService,
+        PeopleRepresentationModelAssembler assembler
+    ) {
         this.peopleService = peopleService;
+        this.assembler = assembler;
     }
     
     @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public Mono<ResponseEntity<CreatePersonResponse>> createPerson(@Valid PersonDto personDto) {
+    public Mono<ResponseEntity<EntityModel<People>>> createPerson(
+        @Valid PersonDto personDto,
+        ServerWebExchange exchange
+    ) {
         People person = peopleService.createPeople(personDto);
         
-        return Mono.just(new ResponseEntity<>(
-            makeCreatePersonResponse(person.getId()),
-            HttpStatus.CREATED
-        ));
-    }
-    
-    private CreatePersonResponse makeCreatePersonResponse(Integer id) {
-        return new CreatePersonResponse(id);
+        return assembler.toModel(person, exchange)
+            .map(peopleModel -> ResponseEntity
+                .created(peopleModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(peopleModel)
+            );
     }
     
     @PatchMapping(
@@ -102,9 +112,12 @@ public class PeopleController {
     
     @GetMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
-    public Mono<People> getPersonById(@PathVariable("id") Integer id) {
+    public Mono<EntityModel<People>> getPersonById(
+        @PathVariable("id") Integer id,
+        ServerWebExchange exchange
+    ) {
         People person = peopleService.findPersonById(id);
         
-        return Mono.just(person);
+        return assembler.toModel(person, exchange);
     }
 }

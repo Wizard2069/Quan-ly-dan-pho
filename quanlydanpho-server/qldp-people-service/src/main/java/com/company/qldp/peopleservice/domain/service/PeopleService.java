@@ -222,6 +222,9 @@ public class PeopleService {
         if (person.getDeletedManager() != null) {
             person.getDeletedManager().getRoles().stream().count();
         }
+        if (person.getMobilization() != null) {
+            person.getMobilization().getClass();
+        }
         
         return person;
     }
