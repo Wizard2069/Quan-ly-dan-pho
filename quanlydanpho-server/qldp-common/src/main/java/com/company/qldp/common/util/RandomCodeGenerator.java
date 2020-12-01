@@ -6,7 +6,7 @@ import java.util.Random;
 public class RandomCodeGenerator {
     
     public static String generateCode(int codeLength) {
-        char[] chars = "abcdefghijklmnopqrstuvwxyz1234567890".toCharArray();
+        char[] chars = "1234567890".toCharArray();
         StringBuilder sb = new StringBuilder();
         Random random = new SecureRandom();
         

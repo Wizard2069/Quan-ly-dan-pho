@@ -12,6 +12,6 @@ public class IDCardConstraintValidator implements ConstraintValidator<ValidIDCar
     
     @Override
     public boolean isValid(String idCardNumber, ConstraintValidatorContext context) {
-        return idCardNumber.length() == 12;
+        return idCardNumber.matches("([01-96]{3})+([0-3])+([0-9]{8})\\b");
     }
 }

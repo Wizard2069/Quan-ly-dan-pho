@@ -1,10 +1,8 @@
 package com.company.qldp.householdservice.domain.service;
 
 import com.company.qldp.common.util.RandomCodeGenerator;
-import com.company.qldp.domain.FamilyMember;
 import com.company.qldp.domain.Household;
 import com.company.qldp.domain.People;
-import com.company.qldp.householdservice.domain.Member;
 import com.company.qldp.householdservice.domain.dto.HouseholdDto;
 import com.company.qldp.householdservice.domain.repository.FamilyMemberRepository;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
@@ -14,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class HouseholdService {
@@ -45,9 +40,9 @@ public class HouseholdService {
             throw new PersonNotFoundException();
         }
         
-        String code = RandomCodeGenerator.generateCode(12);
+        String code = "24" + RandomCodeGenerator.generateCode(7);
         while (householdCodeExists(code)) {
-            code = RandomCodeGenerator.generateCode(12);
+            code = "24" + RandomCodeGenerator.generateCode(7);
         }
         
         Household household = Household.builder()

@@ -65,7 +65,7 @@ public class PeopleService {
         }
         
         while (peopleCodeExists(peopleCode)) {
-            peopleCode = RandomCodeGenerator.generateCode(8);
+            peopleCode = RandomCodeGenerator.generateCode(12);
         }
         
         PeopleInfo peopleInfo = PeopleInfo.builder()

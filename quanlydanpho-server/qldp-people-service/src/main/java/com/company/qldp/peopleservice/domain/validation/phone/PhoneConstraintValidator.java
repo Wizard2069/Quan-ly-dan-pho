@@ -13,8 +13,6 @@ public class PhoneConstraintValidator implements ConstraintValidator<ValidPhoneN
     
     @Override
     public boolean isValid(String phoneNumber, ConstraintValidatorContext context) {
-        Pattern pattern = Pattern.compile("(03|07|08|09|01[2|6|8|9])+([0-9]{8})\\b");
-        
-        return pattern.matcher(phoneNumber).matches();
+        return phoneNumber.matches("(03|07|08|09|01[2|6|8|9])+([0-9]{8})\\b");
     }
 }
