@@ -28,6 +28,7 @@ public interface PeopleSearchRepository extends ReactiveElasticsearchRepository<
                 "\"query\": \"?0\", " +
                 "\"type\": \"bool_prefix\", " +
                 "\"fields\": [" +
+                    "\"full_name\", " +
                     "\"full_name.search\", " +
                     "\"full_name.search._2gram\", " +
                     "\"full_name.search._3gram\"" +

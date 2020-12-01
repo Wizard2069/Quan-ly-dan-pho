@@ -14,6 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Document(indexName = "people")
+@Setting(settingPath = "/elastic-setting.json")
 @Relation(collectionRelation = "people")
 public class PeopleSearch {
     
@@ -30,10 +31,10 @@ public class PeopleSearch {
     private String peopleCode;
     
     @MultiField(
-        mainField = @Field(name = "full_name", type = FieldType.Text),
+        mainField = @Field(name = "full_name", type = FieldType.Text, analyzer = "vn_folding"),
         otherFields = {
             @InnerField(suffix = "keyword", type = FieldType.Keyword),
-            @InnerField(suffix = "search", type = FieldType.Search_As_You_Type)
+            @InnerField(suffix = "search", type = FieldType.Search_As_You_Type, searchAnalyzer = "vn_folding")
         }
     )
     private String fullName;
