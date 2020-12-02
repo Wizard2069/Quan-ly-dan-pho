@@ -1,19 +1,24 @@
 package com.company.qldp.householdservice.web;
 
+import com.company.qldp.domain.FamilyMember;
 import com.company.qldp.domain.Household;
+import com.company.qldp.householdservice.domain.dto.FamilyDto;
 import com.company.qldp.householdservice.domain.dto.HouseholdDto;
 import com.company.qldp.householdservice.domain.service.HouseholdService;
+import com.company.qldp.householdservice.domain.util.AddPeopleResponse;
 import com.company.qldp.householdservice.domain.util.CreateHouseholdResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.company.qldp.householdservice.domain.util.AddPeopleResponse.*;
 
 @RestController
 @RequestMapping(
@@ -41,5 +46,36 @@ public class HouseholdController {
     
     private CreateHouseholdResponse makeCreateHouseholdResponse(Integer id) {
         return new CreateHouseholdResponse(id);
+    }
+    
+    @PostMapping(
+        path = "/{id}/family",
+        consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public Mono<ResponseEntity<AddPeopleResponse>> addPeople(
+        @PathVariable("id") Integer id,
+        @Valid @RequestBody FamilyDto familyDto
+    ) {
+        List<FamilyMember> familyMembers = householdService.addPeopleToHousehold(id, familyDto);
+        
+        return Mono.just(new ResponseEntity<>(
+            makeAddPeopleResponse(familyMembers),
+            HttpStatus.OK
+        ));
+    }
+    
+    private AddPeopleResponse makeAddPeopleResponse(List<FamilyMember> familyMembers) {
+        List<FamilyMemberResponse> familyMemberResponses = new ArrayList<>();
+        
+        for (FamilyMember familyMember : familyMembers) {
+            FamilyMemberResponse familyMemberResponse = FamilyMemberResponse.builder()
+                .personId(familyMember.getPerson().getId())
+                .householdId(familyMember.getHousehold().getId())
+                .hostRelation(familyMember.getHostRelation())
+                .build();
+            familyMemberResponses.add(familyMemberResponse);
+        }
+        
+        return new AddPeopleResponse(familyMemberResponses);
     }
 }

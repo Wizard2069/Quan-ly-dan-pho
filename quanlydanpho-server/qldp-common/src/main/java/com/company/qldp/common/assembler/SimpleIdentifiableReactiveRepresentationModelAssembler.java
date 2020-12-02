@@ -86,7 +86,7 @@ public class SimpleIdentifiableReactiveRepresentationModelAssembler<T>
         Mono<Long> totalElements = entities.count();
         
         return entities
-            .skip((page - 1) * limit)
+            .skip((long) (page - 1) * limit)
             .take(limit)
             .flatMap(entity -> toModel(entity, exchange))
             .collectList()

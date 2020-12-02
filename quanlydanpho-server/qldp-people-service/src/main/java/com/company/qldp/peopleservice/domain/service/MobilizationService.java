@@ -8,11 +8,11 @@ import com.company.qldp.domain.Stay;
 import com.company.qldp.domain.TempAbsent;
 import com.company.qldp.peopleservice.domain.dto.StayDto;
 import com.company.qldp.peopleservice.domain.dto.TempAbsentDto;
-import com.company.qldp.peopleservice.domain.exception.InvalidDateRangeException;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import com.company.qldp.peopleservice.domain.repository.StayRepository;
 import com.company.qldp.peopleservice.domain.repository.TempAbsentRepository;
+import com.company.qldp.peopleservice.domain.util.CreateDateInterval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +45,7 @@ public class MobilizationService {
             throw new PersonNotFoundException();
         }
     
-        DateInterval interval = createDateInterval(
+        DateInterval interval = CreateDateInterval.create(
             tempAbsentDto.getFromDate(),
             tempAbsentDto.getToDate()
         );
@@ -85,7 +85,7 @@ public class MobilizationService {
             throw new PersonNotFoundException();
         }
     
-        DateInterval interval = createDateInterval(
+        DateInterval interval = CreateDateInterval.create(
             stayDto.getFromDate(),
             stayDto.getToDate()
         );
@@ -115,20 +115,5 @@ public class MobilizationService {
     
     private boolean tempResidentCodeExists(String code) {
         return stayRepository.findByTempResidenceCode(code) != null;
-    }
-    
-    private DateInterval createDateInterval(String fromDate, String toDate) {
-        Date from = Date.from(Instant.parse(fromDate));
-        Date to = Date.from(Instant.parse(toDate));
-    
-        if (to.before(from)) {
-            throw new InvalidDateRangeException();
-        }
-    
-        DateInterval interval = DateInterval.builder()
-            .from(from).to(to)
-            .build();
-        
-        return interval;
     }
 }
