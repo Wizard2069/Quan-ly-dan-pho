@@ -2,7 +2,7 @@ package com.company.qldp.householdservice.web;
 
 import com.company.qldp.domain.FamilyMember;
 import com.company.qldp.domain.Household;
-import com.company.qldp.householdservice.domain.dto.FamilyDto;
+import com.company.qldp.householdservice.domain.dto.FamilyMemberDto;
 import com.company.qldp.householdservice.domain.dto.HouseholdDto;
 import com.company.qldp.householdservice.domain.service.HouseholdService;
 import com.company.qldp.householdservice.domain.util.AddPeopleResponse;
@@ -54,9 +54,9 @@ public class HouseholdController {
     )
     public Mono<ResponseEntity<AddPeopleResponse>> addPeople(
         @PathVariable("id") Integer id,
-        @Valid @RequestBody FamilyDto familyDto
+        @Valid @RequestBody FamilyMemberDto familyMemberDto
     ) {
-        List<FamilyMember> familyMembers = householdService.addPeopleToHousehold(id, familyDto);
+        List<FamilyMember> familyMembers = householdService.addPeopleToHousehold(id, familyMemberDto);
         
         return Mono.just(new ResponseEntity<>(
             makeAddPeopleResponse(familyMembers),

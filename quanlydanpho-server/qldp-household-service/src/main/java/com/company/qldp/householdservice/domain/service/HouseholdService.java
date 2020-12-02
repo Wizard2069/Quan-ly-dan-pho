@@ -4,7 +4,7 @@ import com.company.qldp.common.util.RandomCodeGenerator;
 import com.company.qldp.domain.FamilyMember;
 import com.company.qldp.domain.Household;
 import com.company.qldp.domain.People;
-import com.company.qldp.householdservice.domain.dto.FamilyDto;
+import com.company.qldp.householdservice.domain.dto.FamilyMemberDto;
 import com.company.qldp.householdservice.domain.dto.HouseholdDto;
 import com.company.qldp.householdservice.domain.exception.HouseholdNotFoundException;
 import com.company.qldp.householdservice.domain.repository.FamilyMemberRepository;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.company.qldp.householdservice.domain.dto.FamilyDto.*;
+import static com.company.qldp.householdservice.domain.dto.FamilyMemberDto.*;
 
 @Service
 public class HouseholdService {
@@ -70,8 +70,8 @@ public class HouseholdService {
     }
     
     @Transactional
-    public List<FamilyMember> addPeopleToHousehold(Integer householdId, FamilyDto familyDto) {
-        List<Member> members = familyDto.getMembers();
+    public List<FamilyMember> addPeopleToHousehold(Integer householdId, FamilyMemberDto familyMemberDto) {
+        List<Member> members = familyMemberDto.getMembers();
         
         Household household = householdRepository.findById(householdId)
             .orElseThrow(HouseholdNotFoundException::new);

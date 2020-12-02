@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FamilyDto {
+public class FamilyMemberDto {
     
     @NotNull
     @Size(min = 1)
