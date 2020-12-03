@@ -1,5 +1,6 @@
 package com.company.qldp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class IDCard {
         fetch = FetchType.LAZY
     )
     @JoinColumn(name = "person_id")
+    @JsonIgnore
     private People person;
     
     @Column(name = "id_card_number", nullable = false, length = 12)

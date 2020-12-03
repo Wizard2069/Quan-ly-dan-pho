@@ -15,10 +15,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class IDCardDto {
     
-    @NotNull
-    @Length(min = 1)
-    private String peopleCode;
-    
     @ValidIDCard
     private String idCardNumber;
     

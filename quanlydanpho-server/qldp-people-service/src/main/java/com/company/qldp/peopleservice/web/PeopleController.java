@@ -1,14 +1,11 @@
 package com.company.qldp.peopleservice.web;
 
 import com.company.qldp.domain.Death;
-import com.company.qldp.domain.IDCard;
 import com.company.qldp.domain.People;
 import com.company.qldp.peopleservice.domain.assembler.PeopleRepresentationModelAssembler;
 import com.company.qldp.peopleservice.domain.dto.DeathDto;
-import com.company.qldp.peopleservice.domain.dto.IDCardDto;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
 import com.company.qldp.peopleservice.domain.service.PeopleService;
-import com.company.qldp.peopleservice.domain.util.CreateIDCardResponse;
 import com.company.qldp.peopleservice.domain.util.DeathPersonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
@@ -72,23 +69,6 @@ public class PeopleController {
     
     private DeathPersonResponse makeDeathPersonResponse(Integer id) {
         return new DeathPersonResponse(id);
-    }
-    
-    @PostMapping(
-        path = "/id-card",
-        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
-    )
-    public Mono<ResponseEntity<CreateIDCardResponse>> createIDCard(@Valid IDCardDto idCardDto) {
-        IDCard idCard = peopleService.createPeopleIDCard(idCardDto);
-        
-        return Mono.just(new ResponseEntity<>(
-            makeCreateIDCardResponse(idCard.getId()),
-            HttpStatus.CREATED
-        ));
-    }
-    
-    private CreateIDCardResponse makeCreateIDCardResponse(Integer id) {
-        return new CreateIDCardResponse(id);
     }
     
     @GetMapping("/{id}")
