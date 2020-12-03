@@ -1,16 +1,13 @@
 package com.company.qldp.peopleservice.web;
 
-import com.company.qldp.domain.Family;
 import com.company.qldp.domain.Story;
 import com.company.qldp.peopleservice.domain.assembler.StoryRepresentationModelAssembler;
-import com.company.qldp.peopleservice.domain.dto.FamilyDto;
 import com.company.qldp.peopleservice.domain.dto.StoryDto;
 import com.company.qldp.peopleservice.domain.service.StoryService;
-import com.company.qldp.peopleservice.domain.util.AddFamilyRelationResponse;
-import com.company.qldp.peopleservice.domain.util.CreateStoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,10 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.company.qldp.peopleservice.domain.util.AddFamilyRelationResponse.*;
 
 @RestController
 @RequestMapping(
@@ -50,58 +44,18 @@ public class StoryController {
         path = "/{id}/stories",
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
     )
-    public Mono<ResponseEntity<CreateStoryResponse>> addPeopleStory(
+    public Mono<ResponseEntity<EntityModel<Story>>> addPeopleStory(
         @PathVariable("id") Integer id,
-        @Valid StoryDto storyDto
+        @Valid StoryDto storyDto,
+        ServerWebExchange exchange
     ) {
         Story story = storyService.createStory(id, storyDto);
         
-        return Mono.just(new ResponseEntity<>(
-            makeCreateStoryResponse(story),
-            HttpStatus.CREATED
-        ));
-    }
-    
-    private CreateStoryResponse makeCreateStoryResponse(Story story) {
-        return CreateStoryResponse.builder()
-            .id(story.getId())
-            .personId(story.getPerson().getId())
-            .address(story.getAddress())
-            .from(story.getInterval().getFrom())
-            .to(story.getInterval().getTo())
-            .job(story.getJob())
-            .workplace(story.getWorkplace())
-            .build();
-    }
-    
-    @PostMapping(
-        path = "/{id}/family",
-        consumes = MediaType.APPLICATION_JSON_VALUE
-    )
-    public Mono<ResponseEntity<AddFamilyRelationResponse>> addFamilyRelation(
-        @PathVariable("id") Integer id,
-        @Valid @RequestBody FamilyDto familyDto
-    ) {
-        List<Family> familyList = storyService.addFamilyRelationToPeople(id, familyDto);
-        
-        return Mono.just(new ResponseEntity<>(
-            makeAddFamilyRelationResponse(familyList),
-            HttpStatus.CREATED
-        ));
-    }
-    
-    private AddFamilyRelationResponse makeAddFamilyRelationResponse(List<Family> familyList) {
-        List<Relation> relations = new ArrayList<>();
-        
-        for (Family family : familyList) {
-            Relation relation = Relation.builder()
-                .id(family.getId())
-                .peopleRelation(family.getPersonRelation())
-                .build();
-            relations.add(relation);
-        }
-        
-        return new AddFamilyRelationResponse(relations);
+        return assembler.toModel(story, exchange)
+            .map(storyModel -> ResponseEntity
+                .created(storyModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(storyModel)
+            );
     }
     
     @GetMapping(path = "/{id}/stories")

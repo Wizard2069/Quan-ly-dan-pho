@@ -2,7 +2,6 @@ package com.company.qldp.common.assembler;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -32,9 +31,6 @@ public class SimpleIdentifiableReactiveRepresentationModelAssembler<T>
     private LinkRelationProvider relationProvider;
     
     private Class<?> resourceType;
-    
-    @Setter
-    private String basePath = "";
     
     public SimpleIdentifiableReactiveRepresentationModelAssembler(
         Class<?> controllerClass,

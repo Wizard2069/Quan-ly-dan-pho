@@ -1,6 +1,7 @@
 package com.company.qldp.domain;
 
 import com.company.qldp.common.PeopleInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class Family {
         fetch = FetchType.LAZY
     )
     @JoinColumn(name = "person_id")
+    @JsonIgnore
     private People person;
     
     @Embedded
