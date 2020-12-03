@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 
-import static com.company.qldp.common.PeopleInfo.Sex;
+import com.company.qldp.common.Sex;
 
 @Data
 @NoArgsConstructor

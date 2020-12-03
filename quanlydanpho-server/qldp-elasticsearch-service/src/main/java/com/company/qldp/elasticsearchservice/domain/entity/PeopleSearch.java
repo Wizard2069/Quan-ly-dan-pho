@@ -1,6 +1,6 @@
 package com.company.qldp.elasticsearchservice.domain.entity;
 
-import com.company.qldp.common.PeopleInfo;
+import com.company.qldp.common.Sex;
 import lombok.*;
 
 import org.springframework.data.annotation.Id;
@@ -43,7 +43,7 @@ public class PeopleSearch {
     private Date birthday;
     
     @Field(type = FieldType.Text)
-    private PeopleInfo.Sex sex;
+    private Sex sex;
     
     private String job;
     

@@ -6,12 +6,10 @@ import com.company.qldp.domain.People;
 import com.company.qldp.peopleservice.domain.assembler.PeopleRepresentationModelAssembler;
 import com.company.qldp.peopleservice.domain.dto.DeathDto;
 import com.company.qldp.peopleservice.domain.dto.IDCardDto;
-import com.company.qldp.peopleservice.domain.dto.LeaveDto;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
 import com.company.qldp.peopleservice.domain.service.PeopleService;
 import com.company.qldp.peopleservice.domain.util.CreateIDCardResponse;
 import com.company.qldp.peopleservice.domain.util.DeathPersonResponse;
-import com.company.qldp.peopleservice.domain.util.LeavePersonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -74,23 +72,6 @@ public class PeopleController {
     
     private DeathPersonResponse makeDeathPersonResponse(Integer id) {
         return new DeathPersonResponse(id);
-    }
-    
-    @PatchMapping(
-        path = "/leave",
-        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
-    )
-    public Mono<ResponseEntity<LeavePersonResponse>> leavePerson(@Valid LeaveDto leaveDto) {
-        People people = peopleService.leavePeople(leaveDto);
-        
-        return Mono.just(new ResponseEntity<>(
-            makeLeavePersonResponse(people.getId()),
-            HttpStatus.OK
-        ));
-    }
-    
-    private LeavePersonResponse makeLeavePersonResponse(Integer id) {
-        return new LeavePersonResponse(id);
     }
     
     @PostMapping(

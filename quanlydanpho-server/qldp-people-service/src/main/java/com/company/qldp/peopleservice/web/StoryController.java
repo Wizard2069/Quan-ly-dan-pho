@@ -2,16 +2,22 @@ package com.company.qldp.peopleservice.web;
 
 import com.company.qldp.domain.Family;
 import com.company.qldp.domain.Story;
+import com.company.qldp.peopleservice.domain.assembler.StoryRepresentationModelAssembler;
 import com.company.qldp.peopleservice.domain.dto.FamilyDto;
 import com.company.qldp.peopleservice.domain.dto.StoryDto;
 import com.company.qldp.peopleservice.domain.service.StoryService;
 import com.company.qldp.peopleservice.domain.util.AddFamilyRelationResponse;
 import com.company.qldp.peopleservice.domain.util.CreateStoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -23,19 +29,25 @@ import static com.company.qldp.peopleservice.domain.util.AddFamilyRelationRespon
 @RestController
 @RequestMapping(
     path = "/people",
-    produces = MediaType.APPLICATION_JSON_VALUE
+    produces = MediaTypes.HAL_JSON_VALUE
 )
 public class StoryController {
     
     private StoryService storyService;
     
+    private StoryRepresentationModelAssembler assembler;
+    
     @Autowired
-    public StoryController(StoryService storyService) {
+    public StoryController(
+        StoryService storyService,
+        StoryRepresentationModelAssembler assembler
+    ) {
         this.storyService = storyService;
+        this.assembler = assembler;
     }
     
     @PostMapping(
-        path = "/{id}/story",
+        path = "/{id}/stories",
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
     )
     public Mono<ResponseEntity<CreateStoryResponse>> addPeopleStory(
@@ -83,12 +95,34 @@ public class StoryController {
         
         for (Family family : familyList) {
             Relation relation = Relation.builder()
-                .peopleId(family.getPerson().getId())
+                .id(family.getId())
                 .peopleRelation(family.getPersonRelation())
                 .build();
             relations.add(relation);
         }
         
         return new AddFamilyRelationResponse(relations);
+    }
+    
+    @GetMapping(path = "/{id}/stories")
+    @ResponseStatus(code = HttpStatus.OK)
+    public Mono<CollectionModel<EntityModel<Story>>> getStoriesByPeopleId(
+        @PathVariable("id") Integer id,
+        ServerWebExchange exchange
+    ) {
+        List<Story> stories = storyService.getStoriesByPeopleId(id);
+        
+        return assembler.toCollectionModel(Flux.fromIterable(stories), exchange);
+    }
+    
+    @GetMapping(path = "/{id}/stories/{storyId}")
+    public Mono<EntityModel<Story>> getStoryById(
+        @PathVariable("id") Integer peopleId,
+        @PathVariable("storyId") Integer storyId,
+        ServerWebExchange exchange
+    ) {
+        Story story = storyService.getStoryById(peopleId, storyId);
+        
+        return assembler.toModel(story, exchange);
     }
 }

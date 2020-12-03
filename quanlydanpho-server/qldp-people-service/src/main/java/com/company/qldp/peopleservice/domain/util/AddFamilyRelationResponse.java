@@ -20,7 +20,7 @@ public class AddFamilyRelationResponse {
     @Builder
     public static class Relation {
         
-        private Integer peopleId;
+        private Integer id;
         private String peopleRelation;
     }
 }

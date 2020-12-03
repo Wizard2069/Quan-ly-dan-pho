@@ -29,8 +29,4 @@ public class PeopleInfo {
     
     @Column(name = "current_address")
     private String currentAddress;
-    
-    public enum Sex {
-        MALE, FEMALE, OTHER
-    }
 }

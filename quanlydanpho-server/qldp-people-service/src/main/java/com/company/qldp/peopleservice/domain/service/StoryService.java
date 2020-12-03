@@ -1,7 +1,6 @@
 package com.company.qldp.peopleservice.domain.service;
 
 import com.company.qldp.common.DateInterval;
-import com.company.qldp.common.PeopleInfo;
 import com.company.qldp.domain.Family;
 import com.company.qldp.domain.People;
 import com.company.qldp.domain.Story;
@@ -80,5 +79,13 @@ public class StoryService {
         }
         
         return familyList;
+    }
+    
+    public List<Story> getStoriesByPeopleId(Integer peopleId) {
+        return storyRepository.findAllByPerson_Id(peopleId);
+    }
+    
+    public Story getStoryById(Integer peopleId, Integer storyId) {
+        return storyRepository.findByPerson_IdAndId(peopleId, storyId);
     }
 }

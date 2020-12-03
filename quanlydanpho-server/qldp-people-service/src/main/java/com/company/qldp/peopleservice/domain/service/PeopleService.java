@@ -8,7 +8,6 @@ import com.company.qldp.elasticsearchservice.domain.repository.IDCardSearchRepos
 import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
 import com.company.qldp.peopleservice.domain.dto.DeathDto;
 import com.company.qldp.peopleservice.domain.dto.IDCardDto;
-import com.company.qldp.peopleservice.domain.dto.LeaveDto;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
 import com.company.qldp.peopleservice.domain.exception.DeathAlreadyExistException;
 import com.company.qldp.peopleservice.domain.exception.IDCardNumberAlreadyExistException;
@@ -153,22 +152,6 @@ public class PeopleService {
             .build();
         
         return deathRepository.save(createdDeath);
-    }
-    
-    public People leavePeople(LeaveDto leaveDto) {
-        People people = peopleRepository.findByPeopleCode(leaveDto.getPeopleCode());
-        if (people == null) {
-            throw new PersonNotFoundException();
-        }
-    
-        PersonalMobilization mobilization = PersonalMobilization.builder()
-            .leaveDate(Date.from(Instant.parse(leaveDto.getLeaveDate())))
-            .leaveReason(leaveDto.getLeaveReason())
-            .newAddress(leaveDto.getNewAddress())
-            .build();
-        people.setMobilization(mobilization);
-        
-        return peopleRepository.save(people);
     }
     
     public IDCard createPeopleIDCard(IDCardDto idCardDto) {

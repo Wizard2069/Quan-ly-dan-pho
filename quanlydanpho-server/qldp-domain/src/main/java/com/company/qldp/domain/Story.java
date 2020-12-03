@@ -1,6 +1,7 @@
 package com.company.qldp.domain;
 
 import com.company.qldp.common.DateInterval;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class Story {
         fetch = FetchType.LAZY
     )
     @JoinColumn(name = "person_id")
+    @JsonIgnore
     private People person;
     
     @Embedded

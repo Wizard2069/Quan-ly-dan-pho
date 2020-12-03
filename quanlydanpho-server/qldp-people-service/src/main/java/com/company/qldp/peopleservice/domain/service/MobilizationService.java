@@ -6,6 +6,7 @@ import com.company.qldp.domain.People;
 import com.company.qldp.domain.PersonalMobilization;
 import com.company.qldp.domain.Stay;
 import com.company.qldp.domain.TempAbsent;
+import com.company.qldp.peopleservice.domain.dto.LeaveDto;
 import com.company.qldp.peopleservice.domain.dto.StayDto;
 import com.company.qldp.peopleservice.domain.dto.TempAbsentDto;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
@@ -35,6 +36,22 @@ public class MobilizationService {
         this.peopleRepository = peopleRepository;
         this.tempAbsentRepository = tempAbsentRepository;
         this.stayRepository = stayRepository;
+    }
+    
+    public People leavePeople(LeaveDto leaveDto) {
+        People people = peopleRepository.findByPeopleCode(leaveDto.getPeopleCode());
+        if (people == null) {
+            throw new PersonNotFoundException();
+        }
+        
+        PersonalMobilization mobilization = PersonalMobilization.builder()
+            .leaveDate(Date.from(Instant.parse(leaveDto.getLeaveDate())))
+            .leaveReason(leaveDto.getLeaveReason())
+            .newAddress(leaveDto.getNewAddress())
+            .build();
+        people.setMobilization(mobilization);
+        
+        return peopleRepository.save(people);
     }
     
     public TempAbsent createTempAbsent(TempAbsentDto tempAbsentDto) {
