@@ -1,5 +1,6 @@
 package com.company.qldp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class Correction {
         fetch = FetchType.LAZY
     )
     @JoinColumn(name = "household_id")
+    @JsonIgnore
     private Household household;
     
     @Column(name = "change_info")
@@ -43,5 +45,5 @@ public class Correction {
         fetch = FetchType.LAZY
     )
     @JoinColumn(name = "performer_id")
-    private User performer;
+    private People performer;
 }

@@ -11,7 +11,7 @@ import com.company.qldp.peopleservice.domain.exception.TempAbsentNotFoundExcepti
 import com.company.qldp.peopleservice.domain.repository.IDCardRepository;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import com.company.qldp.peopleservice.domain.repository.TempAbsentRepository;
-import com.company.qldp.peopleservice.domain.util.DateUtils;
+import com.company.qldp.common.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

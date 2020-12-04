@@ -7,7 +7,7 @@ import com.company.qldp.peopleservice.domain.dto.StoryDto;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import com.company.qldp.peopleservice.domain.repository.StoryRepository;
-import com.company.qldp.peopleservice.domain.util.DateUtils;
+import com.company.qldp.common.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
-package com.company.qldp.peopleservice.domain.util;
+package com.company.qldp.common.util;
 
 import com.company.qldp.common.DateInterval;
-import com.company.qldp.peopleservice.domain.exception.InvalidDateRangeException;
+import com.company.qldp.common.exception.InvalidDateRangeException;
 
 import java.time.Instant;
 import java.util.Date;
@@ -17,12 +17,10 @@ public class DateUtils {
         if (to.before(from)) {
             throw new InvalidDateRangeException();
         }
-        
-        DateInterval interval = DateInterval.builder()
+    
+        return DateInterval.builder()
             .from(from).to(to)
             .build();
-        
-        return interval;
     }
     
     public static Map<String, Date> getDateRange(String fromDateStr, String toDateStr) {
