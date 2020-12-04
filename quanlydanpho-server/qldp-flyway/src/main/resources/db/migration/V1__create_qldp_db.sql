@@ -183,7 +183,7 @@ ALTER TABLE `id_card`
 
 ALTER TABLE `corrections`
     ADD CONSTRAINT `corrections_household_id` FOREIGN KEY (`household_id`) REFERENCES `household` (`ID`),
-    ADD CONSTRAINT `corrections_performer_id` FOREIGN KEY (`performer_id`) REFERENCES `users` (`ID`);
+    ADD CONSTRAINT `corrections_performer_id` FOREIGN KEY (`performer_id`) REFERENCES `people` (`ID`);
 
 ALTER TABLE `family`
     ADD CONSTRAINT `family_person_id` FOREIGN KEY (`person_id`) REFERENCES `people` (`ID`);
