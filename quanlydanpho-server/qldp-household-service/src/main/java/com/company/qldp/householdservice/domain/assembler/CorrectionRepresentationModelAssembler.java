@@ -21,7 +21,12 @@ public class CorrectionRepresentationModelAssembler
     
     @Override
     protected String getEntityId(EntityModel<Correction> resource) {
-        return "";
+        return resource.getContent().getId().toString();
+    }
+    
+    @Override
+    protected String getCollectionName() {
+        return "corrections";
     }
     
     @Override

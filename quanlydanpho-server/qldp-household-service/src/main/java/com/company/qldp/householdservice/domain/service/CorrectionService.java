@@ -54,6 +54,14 @@ public class CorrectionService {
     }
     
     @Transactional
+    public Correction getCorrectionByHouseholdId(Integer id, Integer correctionId) {
+        Correction correction = correctionRepository.findByHousehold_IdAndId(id, correctionId);
+        getCorrectionInfo(correction);
+        
+        return correction;
+    }
+    
+    @Transactional
     public List<Correction> getCorrectionsByHouseholdId(Integer id) {
         List<Correction> corrections = correctionRepository.findAllByHousehold_Id(id);
         corrections.forEach(this::getCorrectionInfo);

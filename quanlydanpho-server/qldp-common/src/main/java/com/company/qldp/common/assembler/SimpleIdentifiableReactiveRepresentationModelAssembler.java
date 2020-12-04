@@ -57,10 +57,9 @@ public class SimpleIdentifiableReactiveRepresentationModelAssembler<T>
                 String collectionLink = link.getHref();
                 
                 String entityLink = collectionLink + "/" + entityId;
-                if (entityId.isEmpty()) {
-                    entityLink = link.getHref();
+                if (!entityId.isEmpty()) {
+                    resource.add(Link.of(entityLink));
                 }
-                resource.add(Link.of(entityLink));
                 
                 if (getCollectionName() != null) {
                     resource.add(Link.of(collectionLink).withRel(getCollectionName()));

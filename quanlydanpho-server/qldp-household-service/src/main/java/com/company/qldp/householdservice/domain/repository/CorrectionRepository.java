@@ -8,4 +8,6 @@ import java.util.List;
 public interface CorrectionRepository extends JpaRepository<Correction, Integer> {
 
     List<Correction> findAllByHousehold_Id(Integer id);
+    
+    Correction findByHousehold_IdAndId(Integer householdId, Integer id);
 }
