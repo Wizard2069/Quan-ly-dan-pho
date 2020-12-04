@@ -4,7 +4,7 @@ import com.company.qldp.common.PeopleInfo;
 import com.company.qldp.domain.*;
 import com.company.qldp.elasticsearchservice.domain.entity.PeopleSearch;
 import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
-import com.company.qldp.peopleservice.domain.dto.LeaveDto;
+import com.company.qldp.peopleservice.domain.dto.LeavePeopleDto;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
@@ -107,14 +107,14 @@ public class PeopleService {
         return peopleRepository.findByPeopleCode(peopleCode) != null;
     }
     
-    public People leavePeople(Integer id, LeaveDto leaveDto) {
+    public People leavePeople(Integer id, LeavePeopleDto leavePeopleDto) {
         People people = peopleRepository.findById(id)
             .orElseThrow(PersonNotFoundException::new);
         
         PersonalMobilization mobilization = PersonalMobilization.builder()
-            .leaveDate(Date.from(Instant.parse(leaveDto.getLeaveDate())))
-            .leaveReason(leaveDto.getLeaveReason())
-            .newAddress(leaveDto.getNewAddress())
+            .leaveDate(Date.from(Instant.parse(leavePeopleDto.getLeaveDate())))
+            .leaveReason(leavePeopleDto.getLeaveReason())
+            .newAddress(leavePeopleDto.getNewAddress())
             .build();
         people.setMobilization(mobilization);
         

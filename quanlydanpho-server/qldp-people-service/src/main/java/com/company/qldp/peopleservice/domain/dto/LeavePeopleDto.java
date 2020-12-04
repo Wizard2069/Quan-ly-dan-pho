@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LeaveDto {
+public class LeavePeopleDto {
     
     @NotNull
     @Length(min = 1)

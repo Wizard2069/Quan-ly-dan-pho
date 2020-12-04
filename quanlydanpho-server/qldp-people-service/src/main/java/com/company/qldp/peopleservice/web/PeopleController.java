@@ -2,7 +2,7 @@ package com.company.qldp.peopleservice.web;
 
 import com.company.qldp.domain.People;
 import com.company.qldp.peopleservice.domain.assembler.PeopleRepresentationModelAssembler;
-import com.company.qldp.peopleservice.domain.dto.LeaveDto;
+import com.company.qldp.peopleservice.domain.dto.LeavePeopleDto;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
 import com.company.qldp.peopleservice.domain.service.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,10 +70,10 @@ public class PeopleController {
     @ResponseStatus(code = HttpStatus.OK)
     public Mono<EntityModel<People>> leavePerson(
         @PathVariable("id") Integer id,
-        @Valid LeaveDto leaveDto,
+        @Valid LeavePeopleDto leavePeopleDto,
         ServerWebExchange exchange
     ) {
-        People people = peopleService.leavePeople(id, leaveDto);
+        People people = peopleService.leavePeople(id, leavePeopleDto);
         
         return assembler.toModel(people, exchange);
     }

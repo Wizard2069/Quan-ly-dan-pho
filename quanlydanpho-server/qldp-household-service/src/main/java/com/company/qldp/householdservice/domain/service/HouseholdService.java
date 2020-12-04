@@ -4,8 +4,10 @@ import com.company.qldp.common.util.RandomCodeGenerator;
 import com.company.qldp.domain.Household;
 import com.company.qldp.domain.People;
 import com.company.qldp.householdservice.domain.dto.HouseholdDto;
+import com.company.qldp.householdservice.domain.dto.LeaveHouseholdDto;
 import com.company.qldp.householdservice.domain.exception.HouseholdNotFoundException;
 import com.company.qldp.householdservice.domain.repository.HouseholdRepository;
+import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,5 +79,19 @@ public class HouseholdService {
     private void getHouseholdExtraInfo(Household household) {
         household.getHost().hashCode();
         household.getPerformer().hashCode();
+    }
+    
+    @Transactional
+    public Household leaveHousehold(Integer id, LeaveHouseholdDto leaveHouseholdDto) {
+        Household household = householdRepository.findById(id)
+            .orElseThrow(HouseholdNotFoundException::new);
+        People performer = peopleRepository.findById(leaveHouseholdDto.getPerformerId())
+            .orElseThrow(PersonNotFoundException::new);
+        
+        household.setLeaveDay(Date.from(Instant.parse(leaveHouseholdDto.getLeaveDate())));
+        household.setLeaveReason(leaveHouseholdDto.getLeaveReason());
+        household.setPerformer(performer);
+        
+        return householdRepository.save(household);
     }
 }

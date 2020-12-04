@@ -3,6 +3,7 @@ package com.company.qldp.householdservice.web;
 import com.company.qldp.domain.Household;
 import com.company.qldp.householdservice.domain.assembler.HouseholdRepresentationModelAssembler;
 import com.company.qldp.householdservice.domain.dto.HouseholdDto;
+import com.company.qldp.householdservice.domain.dto.LeaveHouseholdDto;
 import com.company.qldp.householdservice.domain.service.HouseholdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -71,5 +72,20 @@ public class HouseholdController {
         List<Household> households = householdService.getHouseholds();
         
         return assembler.toCollectionModel(Flux.fromIterable(households), exchange);
+    }
+    
+    @PatchMapping(
+        path = "/{id}",
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+    )
+    @ResponseStatus(code = HttpStatus.OK)
+    public Mono<EntityModel<Household>> leaveHousehold(
+        @PathVariable("id") Integer id,
+        @Valid LeaveHouseholdDto leaveHouseholdDto,
+        ServerWebExchange exchange
+    ) {
+        Household household = householdService.leaveHousehold(id, leaveHouseholdDto);
+        
+        return assembler.toModel(household, exchange);
     }
 }
