@@ -22,11 +22,11 @@ public class DeathRepresentationModelAssembler
     public EntityModel<Death> addLinks(EntityModel<Death> resource, ServerWebExchange exchange) {
         initLinkBuilder(exchange).withSelfRel().toMono(link -> {
             String entityId = resource.getContent().getId().toString();
-            String collectionLink = link.getHref().replace("/{id}", "");
+            String collectionLink = link.getHref();
             String entityLink = collectionLink + "/" + entityId;
             
-            resource.add(Link.of(collectionLink).withRel("deaths"));
             resource.add(Link.of(entityLink));
+            resource.add(Link.of(collectionLink).withRel("deaths"));
             
             return link;
         }).subscribe();
@@ -36,6 +36,6 @@ public class DeathRepresentationModelAssembler
     
     @Override
     protected WebFluxBuilder initLinkBuilder(ServerWebExchange exchange) {
-        return linkTo(methodOn(DeathController.class).getDeathById(null, exchange), exchange);
+        return linkTo(methodOn(DeathController.class).getAllDeaths(exchange), exchange);
     }
 }

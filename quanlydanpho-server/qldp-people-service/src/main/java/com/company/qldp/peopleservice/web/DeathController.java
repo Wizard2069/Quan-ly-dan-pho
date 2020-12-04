@@ -5,17 +5,21 @@ import com.company.qldp.peopleservice.domain.assembler.DeathRepresentationModelA
 import com.company.qldp.peopleservice.domain.dto.DeathDto;
 import com.company.qldp.peopleservice.domain.service.DeathService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(
@@ -60,5 +64,23 @@ public class DeathController {
         Death death = deathService.getDeath(id);
         
         return assembler.toModel(death, exchange);
+    }
+    
+    @GetMapping
+    @ResponseStatus(code = HttpStatus.OK)
+    public Mono<CollectionModel<EntityModel<Death>>> getAllDeaths(ServerWebExchange exchange) {
+        MultiValueMap<String, String> queryParams = exchange.getRequest().getQueryParams();
+        String fromDateStr = queryParams.getFirst("from");
+        String toDateStr = queryParams.getFirst("to");
+    
+        List<Death> deaths;
+        
+        if (fromDateStr == null && toDateStr == null) {
+            deaths = deathService.getDeaths();
+        } else {
+            deaths = deathService.getDeathsByDateRange(fromDateStr, toDateStr);
+        }
+        
+        return assembler.toCollectionModel(Flux.fromIterable(deaths), exchange);
     }
 }
