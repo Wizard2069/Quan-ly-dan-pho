@@ -11,6 +11,7 @@ import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.repository.DeathRepository;
 import com.company.qldp.peopleservice.domain.repository.IDCardRepository;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
+import com.company.qldp.peopleservice.domain.util.DateUtils;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DeathService {
@@ -103,16 +105,9 @@ public class DeathService {
     
     @Transactional
     public List<Death> getDeathsByDateRange(String fromDateStr, String toDateStr) {
-        if (fromDateStr == null || toDateStr == null) {
-            throw new InvalidDateRangeException();
-        }
-        
-        Date from = Date.from(Instant.parse(fromDateStr));
-        Date to = Date.from(Instant.parse(toDateStr));
-        
-        if (to.before(from)) {
-            throw new InvalidDateRangeException();
-        }
+        Map<String, Date> dateRange = DateUtils.getDateRange(fromDateStr, toDateStr);
+        Date from = dateRange.get("from");
+        Date to = dateRange.get("to");
         
         List<Death> deaths = deathRepository.findAllByDeclaredDayBetween(from ,to);
         deaths.forEach(death -> death.getDeathPerson().hashCode());

@@ -1,7 +1,5 @@
 package com.company.qldp.peopleservice.domain.validation.idcard;
 
-import com.company.qldp.peopleservice.domain.validation.idcard.IDCardConstraintValidator;
-
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
