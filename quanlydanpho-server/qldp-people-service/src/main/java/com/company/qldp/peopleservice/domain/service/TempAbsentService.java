@@ -6,19 +6,16 @@ import com.company.qldp.domain.People;
 import com.company.qldp.domain.PersonalMobilization;
 import com.company.qldp.domain.TempAbsent;
 import com.company.qldp.peopleservice.domain.dto.TempAbsentDto;
-import com.company.qldp.peopleservice.domain.exception.InvalidDateRangeException;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.exception.TempAbsentNotFoundException;
 import com.company.qldp.peopleservice.domain.repository.IDCardRepository;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import com.company.qldp.peopleservice.domain.repository.TempAbsentRepository;
-import com.company.qldp.peopleservice.domain.util.CreateDateInterval;
 import com.company.qldp.peopleservice.domain.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +47,7 @@ public class TempAbsentService {
             throw new PersonNotFoundException();
         }
         
-        DateInterval interval = CreateDateInterval.create(
+        DateInterval interval = DateUtils.createDateInterval(
             tempAbsentDto.getFromDate(),
             tempAbsentDto.getToDate()
         );

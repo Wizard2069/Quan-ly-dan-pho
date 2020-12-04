@@ -1,49 +1,85 @@
 package com.company.qldp.peopleservice.web;
 
 import com.company.qldp.domain.Stay;
+import com.company.qldp.peopleservice.domain.assembler.StayRepresentationModelAssembler;
 import com.company.qldp.peopleservice.domain.dto.StayDto;
 import com.company.qldp.peopleservice.domain.service.StayService;
-import com.company.qldp.peopleservice.domain.util.CreateStayResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(
-    path = "/people/stay",
+    path = "/people/stays",
     produces = MediaTypes.HAL_JSON_VALUE
 )
 public class StayController {
     
     private StayService stayService;
     
+    private StayRepresentationModelAssembler assembler;
+    
     @Autowired
-    public StayController(StayService stayService) {
+    public StayController(
+        StayService stayService,
+        StayRepresentationModelAssembler assembler
+    ) {
         this.stayService = stayService;
+        this.assembler = assembler;
     }
     
-    @PostMapping(
-        path = "/stay",
-        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
-    )
-    public Mono<ResponseEntity<CreateStayResponse>> createStay(@Valid StayDto stayDto) {
+    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public Mono<ResponseEntity<EntityModel<Stay>>> createStay(
+        @Valid StayDto stayDto,
+        ServerWebExchange exchange
+    ) {
         Stay stay = stayService.createStay(stayDto);
         
-        return Mono.just(new ResponseEntity<>(
-            makeCreateStayResponse(stay.getId()),
-            HttpStatus.CREATED
-        ));
+        return assembler.toModel(stay, exchange)
+            .map(stayModel -> ResponseEntity
+                .created(stayModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(stayModel)
+            );
     }
     
-    private CreateStayResponse makeCreateStayResponse(Integer id) {
-        return new CreateStayResponse(id);
+    @GetMapping(path = "/{id}")
+    @ResponseStatus(code = HttpStatus.OK)
+    public Mono<EntityModel<Stay>> getStayById(
+        @PathVariable("id") Integer id,
+        ServerWebExchange exchange
+    ) {
+        Stay stay = stayService.getStay(id);
+        
+        return assembler.toModel(stay, exchange);
+    }
+    
+    @GetMapping
+    public Mono<CollectionModel<EntityModel<Stay>>> getAllStays(ServerWebExchange exchange) {
+        MultiValueMap<String, String> queryParams = exchange.getRequest().getQueryParams();
+        String fromDateStr = queryParams.getFirst("from");
+        String toDateStr = queryParams.getFirst("to");
+    
+        List<Stay> stays;
+        
+        if (fromDateStr == null && toDateStr == null) {
+            stays = stayService.getStays();
+        } else {
+            stays = stayService.getStaysByDateRange(fromDateStr, toDateStr);
+        }
+        
+        return assembler.toCollectionModel(Flux.fromIterable(stays), exchange);
     }
 }

@@ -52,12 +52,25 @@ public class SimpleIdentifiableReactiveRepresentationModelAssembler<T>
     @Override
     public EntityModel<T> addLinks(EntityModel<T> resource, ServerWebExchange exchange) {
         initLinkBuilder(exchange).withSelfRel().toMono(link -> {
-            resource.add(link);
+            String entityId = getEntityId(resource);
+            String collectionLink = link.getHref();
+            String entityLink = collectionLink + "/" + entityId;
             
+            resource.add(Link.of(entityLink));
+            resource.add(Link.of(collectionLink).withRel(getCollectionName()));
+        
             return link;
         }).subscribe();
         
         return resource;
+    }
+    
+    protected String getEntityId(EntityModel<T> resource) {
+        return null;
+    }
+    
+    protected String getCollectionName() {
+        return null;
     }
     
     @Override

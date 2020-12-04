@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.NOT_FOUND)
-public class DeathNotFoundException extends RuntimeException {
+public class StayNotFoundException extends RuntimeException {
     
-    public DeathNotFoundException() {
-        super("Could not find this death");
+    public StayNotFoundException() {
+        super("Could not find this stay");
     }
 }

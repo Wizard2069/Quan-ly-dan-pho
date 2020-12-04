@@ -4,7 +4,6 @@ import com.company.qldp.common.assembler.SimpleIdentifiableReactiveRepresentatio
 import com.company.qldp.domain.TempAbsent;
 import com.company.qldp.peopleservice.web.TempAbsentController;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
@@ -19,19 +18,13 @@ public class TempAbsentRepresentationModelAssembler
     }
     
     @Override
-    public EntityModel<TempAbsent> addLinks(EntityModel<TempAbsent> resource, ServerWebExchange exchange) {
-        initLinkBuilder(exchange).withSelfRel().toMono(link -> {
-            String entityId = resource.getContent().getId().toString();
-            String collectionLink = link.getHref();
-            String entityLink = collectionLink + "/" + entityId;
-            
-            resource.add(Link.of(entityLink));
-            resource.add(Link.of(collectionLink).withRel("tempAbsents"));
-            
-            return link;
-        }).subscribe();
-        
-        return resource;
+    protected String getEntityId(EntityModel<TempAbsent> resource) {
+        return resource.getContent().getId().toString();
+    }
+    
+    @Override
+    protected String getCollectionName() {
+        return "tempAbsents";
     }
     
     @Override

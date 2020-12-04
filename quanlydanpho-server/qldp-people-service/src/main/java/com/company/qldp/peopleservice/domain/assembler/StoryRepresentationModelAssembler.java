@@ -4,7 +4,6 @@ import com.company.qldp.common.assembler.SimpleIdentifiableReactiveRepresentatio
 import com.company.qldp.domain.Story;
 import com.company.qldp.peopleservice.web.StoryController;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.reactive.WebFluxLinkBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -22,19 +21,13 @@ public class StoryRepresentationModelAssembler
     }
     
     @Override
-    public EntityModel<Story> addLinks(EntityModel<Story> resource, ServerWebExchange exchange) {
-        initLinkBuilder(exchange).withSelfRel().toMono(link -> {
-            String entityId = resource.getContent().getId().toString();
-            String collectionLink = link.getHref();
-            String entityLink = collectionLink + "/" + entityId;
-            
-            resource.add(Link.of(entityLink));
-            resource.add(Link.of(collectionLink).withRel("stories"));
-            
-            return link;
-        }).subscribe();
-        
-        return resource;
+    protected String getEntityId(EntityModel<Story> resource) {
+        return resource.getContent().getId().toString();
+    }
+    
+    @Override
+    protected String getCollectionName() {
+        return "stories";
     }
     
     @Override

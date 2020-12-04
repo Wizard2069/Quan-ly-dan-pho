@@ -4,11 +4,8 @@ import com.company.qldp.common.assembler.SimpleIdentifiableReactiveRepresentatio
 import com.company.qldp.domain.People;
 import com.company.qldp.peopleservice.web.PeopleController;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
-
-import java.util.Map;
 
 import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.*;
 
@@ -21,26 +18,17 @@ public class PeopleRepresentationModelAssembler
     }
     
     @Override
-    public EntityModel<People> addLinks(EntityModel<People> resource, ServerWebExchange exchange) {
-        initLinkBuilder(exchange).withSelfRel().toMono(link -> {
-            String entityId = resource.getContent().getId().toString();
-            String entityLink = link.getHref().replace("{id}", entityId);
-            String collectionLink = entityLink.replace("/" + entityId, "");
-            
-            resource.add(Link.of(entityLink));
-            resource.add(Link.of(collectionLink).withRel("people"));
-            
-            return link;
-        }).subscribe();
-        
-        return resource;
+    protected String getEntityId(EntityModel<People> resource) {
+        return resource.getContent().getId().toString();
+    }
+    
+    @Override
+    protected String getCollectionName() {
+        return "people";
     }
     
     @Override
     protected WebFluxBuilder initLinkBuilder(ServerWebExchange exchange) {
-        Map<String, String> attributes = exchange.getAttribute("org.springframework.web.reactive.HandlerMapping.uriTemplateVariables");
-        assert attributes != null;
-        
         return linkTo(methodOn(PeopleController.class).getPersonById(null, exchange), exchange);
     }
 }
