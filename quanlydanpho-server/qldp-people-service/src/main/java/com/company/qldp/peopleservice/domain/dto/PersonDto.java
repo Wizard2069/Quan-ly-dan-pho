@@ -62,6 +62,18 @@ public class PersonDto {
     @Length(min = 1)
     private String permanentAddress;
     
+    private String academicLevel;
+    
+    private String qualification;
+    
+    private String ethnicLanguage;
+    
+    private String languageLevel;
+    
+    private String workplace;
+    
+    private String criminalRecord;
+    
     @NotNull
     @Length(min = 1)
     private String createdManagerUsername;

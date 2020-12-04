@@ -64,6 +64,15 @@ public class PeopleService {
             .nationality(personDto.getNationality())
             .build();
         
+        PersonalEducationInfo educationInfo = PersonalEducationInfo.builder()
+            .academicLevel(personDto.getAcademicLevel())
+            .criminalRecord(personDto.getCriminalRecord())
+            .ethnicLanguage(personDto.getEthnicLanguage())
+            .languageLevel(personDto.getLanguageLevel())
+            .qualification(personDto.getQualification())
+            .workplace(personDto.getWorkplace())
+            .build();
+        
         People people = People.builder()
             .peopleCode(peopleCode)
             .alias(personDto.getAlias())
