@@ -1,19 +1,22 @@
 package com.company.qldp.householdservice.web;
 
 import com.company.qldp.domain.FamilyMember;
+import com.company.qldp.householdservice.domain.assembler.FamilyMemberRepresentationModelAssembler;
 import com.company.qldp.householdservice.domain.dto.FamilyMemberDto;
 import com.company.qldp.householdservice.domain.service.FamilyMemberService;
-import com.company.qldp.householdservice.domain.util.AddPeopleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.MediaTypes;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,39 +28,42 @@ public class FamilyMemberController {
     
     private FamilyMemberService familyMemberService;
     
+    private FamilyMemberRepresentationModelAssembler assembler;
+    
     @Autowired
-    public FamilyMemberController(FamilyMemberService familyMemberService) {
+    public FamilyMemberController(
+        FamilyMemberService familyMemberService,
+        FamilyMemberRepresentationModelAssembler assembler
+    ) {
         this.familyMemberService = familyMemberService;
+        this.assembler = assembler;
     }
     
     @PostMapping(
-        path = "/{id}/family",
+        path = "/{id}/members",
         consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public Mono<ResponseEntity<AddPeopleResponse>> addPeople(
+    public Mono<ResponseEntity<CollectionModel<EntityModel<FamilyMember>>>> addPeople(
         @PathVariable("id") Integer id,
-        @Valid @RequestBody FamilyMemberDto familyMemberDto
+        @Valid @RequestBody FamilyMemberDto familyMemberDto,
+        ServerWebExchange exchange
     ) {
-        List<FamilyMember> familyMembers = familyMemberService.addPeopleToHousehold(id, familyMemberDto);
+        List<FamilyMember> familyMembers = familyMemberService.addFamilyMembers(id, familyMemberDto);
         
-        return Mono.just(new ResponseEntity<>(
-            makeAddPeopleResponse(familyMembers),
-            HttpStatus.OK
-        ));
+        return assembler.toCollectionModel(Flux.fromIterable(familyMembers), exchange)
+            .map(memberCollectionModel -> ResponseEntity
+                .created(memberCollectionModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(memberCollectionModel)
+            );
     }
     
-    private AddPeopleResponse makeAddPeopleResponse(List<FamilyMember> familyMembers) {
-        List<AddPeopleResponse.FamilyMemberResponse> familyMemberResponses = new ArrayList<>();
+    @GetMapping(path = "/{id}/members")
+    public Mono<CollectionModel<EntityModel<FamilyMember>>> getAllMembers(
+        @PathVariable("id") Integer id,
+        ServerWebExchange exchange
+    ) {
+        List<FamilyMember> familyMembers = familyMemberService.getFamilyMembers(id);
         
-        for (FamilyMember familyMember : familyMembers) {
-            AddPeopleResponse.FamilyMemberResponse familyMemberResponse = AddPeopleResponse.FamilyMemberResponse.builder()
-                .personId(familyMember.getPerson().getId())
-                .householdId(familyMember.getHousehold().getId())
-                .hostRelation(familyMember.getHostRelation())
-                .build();
-            familyMemberResponses.add(familyMemberResponse);
-        }
-        
-        return new AddPeopleResponse(familyMemberResponses);
+        return assembler.toCollectionModel(Flux.fromIterable(familyMembers), exchange);
     }
 }

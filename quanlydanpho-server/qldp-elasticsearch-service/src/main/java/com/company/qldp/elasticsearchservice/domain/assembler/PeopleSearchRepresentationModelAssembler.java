@@ -19,18 +19,13 @@ public class PeopleSearchRepresentationModelAssembler
     }
     
     @Override
-    public EntityModel<PeopleSearch> addLinks(EntityModel<PeopleSearch> resource, ServerWebExchange exchange) {
-        initLinkBuilder(exchange).withSelfRel().toMono(link -> {
-            Integer entityId = resource.getContent().getId();
-            String entityLink = link.getHref() + "/" + entityId;
-            
-            resource.add(Link.of(entityLink));
-            resource.add(link.withRel("people"));
+    protected String getEntityId(EntityModel<PeopleSearch> resource) {
+        return resource.getContent().getId().toString();
+    }
     
-            return link;
-        }).subscribe();
-        
-        return resource;
+    @Override
+    protected String getCollectionName() {
+        return "people";
     }
     
     @Override

@@ -27,7 +27,6 @@ public class FamilyMemberDto {
     public static class Member {
         
         @NotNull
-        @Length(min = 1)
         private Integer id;
         
         @NotNull

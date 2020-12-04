@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.company.qldp.householdservice.domain.dto.FamilyMemberDto.*;
+
 @Service
 public class FamilyMemberService {
     
@@ -35,15 +37,15 @@ public class FamilyMemberService {
     }
     
     @Transactional
-    public List<FamilyMember> addPeopleToHousehold(Integer householdId, FamilyMemberDto familyMemberDto) {
-        List<FamilyMemberDto.Member> members = familyMemberDto.getMembers();
+    public List<FamilyMember> addFamilyMembers(Integer householdId, FamilyMemberDto familyMemberDto) {
+        List<Member> members = familyMemberDto.getMembers();
         
         Household household = householdRepository.findById(householdId)
             .orElseThrow(HouseholdNotFoundException::new);
         
         List<FamilyMember> familyMembers = new ArrayList<>();
         
-        for (FamilyMemberDto.Member member : members) {
+        for (Member member : members) {
             People person = peopleRepository.findById(member.getId())
                 .orElseThrow(PersonNotFoundException::new);
             
@@ -57,5 +59,17 @@ public class FamilyMemberService {
         }
         
         return familyMembers;
+    }
+    
+    @Transactional
+    public List<FamilyMember> getFamilyMembers(Integer id) {
+        List<FamilyMember> familyMembers = familyMemberRepository.findAllByHousehold_Id(id);
+        familyMembers.forEach(this::getMemberInfo);
+        
+        return familyMembers;
+    }
+    
+    private void getMemberInfo(FamilyMember member) {
+        member.getPerson().hashCode();
     }
 }
