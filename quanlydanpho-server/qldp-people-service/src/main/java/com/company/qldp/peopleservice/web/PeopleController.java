@@ -1,12 +1,10 @@
 package com.company.qldp.peopleservice.web;
 
-import com.company.qldp.domain.Death;
 import com.company.qldp.domain.People;
 import com.company.qldp.peopleservice.domain.assembler.PeopleRepresentationModelAssembler;
-import com.company.qldp.peopleservice.domain.dto.DeathDto;
+import com.company.qldp.peopleservice.domain.dto.LeaveDto;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
 import com.company.qldp.peopleservice.domain.service.PeopleService;
-import com.company.qldp.peopleservice.domain.util.DeathPersonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -54,23 +52,6 @@ public class PeopleController {
             );
     }
     
-    @PatchMapping(
-        path = "/death",
-        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
-    )
-    public Mono<ResponseEntity<DeathPersonResponse>> declareDeathPerson(@Valid DeathDto deathDto) {
-        Death death = peopleService.deleteDeathPeople(deathDto);
-        
-        return Mono.just(new ResponseEntity<>(
-            makeDeathPersonResponse(death.getId()),
-            HttpStatus.OK
-        ));
-    }
-    
-    private DeathPersonResponse makeDeathPersonResponse(Integer id) {
-        return new DeathPersonResponse(id);
-    }
-    
     @GetMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
     public Mono<EntityModel<People>> getPersonById(
@@ -80,5 +61,20 @@ public class PeopleController {
         People person = peopleService.findPersonById(id);
         
         return assembler.toModel(person, exchange);
+    }
+    
+    @PatchMapping(
+        path = "/{id}",
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+    )
+    @ResponseStatus(code = HttpStatus.OK)
+    public Mono<EntityModel<People>> leavePerson(
+        @PathVariable("id") Integer id,
+        @Valid LeaveDto leaveDto,
+        ServerWebExchange exchange
+    ) {
+        People people = peopleService.leavePeople(id, leaveDto);
+        
+        return assembler.toModel(people, exchange);
     }
 }

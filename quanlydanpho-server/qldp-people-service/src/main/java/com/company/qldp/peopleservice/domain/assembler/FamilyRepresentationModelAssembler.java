@@ -3,7 +3,6 @@ package com.company.qldp.peopleservice.domain.assembler;
 import com.company.qldp.common.assembler.SimpleIdentifiableReactiveRepresentationModelAssembler;
 import com.company.qldp.domain.Family;
 import com.company.qldp.peopleservice.web.FamilyController;
-import org.springframework.hateoas.server.reactive.WebFluxLinkBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 

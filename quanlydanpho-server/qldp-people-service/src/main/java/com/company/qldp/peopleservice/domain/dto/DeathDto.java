@@ -1,5 +1,6 @@
 package com.company.qldp.peopleservice.domain.dto;
 
+import com.company.qldp.peopleservice.domain.validation.idcard.ValidIDCard;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,13 +19,11 @@ public class DeathDto {
     @Length(min = 1)
     private String deathCertNumber;
     
-    @NotNull
-    @Length(min = 1)
-    private String declaredPersonCode;
+    @ValidIDCard
+    private String declaredPersonIdCardNumber;
     
-    @NotNull
-    @Length(min = 1)
-    private String deathPersonCode;
+    @ValidIDCard
+    private String deathPersonIdCardNumber;
     
     @NotNull
     @Length(min = 1)

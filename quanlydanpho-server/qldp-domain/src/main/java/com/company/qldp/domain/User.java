@@ -42,5 +42,6 @@ public class User {
             referencedColumnName = "id"
         )
     )
+    @JsonIgnore
     private Collection<Role> roles = new ArrayList<>();
 }

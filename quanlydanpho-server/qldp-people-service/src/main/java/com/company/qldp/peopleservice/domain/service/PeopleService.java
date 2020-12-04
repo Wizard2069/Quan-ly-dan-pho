@@ -4,11 +4,9 @@ import com.company.qldp.common.PeopleInfo;
 import com.company.qldp.domain.*;
 import com.company.qldp.elasticsearchservice.domain.entity.PeopleSearch;
 import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
-import com.company.qldp.peopleservice.domain.dto.DeathDto;
+import com.company.qldp.peopleservice.domain.dto.LeaveDto;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
-import com.company.qldp.peopleservice.domain.exception.DeathAlreadyExistException;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
-import com.company.qldp.peopleservice.domain.repository.DeathRepository;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import com.company.qldp.common.util.RandomCodeGenerator;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
@@ -25,19 +23,16 @@ public class PeopleService {
     
     private PeopleRepository peopleRepository;
     private UserRepository userRepository;
-    private DeathRepository deathRepository;
     private PeopleSearchRepository peopleSearchRepository;
     
     @Autowired
     public PeopleService(
         PeopleRepository peopleRepository,
         UserRepository userRepository,
-        DeathRepository deathRepository,
         PeopleSearchRepository peopleSearchRepository
     ) {
         this.peopleRepository = peopleRepository;
         this.userRepository = userRepository;
-        this.deathRepository = deathRepository;
         this.peopleSearchRepository = peopleSearchRepository;
     }
     
@@ -103,42 +98,18 @@ public class PeopleService {
         return peopleRepository.findByPeopleCode(peopleCode) != null;
     }
     
-    public Death deleteDeathPeople(DeathDto deathDto) {
-        String deathCertNumber = deathDto.getDeathCertNumber();
-        String declaredPersonCode = deathDto.getDeclaredPersonCode();
-        String deathPersonCode = deathDto.getDeathPersonCode();
+    public People leavePeople(Integer id, LeaveDto leaveDto) {
+        People people = peopleRepository.findById(id)
+            .orElseThrow(PersonNotFoundException::new);
         
-        Death death = deathRepository.findByDeathCertNumber(deathCertNumber);
-        People declaredPerson = peopleRepository.findByPeopleCode(declaredPersonCode);
-        People deathPerson = peopleRepository.findByPeopleCode(deathPersonCode);
-        
-        if (death != null) {
-            throw new DeathAlreadyExistException();
-        }
-        if (declaredPerson == null || deathPerson == null) {
-            throw new PersonNotFoundException();
-        }
-        
-        User deletedManager = userRepository.findByUsername(deathDto.getDeletedManagerUsername());
-        if (deletedManager == null) {
-            throw new UserNotFoundException();
-        }
-        
-        deathPerson.setDeletedDate(new Date());
-        deathPerson.setDeletedManager(deletedManager);
-        deathPerson.setDeletedReason("death");
-        peopleRepository.save(deathPerson);
-        
-        Death createdDeath = Death.builder()
-            .deathCertNumber(deathDto.getDeathCertNumber())
-            .declaredPerson(declaredPerson)
-            .deathPerson(deathPerson)
-            .declaredDay(Date.from(Instant.parse(deathDto.getDeclaredDay())))
-            .deathDay(Date.from(Instant.parse(deathDto.getDeathDay())))
-            .deathReason(deathDto.getDeathReason())
+        PersonalMobilization mobilization = PersonalMobilization.builder()
+            .leaveDate(Date.from(Instant.parse(leaveDto.getLeaveDate())))
+            .leaveReason(leaveDto.getLeaveReason())
+            .newAddress(leaveDto.getNewAddress())
             .build();
+        people.setMobilization(mobilization);
         
-        return deathRepository.save(createdDeath);
+        return peopleRepository.save(people);
     }
     
     @Transactional

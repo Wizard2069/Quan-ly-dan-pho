@@ -1,5 +1,6 @@
 package com.company.qldp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,9 +27,10 @@ public class Death {
         fetch = FetchType.LAZY
     )
     @JoinColumn(name = "declared_person_id")
+    @JsonIgnore
     private People declaredPerson;
     
-    @ManyToOne(
+    @OneToOne(
         optional = false,
         fetch = FetchType.LAZY
     )

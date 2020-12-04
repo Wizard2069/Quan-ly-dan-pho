@@ -1,5 +1,6 @@
 package com.company.qldp.peopleservice.domain.dto;
 
+import com.company.qldp.peopleservice.domain.validation.idcard.ValidIDCard;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,9 +15,8 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class TempAbsentDto {
     
-    @NotNull
-    @Length(min = 1)
-    private String peopleCode;
+    @ValidIDCard
+    private String idCardNumber;
     
     @NotNull
     @Length(min = 1)

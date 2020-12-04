@@ -16,10 +16,6 @@ public class LeaveDto {
     
     @NotNull
     @Length(min = 1)
-    private String peopleCode;
-    
-    @NotNull
-    @Length(min = 1)
     private String leaveDate;
     
     private String leaveReason;

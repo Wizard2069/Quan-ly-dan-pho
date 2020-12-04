@@ -24,7 +24,7 @@ public class PeopleRepresentationModelAssembler
     public EntityModel<People> addLinks(EntityModel<People> resource, ServerWebExchange exchange) {
         initLinkBuilder(exchange).withSelfRel().toMono(link -> {
             String entityId = resource.getContent().getId().toString();
-            String entityLink = link.getHref();
+            String entityLink = link.getHref().replace("{id}", entityId);
             String collectionLink = entityLink.replace("/" + entityId, "");
             
             resource.add(Link.of(entityLink));
@@ -41,9 +41,6 @@ public class PeopleRepresentationModelAssembler
         Map<String, String> attributes = exchange.getAttribute("org.springframework.web.reactive.HandlerMapping.uriTemplateVariables");
         assert attributes != null;
         
-        return linkTo(methodOn(PeopleController.class).getPersonById(
-            Integer.parseInt(attributes.get("id")),
-            exchange
-        ), exchange);
+        return linkTo(methodOn(PeopleController.class).getPersonById(null, exchange), exchange);
     }
 }
