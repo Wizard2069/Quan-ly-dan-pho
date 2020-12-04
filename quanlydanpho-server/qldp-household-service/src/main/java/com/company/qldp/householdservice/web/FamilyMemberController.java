@@ -9,6 +9,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +56,18 @@ public class FamilyMemberController {
                 .created(memberCollectionModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(memberCollectionModel)
             );
+    }
+    
+    @GetMapping(path = "/{id}/members/{memberId}")
+    @ResponseStatus(code = HttpStatus.OK)
+    public Mono<EntityModel<FamilyMember>> getMember(
+        @PathVariable("id") Integer id,
+        @PathVariable("memberId") Integer memberId,
+        ServerWebExchange exchange
+    ) {
+        FamilyMember member = familyMemberService.getFamilyMember(id, memberId);
+        
+        return assembler.toModel(member, exchange);
     }
     
     @GetMapping(path = "/{id}/members")

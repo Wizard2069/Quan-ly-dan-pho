@@ -62,6 +62,14 @@ public class FamilyMemberService {
     }
     
     @Transactional
+    public FamilyMember getFamilyMember(Integer id, Integer memberId) {
+        FamilyMember member = familyMemberRepository.findByHousehold_IdAndPerson_Id(id, memberId);
+        getMemberInfo(member);
+        
+        return member;
+    }
+    
+    @Transactional
     public List<FamilyMember> getFamilyMembers(Integer id) {
         List<FamilyMember> familyMembers = familyMemberRepository.findAllByHousehold_Id(id);
         familyMembers.forEach(this::getMemberInfo);

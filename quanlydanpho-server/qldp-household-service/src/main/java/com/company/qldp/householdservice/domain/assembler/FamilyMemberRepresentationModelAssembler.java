@@ -22,7 +22,12 @@ public class FamilyMemberRepresentationModelAssembler
     
     @Override
     protected String getEntityId(EntityModel<FamilyMember> resource) {
-        return "";
+        return resource.getContent().getPerson().getId().toString();
+    }
+    
+    @Override
+    protected String getCollectionName() {
+        return "members";
     }
     
     @Override
