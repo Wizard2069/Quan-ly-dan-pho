@@ -15,8 +15,7 @@ import javax.validation.constraints.NotNull;
 public class HouseholdDto {
     
     @NotNull
-    @Length(min = 1)
-    private String hostPersonCode;
+    private Integer hostPersonId;
     
     @NotNull
     @Length(min = 1)
@@ -31,6 +30,5 @@ public class HouseholdDto {
     private String createdDay;
     
     @NotNull
-    @Length(min = 1)
-    private String performerPersonCode;
+    private Integer performerPersonId;
 }

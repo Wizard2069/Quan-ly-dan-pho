@@ -1,14 +1,10 @@
 package com.company.qldp.householdservice.domain.service;
 
 import com.company.qldp.common.util.RandomCodeGenerator;
-import com.company.qldp.domain.FamilyMember;
 import com.company.qldp.domain.Household;
 import com.company.qldp.domain.People;
-import com.company.qldp.householdservice.domain.dto.FamilyMemberDto;
 import com.company.qldp.householdservice.domain.dto.HouseholdDto;
 import com.company.qldp.householdservice.domain.exception.HouseholdNotFoundException;
-import com.company.qldp.householdservice.domain.repository.FamilyMemberRepository;
-import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.householdservice.domain.repository.HouseholdRepository;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,37 +12,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static com.company.qldp.householdservice.domain.dto.FamilyMemberDto.*;
 
 @Service
 public class HouseholdService {
     
     private HouseholdRepository householdRepository;
     private PeopleRepository peopleRepository;
-    private FamilyMemberRepository familyMemberRepository;
     
     @Autowired
     public HouseholdService(
         HouseholdRepository householdRepository,
-        PeopleRepository peopleRepository,
-        FamilyMemberRepository familyMemberRepository
+        PeopleRepository peopleRepository
     ) {
         this.householdRepository = householdRepository;
         this.peopleRepository = peopleRepository;
-        this.familyMemberRepository = familyMemberRepository;
     }
     
     public Household createHousehold(HouseholdDto householdDto) {
-        People host = peopleRepository.findByPeopleCode(householdDto.getHostPersonCode());
-        People performer = peopleRepository.findByPeopleCode(householdDto.getPerformerPersonCode());
-        
-        if (host == null || performer == null) {
-            throw new PersonNotFoundException();
-        }
+        People host = peopleRepository.findById(householdDto.getHostPersonId())
+            .orElseThrow(HouseholdNotFoundException::new);
+        People performer = peopleRepository.findById(householdDto.getPerformerPersonId())
+            .orElseThrow(HouseholdNotFoundException::new);
         
         String code = "24" + RandomCodeGenerator.generateCode(7);
         while (householdCodeExists(code)) {
@@ -70,27 +58,24 @@ public class HouseholdService {
     }
     
     @Transactional
-    public List<FamilyMember> addPeopleToHousehold(Integer householdId, FamilyMemberDto familyMemberDto) {
-        List<Member> members = familyMemberDto.getMembers();
-        
-        Household household = householdRepository.findById(householdId)
+    public Household getHousehold(Integer id) {
+        Household household = householdRepository.findById(id)
             .orElseThrow(HouseholdNotFoundException::new);
+        getHouseholdExtraInfo(household);
         
-        List<FamilyMember> familyMembers = new ArrayList<>();
-        
-        for (Member member : members) {
-            People person = peopleRepository.findById(member.getId())
-                .orElseThrow(PersonNotFoundException::new);
+        return household;
+    }
     
-            FamilyMember familyMember = FamilyMember.builder()
-                .person(person)
-                .household(household)
-                .hostRelation(member.getHostRelation())
-                .build();
-            FamilyMember savedMember = familyMemberRepository.save(familyMember);
-            familyMembers.add(savedMember);
-        }
+    @Transactional
+    public List<Household> getHouseholds() {
+        List<Household> households = householdRepository.findAll();
+        households.forEach(this::getHouseholdExtraInfo);
         
-        return familyMembers;
+        return households;
+    }
+    
+    private void getHouseholdExtraInfo(Household household) {
+        household.getHost().hashCode();
+        household.getPerformer().hashCode();
     }
 }
