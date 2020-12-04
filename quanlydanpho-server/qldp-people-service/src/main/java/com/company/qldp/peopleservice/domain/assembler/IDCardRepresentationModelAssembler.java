@@ -3,6 +3,7 @@ package com.company.qldp.peopleservice.domain.assembler;
 import com.company.qldp.common.assembler.SimpleIdentifiableReactiveRepresentationModelAssembler;
 import com.company.qldp.domain.IDCard;
 import com.company.qldp.peopleservice.web.IDCardController;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
@@ -16,6 +17,11 @@ public class IDCardRepresentationModelAssembler
     
     public IDCardRepresentationModelAssembler() {
         super(IDCardController.class);
+    }
+    
+    @Override
+    protected String getEntityId(EntityModel<IDCard> resource) {
+        return "";
     }
     
     @Override
