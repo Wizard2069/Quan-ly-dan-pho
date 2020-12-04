@@ -8,4 +8,6 @@ import java.util.List;
 public interface FamilyRepository extends JpaRepository<Family, Integer> {
 
     List<Family> findAllByPerson_Id(Integer id);
+    
+    Family findByPerson_IdAndId(Integer personId, Integer id);
 }

@@ -58,6 +58,18 @@ public class FamilyController {
             );
     }
     
+    @GetMapping(path = "/{id}/family/{familyId}")
+    @ResponseStatus(code = HttpStatus.OK)
+    public Mono<EntityModel<Family>> getFamily(
+        @PathVariable("id") Integer id,
+        @PathVariable("familyId") Integer familyId,
+        ServerWebExchange exchange
+    ) {
+        Family family = familyService.getFamilyByPeopleId(id, familyId);
+        
+        return assembler.toModel(family, exchange);
+    }
+    
     @GetMapping(path = "/{id}/family")
     @ResponseStatus(code = HttpStatus.OK)
     public Mono<CollectionModel<EntityModel<Family>>> getFamilies(

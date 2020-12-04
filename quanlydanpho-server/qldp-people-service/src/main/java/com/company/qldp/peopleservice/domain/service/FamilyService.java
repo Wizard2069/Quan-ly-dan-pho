@@ -53,6 +53,10 @@ public class FamilyService {
         return familyList;
     }
     
+    public Family getFamilyByPeopleId(Integer id, Integer familyId) {
+        return familyRepository.findByPerson_IdAndId(id, familyId);
+    }
+    
     public List<Family> getFamiliesByPeopleId(Integer id) {
         return familyRepository.findAllByPerson_Id(id);
     }
