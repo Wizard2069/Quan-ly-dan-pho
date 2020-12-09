@@ -1,5 +1,6 @@
 package com.company.qldp.householdservice.domain.dto;
 
+import com.company.qldp.householdservice.domain.validation.ValidChangeInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +15,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class CorrectionDto {
     
-    @NotNull
-    @Length(min = 1)
+    @ValidChangeInfo
     private String changeInfo;
     
     @NotNull

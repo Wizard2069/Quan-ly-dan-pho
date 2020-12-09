@@ -3,8 +3,15 @@ package com.company.qldp.householdservice.domain.service;
 import com.company.qldp.domain.Correction;
 import com.company.qldp.domain.Household;
 import com.company.qldp.domain.People;
+import com.company.qldp.elasticsearchservice.domain.entity.HouseholdSearch;
+import com.company.qldp.elasticsearchservice.domain.entity.PeopleSearch;
+import com.company.qldp.elasticsearchservice.domain.repository.HouseholdSearchRepository;
+import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
 import com.company.qldp.householdservice.domain.dto.CorrectionDto;
+import com.company.qldp.householdservice.domain.exception.ChangeInfoNotSupportException;
 import com.company.qldp.householdservice.domain.exception.HouseholdNotFoundException;
+import com.company.qldp.householdservice.domain.exception.InvalidAddressException;
+import com.company.qldp.householdservice.domain.exception.InvalidHostException;
 import com.company.qldp.householdservice.domain.repository.CorrectionRepository;
 import com.company.qldp.householdservice.domain.repository.HouseholdRepository;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
@@ -12,6 +19,7 @@ import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.util.Date;
@@ -23,32 +31,79 @@ public class CorrectionService {
     private CorrectionRepository correctionRepository;
     private HouseholdRepository householdRepository;
     private PeopleRepository peopleRepository;
+    private HouseholdSearchRepository householdSearchRepository;
+    private PeopleSearchRepository peopleSearchRepository;
     
     @Autowired
     public CorrectionService(
         CorrectionRepository correctionRepository,
         HouseholdRepository householdRepository,
-        PeopleRepository peopleRepository
+        PeopleRepository peopleRepository,
+        HouseholdSearchRepository householdSearchRepository,
+        PeopleSearchRepository peopleSearchRepository
     ) {
         this.correctionRepository = correctionRepository;
         this.householdRepository = householdRepository;
         this.peopleRepository = peopleRepository;
+        this.householdSearchRepository = householdSearchRepository;
+        this.peopleSearchRepository = peopleSearchRepository;
     }
     
+    @Transactional
     public Correction createCorrection(Integer id, CorrectionDto correctionDto) {
         Household household = householdRepository.findById(id)
             .orElseThrow(HouseholdNotFoundException::new);
         People performer = peopleRepository.findById(correctionDto.getPerformerId())
             .orElseThrow(PersonNotFoundException::new);
-        
+    
         Correction correction = Correction.builder()
             .household(household)
             .changeInfo(correctionDto.getChangeInfo())
             .changeDay(Date.from(Instant.parse(correctionDto.getChangeDate())))
-            .changeFrom(correctionDto.getChangeFrom())
-            .changeTo(correctionDto.getChangeTo())
             .performer(performer)
             .build();
+    
+        switch (correctionDto.getChangeInfo()) {
+            case "HOST" -> {
+                if (household.getHost().getId() != Integer.parseInt(correctionDto.getChangeFrom())) {
+                    throw new InvalidHostException();
+                }
+                
+                People newHost = peopleRepository.findById(Integer.parseInt(correctionDto.getChangeTo()))
+                    .orElseThrow(PersonNotFoundException::new);
+                
+                correction.setChangeFrom(household.getHost().getInfo().getFullName());
+                correction.setChangeTo(newHost.getInfo().getFullName());
+                
+                household.setHost(newHost);
+                household.setPerformer(performer);
+            }
+            case "ADDRESS" -> {
+                if (!household.getAddress().equals(correctionDto.getChangeFrom())) {
+                    throw new InvalidAddressException();
+                }
+                
+                correction.setChangeFrom(correctionDto.getChangeFrom());
+                correction.setChangeTo(correctionDto.getChangeTo());
+                
+                household.setAddress(correction.getChangeTo());
+            }
+            default -> throw new ChangeInfoNotSupportException();
+        }
+        
+        Household savedHousehold = householdRepository.save(household);
+        
+        peopleSearchRepository.findById(savedHousehold.getHost().getId())
+            .zipWith(householdSearchRepository.findById(savedHousehold.getId()))
+            .map(tuple2 -> {
+                PeopleSearch host = tuple2.getT1();
+                HouseholdSearch householdSearch = tuple2.getT2();
+                
+                householdSearch.setHost(host);
+                householdSearch.setAddress(savedHousehold.getAddress());
+                
+                return householdSearchRepository.save(householdSearch);
+            }).subscribe(Mono::subscribe);
         
         return correctionRepository.save(correction);
     }

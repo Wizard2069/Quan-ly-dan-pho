@@ -1,5 +1,6 @@
 package com.company.qldp.elasticsearchservice.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
@@ -23,6 +24,7 @@ public class HouseholdSearch {
     private String householdCode;
     
     @Field(type = FieldType.Nested, includeInParent = true)
+    @JsonIgnore
     private PeopleSearch host;
     
     @MultiField(
