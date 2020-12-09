@@ -2,6 +2,7 @@ package com.company.qldp.peopleservice.domain.assembler;
 
 import com.company.qldp.common.assembler.SimpleIdentifiableReactiveRepresentationModelAssembler;
 import com.company.qldp.domain.People;
+import com.company.qldp.elasticsearchservice.web.PeopleSearchController;
 import com.company.qldp.peopleservice.web.PeopleController;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,6 @@ public class PeopleRepresentationModelAssembler
     
     @Override
     protected WebFluxBuilder initLinkBuilder(ServerWebExchange exchange) {
-        return linkTo(methodOn(PeopleController.class).getPersonById(null, exchange), exchange);
+        return linkTo(methodOn(PeopleSearchController.class).getPeople(exchange), exchange);
     }
 }

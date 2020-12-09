@@ -3,6 +3,10 @@ package com.company.qldp.householdservice.domain.service;
 import com.company.qldp.common.util.RandomCodeGenerator;
 import com.company.qldp.domain.Household;
 import com.company.qldp.domain.People;
+import com.company.qldp.elasticsearchservice.domain.entity.HouseholdSearch;
+import com.company.qldp.elasticsearchservice.domain.entity.PeopleSearch;
+import com.company.qldp.elasticsearchservice.domain.repository.HouseholdSearchRepository;
+import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
 import com.company.qldp.householdservice.domain.dto.HouseholdDto;
 import com.company.qldp.householdservice.domain.dto.LeaveHouseholdDto;
 import com.company.qldp.householdservice.domain.exception.HouseholdNotFoundException;
@@ -12,24 +16,30 @@ import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class HouseholdService {
     
     private HouseholdRepository householdRepository;
     private PeopleRepository peopleRepository;
+    private HouseholdSearchRepository householdSearchRepository;
+    private PeopleSearchRepository peopleSearchRepository;
     
     @Autowired
     public HouseholdService(
         HouseholdRepository householdRepository,
-        PeopleRepository peopleRepository
+        PeopleRepository peopleRepository,
+        HouseholdSearchRepository householdSearchRepository,
+        PeopleSearchRepository peopleSearchRepository
     ) {
         this.householdRepository = householdRepository;
         this.peopleRepository = peopleRepository;
+        this.householdSearchRepository = householdSearchRepository;
+        this.peopleSearchRepository = peopleSearchRepository;
     }
     
     public Household createHousehold(HouseholdDto householdDto) {
@@ -52,7 +62,22 @@ public class HouseholdService {
             .createdDay(Date.from(Instant.parse(householdDto.getCreatedDay())))
             .build();
         
-        return householdRepository.save(household);
+        Household savedHousehold = householdRepository.save(household);
+    
+        peopleSearchRepository.findById(householdDto.getHostPersonId())
+            .map(peopleSearch -> {
+                HouseholdSearch householdSearch = HouseholdSearch.builder()
+                    .id(savedHousehold.getId())
+                    .householdCode(savedHousehold.getHouseholdCode())
+                    .host(peopleSearch)
+                    .address(savedHousehold.getAddress())
+                    .createdDay(savedHousehold.getCreatedDay())
+                    .build();
+                
+                return householdSearchRepository.save(householdSearch);
+            }).subscribe(Mono::subscribe);
+            
+        return savedHousehold;
     }
     
     private boolean householdCodeExists(String code) {
@@ -66,14 +91,6 @@ public class HouseholdService {
         getHouseholdExtraInfo(household);
         
         return household;
-    }
-    
-    @Transactional
-    public List<Household> getHouseholds() {
-        List<Household> households = householdRepository.findAll();
-        households.forEach(this::getHouseholdExtraInfo);
-        
-        return households;
     }
     
     private void getHouseholdExtraInfo(Household household) {

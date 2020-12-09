@@ -71,6 +71,7 @@ public class FamilyMemberController {
     }
     
     @GetMapping(path = "/{id}/members")
+    @ResponseStatus(code = HttpStatus.OK)
     public Mono<CollectionModel<EntityModel<FamilyMember>>> getAllMembers(
         @PathVariable("id") Integer id,
         ServerWebExchange exchange

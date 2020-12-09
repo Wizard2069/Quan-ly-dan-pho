@@ -43,6 +43,9 @@ public class People {
     @Embedded
     private PersonalMobilization mobilization;
     
+    @Embedded
+    private PersonalEducationInfo educationInfo;
+    
     @Temporal(TemporalType.DATE)
     @Column(name = "created_date")
     private Date createdDate;
