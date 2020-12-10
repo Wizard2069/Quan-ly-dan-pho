@@ -4,6 +4,7 @@ import com.company.qldp.domain.People;
 import com.company.qldp.peopleservice.domain.assembler.PeopleRepresentationModelAssembler;
 import com.company.qldp.peopleservice.domain.dto.LeavePeopleDto;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
+import com.company.qldp.peopleservice.domain.dto.UpdatePersonDto;
 import com.company.qldp.peopleservice.domain.service.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
@@ -64,7 +65,7 @@ public class PeopleController {
     }
     
     @PatchMapping(
-        path = "/{id}",
+        path = "/{id}/leave",
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
     )
     @ResponseStatus(code = HttpStatus.OK)
@@ -76,5 +77,20 @@ public class PeopleController {
         People people = peopleService.leavePeople(id, leavePeopleDto);
         
         return assembler.toModel(people, exchange);
+    }
+    
+    @PatchMapping(
+        path = "/{id}",
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+    )
+    @ResponseStatus(code = HttpStatus.OK)
+    public Mono<EntityModel<People>> updatePersonInfo(
+        @PathVariable("id") Integer id,
+        UpdatePersonDto updatePersonDto,
+        ServerWebExchange exchange
+    ) {
+        People updatedPerson = peopleService.updatePeopleInfo(id, updatePersonDto);
+        
+        return assembler.toModel(updatedPerson, exchange);
     }
 }

@@ -6,6 +6,7 @@ import com.company.qldp.elasticsearchservice.domain.entity.PeopleSearch;
 import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
 import com.company.qldp.peopleservice.domain.dto.LeavePeopleDto;
 import com.company.qldp.peopleservice.domain.dto.PersonDto;
+import com.company.qldp.peopleservice.domain.dto.UpdatePersonDto;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import com.company.qldp.common.util.RandomCodeGenerator;
@@ -14,6 +15,7 @@ import com.company.qldp.userservice.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.util.Date;
@@ -79,6 +81,7 @@ public class PeopleService {
             .info(peopleInfo)
             .birthPlace(personDto.getBirthPlace())
             .extraInfo(extraInfo)
+            .educationInfo(educationInfo)
             .passportNumber(personDto.getPassportNumber())
             .permanentAddress(personDto.getPermanentAddress())
             .createdManager(createdManager)
@@ -137,5 +140,59 @@ public class PeopleService {
         }
         
         return person;
+    }
+    
+    public People updatePeopleInfo(Integer id, UpdatePersonDto updatePersonDto) {
+        People person = peopleRepository.findById(id)
+            .orElseThrow(PersonNotFoundException::new);
+        
+        person.setAlias(updatePersonDto.getAlias());
+        person.setPermanentAddress(updatePersonDto.getPermanentAddress());
+        person.setBirthPlace(updatePersonDto.getBirthPlace());
+        person.setNote(updatePersonDto.getNote());
+        person.setPassportNumber(updatePersonDto.getPassportNumber());
+        
+        PersonalExtraInfo extraInfo = PersonalExtraInfo.builder()
+            .domicile(updatePersonDto.getDomicile())
+            .nation(updatePersonDto.getNation())
+            .nationality(updatePersonDto.getNationality())
+            .religion(updatePersonDto.getReligion())
+            .build();
+        person.setExtraInfo(extraInfo);
+        
+        PersonalEducationInfo educationInfo = PersonalEducationInfo.builder()
+            .workplace(updatePersonDto.getWorkplace())
+            .qualification(updatePersonDto.getQualification())
+            .languageLevel(updatePersonDto.getLanguageLevel())
+            .ethnicLanguage(updatePersonDto.getEthnicLanguage())
+            .criminalRecord(updatePersonDto.getCriminalRecord())
+            .academicLevel(updatePersonDto.getAcademicLevel())
+            .build();
+        person.setEducationInfo(educationInfo);
+        
+        PeopleInfo peopleInfo = PeopleInfo.builder()
+            .fullName(updatePersonDto.getFullName())
+            .birthday(Date.from(Instant.parse(updatePersonDto.getBirthday())))
+            .currentAddress(updatePersonDto.getCurrentAddress())
+            .job(updatePersonDto.getJob())
+            .sex(updatePersonDto.getSex())
+            .build();
+        person.setInfo(peopleInfo);
+        
+        People savedPeople = peopleRepository.save(person);
+        
+        peopleSearchRepository.findById(id).map(peopleSearch -> {
+            peopleSearch.setCurrentAddress(savedPeople.getInfo().getCurrentAddress());
+            peopleSearch.setNote(savedPeople.getNote());
+            peopleSearch.setBirthday(savedPeople.getInfo().getBirthday());
+            peopleSearch.setSex(savedPeople.getInfo().getSex());
+            peopleSearch.setFullName(savedPeople.getInfo().getFullName());
+            peopleSearch.setJob(savedPeople.getInfo().getJob());
+            peopleSearch.setPassportNumber(savedPeople.getPassportNumber());
+            
+            return peopleSearchRepository.save(peopleSearch);
+        }).subscribe(Mono::subscribe);
+        
+        return savedPeople;
     }
 }

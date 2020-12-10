@@ -4,6 +4,7 @@ import com.company.qldp.domain.Household;
 import com.company.qldp.householdservice.domain.assembler.HouseholdRepresentationModelAssembler;
 import com.company.qldp.householdservice.domain.dto.HouseholdDto;
 import com.company.qldp.householdservice.domain.dto.LeaveHouseholdDto;
+import com.company.qldp.householdservice.domain.dto.SeparateHouseholdDto;
 import com.company.qldp.householdservice.domain.service.HouseholdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
@@ -76,5 +77,23 @@ public class HouseholdController {
         Household household = householdService.leaveHousehold(id, leaveHouseholdDto);
         
         return assembler.toModel(household, exchange);
+    }
+    
+    @PatchMapping(
+        path = "/{id}/separate",
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+    )
+    public Mono<ResponseEntity<EntityModel<Household>>> separateHousehold(
+        @PathVariable("id") Integer id,
+        @Valid SeparateHouseholdDto separateHouseholdDto,
+        ServerWebExchange exchange
+    ) {
+        Household newHousehold = householdService.separateHousehold(id, separateHouseholdDto);
+        
+        return assembler.toModel(newHousehold, exchange)
+            .map(householdModel -> ResponseEntity
+                .created(householdModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(householdModel)
+            );
     }
 }
