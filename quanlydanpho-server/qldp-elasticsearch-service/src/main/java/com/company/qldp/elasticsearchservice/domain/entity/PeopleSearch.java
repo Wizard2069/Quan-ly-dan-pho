@@ -40,7 +40,7 @@ public class PeopleSearch {
     )
     private String fullName;
     
-    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd")
+    @Field(type = FieldType.Date, format = DateFormat.year_month_day)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birthday;
     
@@ -54,6 +54,14 @@ public class PeopleSearch {
     
     @Field(name = "passport_number")
     private String passportNumber;
+    
+    @Field(name = "arrival_date", type = FieldType.Date, format = DateFormat.year_month_day)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date arrivalDate;
+    
+    @Field(name = "leave_date", type = FieldType.Date, format = DateFormat.year_month_day)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date leaveDate;
     
     private String note;
 }

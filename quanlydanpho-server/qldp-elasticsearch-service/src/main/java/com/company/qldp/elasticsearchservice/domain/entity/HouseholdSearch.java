@@ -35,6 +35,6 @@ public class HouseholdSearch {
     )
     private String address;
     
-    @Field(name = "created_day", type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd")
+    @Field(name = "created_day", type = FieldType.Date, format = DateFormat.year_month_day)
     private Date createdDay;
 }

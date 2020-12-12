@@ -31,7 +31,7 @@ public class IDCardSearch {
     )
     private String idCardNumber;
     
-    @Field(name = "issued_day", type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd")
+    @Field(name = "issued_day", type = FieldType.Date, format = DateFormat.year_month_day)
     private Date issuedDay;
     
     @Field(name = "issued_place")

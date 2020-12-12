@@ -75,6 +75,11 @@ public class PeopleService {
             .workplace(personDto.getWorkplace())
             .build();
         
+        PersonalMobilization mobilization = PersonalMobilization.builder()
+            .arrivalDate(Date.from(Instant.parse(personDto.getArrivalDate())))
+            .arrivalReason(personDto.getArrivalReason())
+            .build();
+        
         People people = People.builder()
             .peopleCode(peopleCode)
             .alias(personDto.getAlias())
@@ -82,6 +87,7 @@ public class PeopleService {
             .birthPlace(personDto.getBirthPlace())
             .extraInfo(extraInfo)
             .educationInfo(educationInfo)
+            .mobilization(mobilization)
             .passportNumber(personDto.getPassportNumber())
             .permanentAddress(personDto.getPermanentAddress())
             .createdManager(createdManager)
@@ -94,12 +100,13 @@ public class PeopleService {
             .id(savedPeople.getId())
             .peopleCode(peopleCode)
             .birthday(savedPeople.getInfo().getBirthday())
-            .currentAddress(personDto.getCurrentAddress())
-            .fullName(personDto.getFullName())
-            .job(personDto.getJob())
-            .note(personDto.getNote())
-            .sex(personDto.getSex())
-            .passportNumber(personDto.getPassportNumber())
+            .currentAddress(savedPeople.getInfo().getCurrentAddress())
+            .fullName(savedPeople.getInfo().getFullName())
+            .job(savedPeople.getInfo().getJob())
+            .note(savedPeople.getNote())
+            .sex(savedPeople.getInfo().getSex())
+            .passportNumber(savedPeople.getPassportNumber())
+            .arrivalDate(savedPeople.getMobilization().getArrivalDate())
             .build();
         peopleSearchRepository.save(peopleSearch).subscribe();
         
@@ -114,14 +121,22 @@ public class PeopleService {
         People people = peopleRepository.findById(id)
             .orElseThrow(PersonNotFoundException::new);
         
-        PersonalMobilization mobilization = PersonalMobilization.builder()
-            .leaveDate(Date.from(Instant.parse(leavePeopleDto.getLeaveDate())))
-            .leaveReason(leavePeopleDto.getLeaveReason())
-            .newAddress(leavePeopleDto.getNewAddress())
-            .build();
+        PersonalMobilization mobilization = people.getMobilization();
+        mobilization.setLeaveDate(Date.from(Instant.parse(leavePeopleDto.getLeaveDate())));
+        mobilization.setLeaveReason(leavePeopleDto.getLeaveReason());
+        mobilization.setNewAddress(leavePeopleDto.getNewAddress());
+        
         people.setMobilization(mobilization);
         
-        return peopleRepository.save(people);
+        People savedPeople = peopleRepository.save(people);
+        
+        peopleSearchRepository.findById(id).map(peopleSearch -> {
+            peopleSearch.setLeaveDate(savedPeople.getMobilization().getLeaveDate());
+            
+            return peopleSearchRepository.save(peopleSearch);
+        }).subscribe(Mono::subscribe);
+        
+        return savedPeople;
     }
     
     @Transactional

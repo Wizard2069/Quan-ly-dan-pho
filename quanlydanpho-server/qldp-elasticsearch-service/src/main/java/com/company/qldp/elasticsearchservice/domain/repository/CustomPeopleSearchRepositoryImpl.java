@@ -14,7 +14,7 @@ import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Flux;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
-import org.elasticsearch.index.query.MultiMatchQueryBuilder.*;
+import static org.elasticsearch.index.query.MultiMatchQueryBuilder.*;
 
 @Repository
 public class CustomPeopleSearchRepositoryImpl implements CustomPeopleSearchRepository {
@@ -35,6 +35,8 @@ public class CustomPeopleSearchRepositoryImpl implements CustomPeopleSearchRepos
         String idCard = queryParams.getFirst("id-card");
         String ageRange = queryParams.getFirst("age");
         String sex = queryParams.getFirst("sex");
+        String dateRange = queryParams.getFirst("date");
+        String status = queryParams.getFirst("status");
         
         if (name != null) {
             queryBuilder = queryBuilder.withQuery(
@@ -63,6 +65,26 @@ public class CustomPeopleSearchRepositoryImpl implements CustomPeopleSearchRepos
             queryBuilder = queryBuilder.withQuery(
                 matchQuery("sex", SexUtils.getSex(sex))
             );
+        }
+        if (dateRange != null) {
+            String[] dateRangeArr = dateRange.split(",");
+            String fromDate = dateRangeArr[0];
+            String toDate = dateRangeArr[1];
+            
+            if (status == null) {
+                status = "arrival";
+            }
+            
+            if (status.equals("arrival")) {
+                queryBuilder = queryBuilder.withQuery(
+                    rangeQuery("arrival_date").from(fromDate).to(toDate).format("yyyy-MM-dd")
+                );
+            }
+            if (status.equals("leave")) {
+                queryBuilder = queryBuilder.withQuery(
+                    rangeQuery("leave_date").from(fromDate).to(toDate).format("yyyy-MM-dd")
+                );
+            }
         }
         
         Flux<PeopleSearch> peopleSearchFlux = operations.search(queryBuilder.build(), PeopleSearch.class)

@@ -77,6 +77,12 @@ public class PersonDto {
     
     @NotNull
     @Length(min = 1)
+    private String arrivalDate;
+    
+    private String arrivalReason;
+    
+    @NotNull
+    @Length(min = 1)
     private String createdManagerUsername;
     
     @NotNull
