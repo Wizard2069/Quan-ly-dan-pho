@@ -41,18 +41,8 @@ public class HouseholdSearchController {
     @ResponseStatus(code = HttpStatus.OK)
     public Mono<CollectionModel<EntityModel<HouseholdSearch>>> getHouseholds(ServerWebExchange exchange) {
         MultiValueMap<String, String> queryParams = exchange.getRequest().getQueryParams();
-        String hostName = queryParams.getFirst("host");
-        String address = queryParams.getFirst("address");
-    
-        Flux<HouseholdSearch> householdSearchFlux;
         
-        if (hostName != null) {
-            householdSearchFlux = householdSearchService.getHouseholdsByHostName(hostName);
-        } else if (address != null) {
-            householdSearchFlux = householdSearchService.getHouseholdsByAddress(address);
-        } else {
-            householdSearchFlux = householdSearchService.getHouseholds();
-        }
+        Flux<HouseholdSearch> householdSearchFlux = householdSearchService.getHouseholdsByFilters(queryParams);
         
         return assembler.toCollectionModel(householdSearchFlux, exchange);
     }

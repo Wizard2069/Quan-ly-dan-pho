@@ -12,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Document(indexName = "id_card")
+@Setting(settingPath = "/elastic-setting.json")
 @Relation(collectionRelation = "idCards")
 public class IDCardSearch {
     

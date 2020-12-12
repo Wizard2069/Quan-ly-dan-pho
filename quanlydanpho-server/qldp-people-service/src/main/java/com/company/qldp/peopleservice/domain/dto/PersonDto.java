@@ -1,5 +1,6 @@
 package com.company.qldp.peopleservice.domain.dto;
 
+import com.company.qldp.common.util.SexUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -85,11 +86,6 @@ public class PersonDto {
     private String note;
     
     public Sex getSex() {
-        return switch (sex) {
-            case "male" -> Sex.MALE;
-            case "female" -> Sex.FEMALE;
-            case "other" -> Sex.OTHER;
-            default -> throw new RuntimeException("Sex not found: " + sex);
-        };
+        return SexUtils.getSex(sex);
     }
 }

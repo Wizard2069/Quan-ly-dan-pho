@@ -21,12 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.company.qldp.householdservice.domain.dto.SeparateHouseholdDto.*;
 
 @Service
 public class HouseholdService {

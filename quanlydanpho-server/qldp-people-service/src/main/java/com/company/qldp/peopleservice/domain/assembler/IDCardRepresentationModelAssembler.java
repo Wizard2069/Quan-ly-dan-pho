@@ -25,6 +25,11 @@ public class IDCardRepresentationModelAssembler
     }
     
     @Override
+    protected String getCollectionName() {
+        return "self";
+    }
+    
+    @Override
     protected WebFluxBuilder initLinkBuilder(ServerWebExchange exchange) {
         Map<String, String> attributes = exchange.getAttribute("org.springframework.web.reactive.HandlerMapping.uriTemplateVariables");
         assert attributes != null;

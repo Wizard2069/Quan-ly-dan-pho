@@ -38,21 +38,8 @@ public class PeopleSearchController {
     @ResponseStatus(code = HttpStatus.OK)
     public Mono<CollectionModel<EntityModel<PeopleSearch>>> getPeople(ServerWebExchange exchange) {
         MultiValueMap<String, String> queryParams = exchange.getRequest().getQueryParams();
-        String name = queryParams.getFirst("name");
-        String idCard = queryParams.getFirst("id-card");
-        String code = queryParams.getFirst("code");
         
-        Flux<PeopleSearch> peopleSearchFlux;
-        
-        if (name != null) {
-            peopleSearchFlux = peopleSearchService.findPeopleByFullName(name);
-        } else if (idCard != null) {
-            peopleSearchFlux = peopleSearchService.findPeopleByIDCardNumber(idCard);
-        } else if (code != null) {
-            peopleSearchFlux = peopleSearchService.findPeopleByCode(code);
-        } else {
-            peopleSearchFlux = peopleSearchService.findAllPeople();
-        }
+        Flux<PeopleSearch> peopleSearchFlux = peopleSearchService.findPeopleByFilters(queryParams);
         
         return assembler.toCollectionModel(peopleSearchFlux, exchange);
     }

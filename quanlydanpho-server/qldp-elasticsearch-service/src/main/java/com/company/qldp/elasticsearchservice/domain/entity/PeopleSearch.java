@@ -1,6 +1,7 @@
 package com.company.qldp.elasticsearchservice.domain.entity;
 
 import com.company.qldp.common.Sex;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import org.springframework.data.annotation.Id;
@@ -40,6 +41,7 @@ public class PeopleSearch {
     private String fullName;
     
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birthday;
     
     @Field(type = FieldType.Text)

@@ -4,6 +4,7 @@ import com.company.qldp.common.DateInterval;
 import com.company.qldp.common.exception.InvalidDateRangeException;
 
 import java.time.Instant;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,5 +41,9 @@ public class DateUtils {
         dateRange.put("to", to);
         
         return dateRange;
+    }
+    
+    public static int getBirthYear(Integer age) {
+        return Calendar.getInstance().get(Calendar.YEAR) - age;
     }
 }
