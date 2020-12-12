@@ -30,5 +30,6 @@ public class HouseholdDto {
     private String createdDay;
     
     @NotNull
-    private Integer performerPersonId;
+    @Length(min = 1)
+    private String performerName;
 }

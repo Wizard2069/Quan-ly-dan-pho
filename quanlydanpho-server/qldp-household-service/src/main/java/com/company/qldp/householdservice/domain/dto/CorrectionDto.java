@@ -31,5 +31,6 @@ public class CorrectionDto {
     private String changeDate;
     
     @NotNull
-    private Integer performerId;
+    @Length(min = 1)
+    private String performerName;
 }

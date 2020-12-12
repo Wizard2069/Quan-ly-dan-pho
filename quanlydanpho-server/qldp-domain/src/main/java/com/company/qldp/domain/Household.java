@@ -45,10 +45,10 @@ public class Household {
     @Column(name = "leave_reason")
     private String leaveReason;
     
-    @OneToOne(
+    @ManyToOne(
         optional = false,
         fetch = FetchType.LAZY
     )
     @JoinColumn(name = "performer_id")
-    private People performer;
+    private User performer;
 }

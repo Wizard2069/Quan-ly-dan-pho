@@ -16,9 +16,6 @@ public class SeparateHouseholdDto {
     private Integer hostId;
     
     @NotNull
-    private Integer performerId;
-    
-    @NotNull
     @Length(min = 1)
     private String newAddress;
     
@@ -29,4 +26,8 @@ public class SeparateHouseholdDto {
     @NotNull
     @Length(min = 1)
     private String createdDay;
+    
+    @NotNull
+    @Length(min = 1)
+    private String performerName;
 }

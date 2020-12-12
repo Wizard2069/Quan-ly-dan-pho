@@ -3,8 +3,9 @@ package com.company.qldp.userservice.domain.service;
 import com.company.qldp.domain.Role;
 import com.company.qldp.domain.User;
 import com.company.qldp.userservice.domain.dto.UserDto;
-import com.company.qldp.userservice.domain.exception.RoleNotFound;
+import com.company.qldp.userservice.domain.exception.RoleNotFoundException;
 import com.company.qldp.userservice.domain.exception.UserAlreadyExistException;
+import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.repository.RoleRepository;
 import com.company.qldp.userservice.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,7 @@ public class UserService {
             
             Optional<Role> role = roleRepository.findById(roleId);
             if (role.isEmpty()) {
-                throw new RoleNotFound();
+                throw new RoleNotFoundException();
             }
             
             roleList.add(role.get());
@@ -79,7 +80,12 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
     
-    public Optional<User> findUserById(Integer id) {
-        return userRepository.findById(id);
+    public User findUserById(Integer id) {
+        return userRepository.findById(id)
+            .orElseThrow(UserNotFoundException::new);
+    }
+    
+    public List<User> findUsers() {
+        return userRepository.findAll();
     }
 }

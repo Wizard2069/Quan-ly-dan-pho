@@ -3,6 +3,7 @@ package com.company.qldp.householdservice.domain.service;
 import com.company.qldp.domain.Correction;
 import com.company.qldp.domain.Household;
 import com.company.qldp.domain.People;
+import com.company.qldp.domain.User;
 import com.company.qldp.elasticsearchservice.domain.entity.HouseholdSearch;
 import com.company.qldp.elasticsearchservice.domain.entity.PeopleSearch;
 import com.company.qldp.elasticsearchservice.domain.repository.HouseholdSearchRepository;
@@ -16,6 +17,8 @@ import com.company.qldp.householdservice.domain.repository.CorrectionRepository;
 import com.company.qldp.householdservice.domain.repository.HouseholdRepository;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
+import com.company.qldp.userservice.domain.exception.UserNotFoundException;
+import com.company.qldp.userservice.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +36,7 @@ public class CorrectionService {
     private PeopleRepository peopleRepository;
     private HouseholdSearchRepository householdSearchRepository;
     private PeopleSearchRepository peopleSearchRepository;
+    private UserRepository userRepository;
     
     @Autowired
     public CorrectionService(
@@ -40,21 +44,26 @@ public class CorrectionService {
         HouseholdRepository householdRepository,
         PeopleRepository peopleRepository,
         HouseholdSearchRepository householdSearchRepository,
-        PeopleSearchRepository peopleSearchRepository
+        PeopleSearchRepository peopleSearchRepository,
+        UserRepository userRepository
     ) {
         this.correctionRepository = correctionRepository;
         this.householdRepository = householdRepository;
         this.peopleRepository = peopleRepository;
         this.householdSearchRepository = householdSearchRepository;
         this.peopleSearchRepository = peopleSearchRepository;
+        this.userRepository = userRepository;
     }
     
     @Transactional
     public Correction createCorrection(Integer id, CorrectionDto correctionDto) {
         Household household = householdRepository.findById(id)
             .orElseThrow(HouseholdNotFoundException::new);
-        People performer = peopleRepository.findById(correctionDto.getPerformerId())
-            .orElseThrow(PersonNotFoundException::new);
+        User performer = userRepository.findByUsername(correctionDto.getPerformerName());
+        
+        if (performer == null) {
+            throw new UserNotFoundException();
+        }
     
         Correction correction = Correction.builder()
             .household(household)

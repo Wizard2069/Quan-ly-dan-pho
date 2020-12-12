@@ -45,5 +45,5 @@ public class Correction {
         fetch = FetchType.LAZY
     )
     @JoinColumn(name = "performer_id")
-    private People performer;
+    private User performer;
 }

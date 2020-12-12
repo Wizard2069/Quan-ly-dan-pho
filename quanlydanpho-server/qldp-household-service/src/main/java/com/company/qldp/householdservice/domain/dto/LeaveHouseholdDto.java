@@ -23,5 +23,6 @@ public class LeaveHouseholdDto {
     private String leaveReason;
     
     @NotNull
-    private Integer performerId;
+    @Length(min = 1)
+    private String performerName;
 }
