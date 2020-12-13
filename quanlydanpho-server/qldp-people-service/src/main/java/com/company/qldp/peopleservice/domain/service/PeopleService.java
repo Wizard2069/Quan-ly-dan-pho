@@ -75,11 +75,6 @@ public class PeopleService {
             .workplace(personDto.getWorkplace())
             .build();
         
-        PersonalMobilization mobilization = PersonalMobilization.builder()
-            .arrivalDate(Date.from(Instant.parse(personDto.getArrivalDate())))
-            .arrivalReason(personDto.getArrivalReason())
-            .build();
-        
         People people = People.builder()
             .peopleCode(peopleCode)
             .alias(personDto.getAlias())
@@ -87,7 +82,6 @@ public class PeopleService {
             .birthPlace(personDto.getBirthPlace())
             .extraInfo(extraInfo)
             .educationInfo(educationInfo)
-            .mobilization(mobilization)
             .passportNumber(personDto.getPassportNumber())
             .permanentAddress(personDto.getPermanentAddress())
             .createdManager(createdManager)
@@ -106,7 +100,6 @@ public class PeopleService {
             .note(savedPeople.getNote())
             .sex(savedPeople.getInfo().getSex())
             .passportNumber(savedPeople.getPassportNumber())
-            .arrivalDate(savedPeople.getMobilization().getArrivalDate())
             .build();
         peopleSearchRepository.save(peopleSearch).subscribe();
         
@@ -143,7 +136,12 @@ public class PeopleService {
     public People findPersonById(Integer id) {
         People person = peopleRepository.findById(id)
             .orElseThrow(PersonNotFoundException::new);
+        getPersonInfo(person);
+        
+        return person;
+    }
     
+    private void getPersonInfo(People person) {
         if (person.getCreatedManager() != null) {
             person.getCreatedManager().getRoles().stream().count();
         }
@@ -153,8 +151,6 @@ public class PeopleService {
         if (person.getMobilization() != null) {
             person.getMobilization().getClass();
         }
-        
-        return person;
     }
     
     public People updatePeopleInfo(Integer id, UpdatePersonDto updatePersonDto) {

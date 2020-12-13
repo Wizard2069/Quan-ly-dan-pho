@@ -5,6 +5,7 @@ import com.company.qldp.common.util.RandomCodeGenerator;
 import com.company.qldp.domain.People;
 import com.company.qldp.domain.PersonalMobilization;
 import com.company.qldp.domain.TempAbsent;
+import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
 import com.company.qldp.peopleservice.domain.dto.TempAbsentDto;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.exception.TempAbsentNotFoundException;
@@ -13,12 +14,15 @@ import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import com.company.qldp.peopleservice.domain.repository.TempAbsentRepository;
 import com.company.qldp.common.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
+import reactor.core.publisher.Mono;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
+import static com.company.qldp.peopleservice.domain.repository.specification.GenericSpecification.*;
 
 @Service
 public class TempAbsentService {
@@ -26,16 +30,19 @@ public class TempAbsentService {
     private TempAbsentRepository tempAbsentRepository;
     private IDCardRepository idCardRepository;
     private PeopleRepository peopleRepository;
+    private PeopleSearchRepository peopleSearchRepository;
     
     @Autowired
     public TempAbsentService(
         TempAbsentRepository tempAbsentRepository,
         IDCardRepository idCardRepository,
-        PeopleRepository peopleRepository
+        PeopleRepository peopleRepository,
+        PeopleSearchRepository peopleSearchRepository
     ) {
         this.tempAbsentRepository = tempAbsentRepository;
         this.idCardRepository = idCardRepository;
         this.peopleRepository = peopleRepository;
+        this.peopleSearchRepository = peopleSearchRepository;
     }
     
     @Transactional
@@ -65,13 +72,30 @@ public class TempAbsentService {
             .reason(tempAbsentDto.getReason())
             .build();
         
-        PersonalMobilization mobilization = PersonalMobilization.builder()
-            .leaveDate(tempAbsent.getInterval().getFrom())
-            .leaveReason(tempAbsent.getReason())
-            .newAddress(tempAbsent.getTempResidencePlace())
-            .build();
+        PersonalMobilization mobilization;
+        
+        if (people.getMobilization() == null) {
+            mobilization = PersonalMobilization.builder()
+                .leaveDate(tempAbsent.getInterval().getFrom())
+                .leaveReason(tempAbsent.getReason())
+                .newAddress(tempAbsent.getTempResidencePlace())
+                .build();
+        } else {
+            mobilization = people.getMobilization();
+            mobilization.setLeaveDate(tempAbsent.getInterval().getFrom());
+            mobilization.setLeaveReason(tempAbsent.getReason());
+            mobilization.setNewAddress(tempAbsent.getTempResidencePlace());
+        }
+        
         people.setMobilization(mobilization);
-        peopleRepository.save(people);
+        
+        People savedPeople = peopleRepository.save(people);
+        
+        peopleSearchRepository.findById(savedPeople.getId()).map(peopleSearch -> {
+            peopleSearch.setLeaveDate(savedPeople.getMobilization().getLeaveDate());
+            
+            return peopleSearchRepository.save(peopleSearch);
+        }).subscribe(Mono::subscribe);
         
         return tempAbsentRepository.save(tempAbsent);
     }
@@ -84,28 +108,24 @@ public class TempAbsentService {
     public TempAbsent getTempAbsent(Integer id) {
         TempAbsent tempAbsent = tempAbsentRepository.findById(id)
             .orElseThrow(TempAbsentNotFoundException::new);
-        tempAbsent.getPerson().hashCode();
+        getTempAbsentInfo(tempAbsent);
         
         return tempAbsent;
     }
     
     @Transactional
-    public List<TempAbsent> getTempAbsents() {
-        List<TempAbsent> tempAbsents = tempAbsentRepository.findAll();
-        tempAbsents.forEach(tempAbsent -> tempAbsent.getPerson().hashCode());
+    public List<TempAbsent> getTempAbsentsByFilters(MultiValueMap<String, String> queryParams) {
+        String dateRange = queryParams.getFirst("date");
+    
+        Specification<TempAbsent> spec = makeDateRangeSpecification(dateRange);
+        
+        List<TempAbsent> tempAbsents = tempAbsentRepository.findAll(spec);
+        tempAbsents.forEach(this::getTempAbsentInfo);
         
         return tempAbsents;
     }
     
-    @Transactional
-    public List<TempAbsent> getTempAbsentsByDateRange(String fromDateStr, String toDateStr) {
-        Map<String, Date> dateRange = DateUtils.getDateRange(fromDateStr, toDateStr);
-        Date from = dateRange.get("from");
-        Date to = dateRange.get("to");
-        
-        List<TempAbsent> tempAbsents = tempAbsentRepository.findAllByDateRange(from, to);
-        tempAbsents.forEach(tempAbsent -> tempAbsent.getPerson().hashCode());
-        
-        return tempAbsents;
+    private void getTempAbsentInfo(TempAbsent tempAbsent) {
+        tempAbsent.getPerson().hashCode();
     }
 }

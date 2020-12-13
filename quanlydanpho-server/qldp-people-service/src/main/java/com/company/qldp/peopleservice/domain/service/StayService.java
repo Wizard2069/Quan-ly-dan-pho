@@ -5,6 +5,7 @@ import com.company.qldp.common.util.RandomCodeGenerator;
 import com.company.qldp.domain.People;
 import com.company.qldp.domain.PersonalMobilization;
 import com.company.qldp.domain.Stay;
+import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
 import com.company.qldp.peopleservice.domain.dto.StayDto;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.exception.StayNotFoundException;
@@ -13,12 +14,15 @@ import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import com.company.qldp.peopleservice.domain.repository.StayRepository;
 import com.company.qldp.common.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
+import reactor.core.publisher.Mono;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
+import static com.company.qldp.peopleservice.domain.repository.specification.GenericSpecification.*;
 
 @Service
 public class StayService {
@@ -26,16 +30,19 @@ public class StayService {
     private StayRepository stayRepository;
     private IDCardRepository idCardRepository;
     private PeopleRepository peopleRepository;
+    private PeopleSearchRepository peopleSearchRepository;
     
     @Autowired
     public StayService(
         StayRepository stayRepository,
         IDCardRepository idCardRepository,
-        PeopleRepository peopleRepository
+        PeopleRepository peopleRepository,
+        PeopleSearchRepository peopleSearchRepository
     ) {
         this.stayRepository = stayRepository;
         this.idCardRepository = idCardRepository;
         this.peopleRepository = peopleRepository;
+        this.peopleSearchRepository = peopleSearchRepository;
     }
     
     @Transactional
@@ -46,7 +53,7 @@ public class StayService {
         if (people == null) {
             throw new PersonNotFoundException();
         }
-        
+    
         DateInterval interval = DateUtils.createDateInterval(
             stayDto.getFromDate(),
             stayDto.getToDate()
@@ -64,13 +71,29 @@ public class StayService {
             .interval(interval)
             .reason(stayDto.getReason())
             .build();
+    
+        PersonalMobilization mobilization;
         
-        PersonalMobilization mobilization = PersonalMobilization.builder()
-            .arrivalDate(stay.getInterval().getFrom())
-            .arrivalReason(stay.getReason())
-            .build();
+        if (people.getMobilization() == null) {
+            mobilization = PersonalMobilization.builder()
+                .arrivalDate(stay.getInterval().getFrom())
+                .arrivalReason(stay.getReason())
+                .build();
+        } else {
+            mobilization = people.getMobilization();
+            mobilization.setArrivalDate(stay.getInterval().getFrom());
+            mobilization.setArrivalReason(stay.getReason());
+        }
+        
         people.setMobilization(mobilization);
-        peopleRepository.save(people);
+        
+        People savedPeople = peopleRepository.save(people);
+        
+        peopleSearchRepository.findById(savedPeople.getId()).map(peopleSearch -> {
+            peopleSearch.setArrivalDate(savedPeople.getMobilization().getArrivalDate());
+            
+            return peopleSearchRepository.save(peopleSearch);
+        }).subscribe(Mono::subscribe);
         
         return stayRepository.save(stay);
     }
@@ -83,28 +106,24 @@ public class StayService {
     public Stay getStay(Integer id) {
         Stay stay = stayRepository.findById(id)
             .orElseThrow(StayNotFoundException::new);
-        stay.getPerson().hashCode();
+        getStayInfo(stay);
         
         return stay;
     }
     
     @Transactional
-    public List<Stay> getStays() {
-        List<Stay> stays = stayRepository.findAll();
-        stays.forEach(stay -> stay.getPerson().hashCode());
+    public List<Stay> getStaysByFilters(MultiValueMap<String, String> queryParams) {
+        String dateRange = queryParams.getFirst("date");
+        
+        Specification<Stay> spec = makeDateRangeSpecification(dateRange);
+        
+        List<Stay> stays = stayRepository.findAll(spec);
+        stays.forEach(this::getStayInfo);
         
         return stays;
     }
     
-    @Transactional
-    public List<Stay> getStaysByDateRange(String fromDateStr, String toDateStr) {
-        Map<String, Date> dateRange = DateUtils.getDateRange(fromDateStr, toDateStr);
-        Date from = dateRange.get("from");
-        Date to = dateRange.get("to");
-        
-        List<Stay> stays = stayRepository.findAllByDateRange(from, to);
-        stays.forEach(stay -> stay.getPerson().hashCode());
-        
-        return stays;
+    private void getStayInfo(Stay stay) {
+        stay.getPerson().hashCode();
     }
 }

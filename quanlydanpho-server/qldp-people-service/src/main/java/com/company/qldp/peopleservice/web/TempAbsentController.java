@@ -70,16 +70,8 @@ public class TempAbsentController {
     @ResponseStatus(code = HttpStatus.OK)
     public Mono<CollectionModel<EntityModel<TempAbsent>>> getAllTempAbsents(ServerWebExchange exchange) {
         MultiValueMap<String, String> queryParams = exchange.getRequest().getQueryParams();
-        String fromDateStr = queryParams.getFirst("from");
-        String toDateStr = queryParams.getFirst("to");
-    
-        List<TempAbsent> tempAbsents;
         
-        if (fromDateStr == null && toDateStr == null) {
-            tempAbsents = tempAbsentService.getTempAbsents();
-        } else {
-            tempAbsents = tempAbsentService.getTempAbsentsByDateRange(fromDateStr, toDateStr);
-        }
+        List<TempAbsent> tempAbsents = tempAbsentService.getTempAbsentsByFilters(queryParams);
         
         return assembler.toCollectionModel(Flux.fromIterable(tempAbsents), exchange);
     }

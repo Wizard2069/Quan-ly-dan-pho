@@ -26,8 +26,6 @@ public class StayDto {
     @Length(min = 1)
     private String fromDate;
     
-    @NotNull
-    @Length(min = 1)
     private String toDate;
     
     private String reason;

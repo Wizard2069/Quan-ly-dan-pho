@@ -69,16 +69,8 @@ public class StayController {
     @GetMapping
     public Mono<CollectionModel<EntityModel<Stay>>> getAllStays(ServerWebExchange exchange) {
         MultiValueMap<String, String> queryParams = exchange.getRequest().getQueryParams();
-        String fromDateStr = queryParams.getFirst("from");
-        String toDateStr = queryParams.getFirst("to");
-    
-        List<Stay> stays;
         
-        if (fromDateStr == null && toDateStr == null) {
-            stays = stayService.getStays();
-        } else {
-            stays = stayService.getStaysByDateRange(fromDateStr, toDateStr);
-        }
+        List<Stay> stays = stayService.getStaysByFilters(queryParams);
         
         return assembler.toCollectionModel(Flux.fromIterable(stays), exchange);
     }

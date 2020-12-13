@@ -2,17 +2,9 @@ package com.company.qldp.peopleservice.domain.repository;
 
 import com.company.qldp.domain.TempAbsent;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import java.util.Date;
-import java.util.List;
-
-public interface TempAbsentRepository extends JpaRepository<TempAbsent, Integer> {
+public interface TempAbsentRepository extends JpaRepository<TempAbsent, Integer>, JpaSpecificationExecutor<TempAbsent> {
 
     TempAbsent findByTempAbsentCode(String code);
-    
-    default List<TempAbsent> findAllByDateRange(Date from, Date to) {
-        return this.findAllByInterval_FromGreaterThanEqualAndInterval_ToLessThanEqual(from, to);
-    }
-    
-    List<TempAbsent> findAllByInterval_FromGreaterThanEqualAndInterval_ToLessThanEqual(Date from, Date to);
 }

@@ -13,29 +13,36 @@ public class DateUtils {
     
     public static DateInterval createDateInterval(String fromDate, String toDate) {
         Date from = Date.from(Instant.parse(fromDate));
-        Date to = Date.from(Instant.parse(toDate));
         
-        if (to.before(from)) {
-            throw new InvalidDateRangeException();
-        }
+        if (toDate.isEmpty()) {
+            return DateInterval.builder()
+                .from(from).to(null)
+                .build();
+        } else {
+            Date to = Date.from(Instant.parse(toDate));
+            
+            if (to.before(from)) {
+                throw new InvalidDateRangeException();
+            }
     
-        return DateInterval.builder()
-            .from(from).to(to)
-            .build();
+            return DateInterval.builder()
+                .from(from).to(to)
+                .build();
+        }
     }
     
     public static Map<String, Date> getDateRange(String fromDateStr, String toDateStr) {
         if (fromDateStr == null || toDateStr == null) {
             throw new InvalidDateRangeException();
         }
-    
+        
         Date from = Date.from(Instant.parse(fromDateStr));
         Date to = Date.from(Instant.parse(toDateStr));
         
         if (to.before(from)) {
             throw new InvalidDateRangeException();
         }
-    
+        
         Map<String, Date> dateRange = new HashMap<>();
         dateRange.put("from", from);
         dateRange.put("to", to);
