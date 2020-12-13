@@ -112,7 +112,7 @@ CREATE TABLE `stay`
     `temp_residence_code` varchar(100) COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
     `phone_number` varchar(100) COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
     `from_date` date NOT NULL,
-    `to_date` date NOT NULL,
+    `to_date` date DEFAULT NULL,
     `reason` text COLLATE utf8mb4_0900_ai_ci NOT NULL,
     PRIMARY KEY (`ID`)
 ) ENGINE = InnoDB;
