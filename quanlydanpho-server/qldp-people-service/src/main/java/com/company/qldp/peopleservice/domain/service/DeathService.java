@@ -10,17 +10,19 @@ import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.repository.DeathRepository;
 import com.company.qldp.peopleservice.domain.repository.IDCardRepository;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
-import com.company.qldp.common.util.DateUtils;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
 
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
+import static com.company.qldp.peopleservice.domain.repository.specification.DeathSpecification.*;
 
 @Service
 public class DeathService {
@@ -47,13 +49,12 @@ public class DeathService {
     public Death createDeath(DeathDto deathDto) {
         String deathCertNumber = deathDto.getDeathCertNumber();
         String declaredPersonIDCardNumber = deathDto.getDeclaredPersonIdCardNumber();
-        String deathPersonIDCardNumber = deathDto.getDeathPersonIdCardNumber();
+        String deathPersonCode = deathDto.getDeathPersonCode();
         
         Death death = deathRepository.findByDeathCertNumber(deathCertNumber);
         People declaredPerson = idCardRepository.findByIdCardNumber(declaredPersonIDCardNumber)
             .getPerson();
-        People deathPerson = idCardRepository.findByIdCardNumber(deathPersonIDCardNumber)
-            .getPerson();
+        People deathPerson = peopleRepository.findByPeopleCode(deathPersonCode);
         
         if (death != null) {
             throw new DeathAlreadyExistException();
@@ -88,29 +89,24 @@ public class DeathService {
     public Death getDeath(Integer id) {
         Death death = deathRepository.findById(id)
             .orElseThrow(DeathNotFoundException::new);
-        
-        death.getDeathPerson().hashCode();
+        getDeathInfo(death);
         
         return death;
     }
     
     @Transactional
-    public List<Death> getDeaths() {
-        List<Death> deaths = deathRepository.findAll();
-        deaths.forEach(death -> death.getDeathPerson().hashCode());
+    public List<Death> getDeathsByFilters(MultiValueMap<String, String> queryParams) {
+        String dateRange = queryParams.getFirst("date");
+    
+        Specification<Death> spec = makeDateRangeSpecification(dateRange);
+        
+        List<Death> deaths = deathRepository.findAll(spec);
+        deaths.forEach(this::getDeathInfo);
         
         return deaths;
     }
     
-    @Transactional
-    public List<Death> getDeathsByDateRange(String fromDateStr, String toDateStr) {
-        Map<String, Date> dateRange = DateUtils.getDateRange(fromDateStr, toDateStr);
-        Date from = dateRange.get("from");
-        Date to = dateRange.get("to");
-        
-        List<Death> deaths = deathRepository.findAllByDeclaredDayBetween(from ,to);
-        deaths.forEach(death -> death.getDeathPerson().hashCode());
-        
-        return deaths;
+    private void getDeathInfo(Death death) {
+        death.getDeathPerson().hashCode();
     }
 }

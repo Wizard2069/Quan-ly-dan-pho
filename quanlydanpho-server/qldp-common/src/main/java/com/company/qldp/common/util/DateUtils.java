@@ -4,10 +4,7 @@ import com.company.qldp.common.DateInterval;
 import com.company.qldp.common.exception.InvalidDateRangeException;
 
 import java.time.Instant;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DateUtils {
     
@@ -31,23 +28,20 @@ public class DateUtils {
         }
     }
     
-    public static Map<String, Date> getDateRange(String fromDateStr, String toDateStr) {
-        if (fromDateStr == null || toDateStr == null) {
-            throw new InvalidDateRangeException();
+    public static String[] getDateRange(String dateRange) {
+        String fromDate = null;
+        String toDate = null;
+    
+        if (dateRange != null) {
+            String[] dateRangeArr = dateRange.split(",");
+            fromDate = dateRangeArr[0];
+    
+            if (dateRangeArr.length > 1) {
+                toDate = dateRangeArr[1];
+            }
         }
         
-        Date from = Date.from(Instant.parse(fromDateStr));
-        Date to = Date.from(Instant.parse(toDateStr));
-        
-        if (to.before(from)) {
-            throw new InvalidDateRangeException();
-        }
-        
-        Map<String, Date> dateRange = new HashMap<>();
-        dateRange.put("from", from);
-        dateRange.put("to", to);
-        
-        return dateRange;
+        return new String[]{fromDate, toDate};
     }
     
     public static int getBirthYear(Integer age) {

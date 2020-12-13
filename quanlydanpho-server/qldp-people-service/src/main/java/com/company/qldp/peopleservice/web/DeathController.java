@@ -70,16 +70,8 @@ public class DeathController {
     @ResponseStatus(code = HttpStatus.OK)
     public Mono<CollectionModel<EntityModel<Death>>> getAllDeaths(ServerWebExchange exchange) {
         MultiValueMap<String, String> queryParams = exchange.getRequest().getQueryParams();
-        String fromDateStr = queryParams.getFirst("from");
-        String toDateStr = queryParams.getFirst("to");
-    
-        List<Death> deaths;
         
-        if (fromDateStr == null && toDateStr == null) {
-            deaths = deathService.getDeaths();
-        } else {
-            deaths = deathService.getDeathsByDateRange(fromDateStr, toDateStr);
-        }
+        List<Death> deaths = deathService.getDeathsByFilters(queryParams);
         
         return assembler.toCollectionModel(Flux.fromIterable(deaths), exchange);
     }
