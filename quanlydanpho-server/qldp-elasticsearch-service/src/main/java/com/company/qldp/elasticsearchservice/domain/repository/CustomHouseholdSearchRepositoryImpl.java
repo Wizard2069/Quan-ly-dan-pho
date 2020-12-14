@@ -37,7 +37,7 @@ public class CustomHouseholdSearchRepositoryImpl implements CustomHouseholdSearc
         }
         if (address != null) {
             queryBuilder = queryBuilder.withQuery(
-                multiMatchQuery(address, "address", "address.search", "address.search._2gram", "address.search._3gram")
+                multiMatchQuery(address, "address.search", "address.search._2gram", "address.search._3gram")
                     .type(Type.BOOL_PREFIX)
             );
         }

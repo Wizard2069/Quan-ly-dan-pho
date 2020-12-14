@@ -40,7 +40,7 @@ public class CustomPeopleSearchRepositoryImpl implements CustomPeopleSearchRepos
         
         if (name != null) {
             queryBuilder = queryBuilder.withQuery(
-                multiMatchQuery(name, "full_name", "full_name.search", "full_name.search._2gram", "full_name.search._3gram")
+                multiMatchQuery(name, "full_name.search", "full_name.search._2gram", "full_name.search._3gram")
                     .type(Type.BOOL_PREFIX).minimumShouldMatch("100%")
             );
         }
