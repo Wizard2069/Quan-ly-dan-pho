@@ -13,6 +13,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
+import org.springframework.web.cors.CorsConfiguration;
 import reactor.core.publisher.Mono;
 
 @EnableWebFluxSecurity
@@ -20,7 +21,7 @@ public class SecurityConfig {
     
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) throws Exception {
-        http.cors()
+        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
                 .and()
                     .authorizeExchange()
                         .pathMatchers(HttpMethod.POST, "/login")
