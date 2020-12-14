@@ -30,7 +30,7 @@ public class HouseholdSearch {
     @MultiField(
         mainField = @Field(type = FieldType.Text, analyzer = "vn_folding"),
         otherFields = {
-            @InnerField(suffix = "search", type = FieldType.Search_As_You_Type, searchAnalyzer = "vn_folding")
+            @InnerField(suffix = "search", type = FieldType.Search_As_You_Type, analyzer = "vn_folding")
         }
     )
     private String address;

@@ -35,7 +35,7 @@ public class PeopleSearch {
         mainField = @Field(name = "full_name", type = FieldType.Text, analyzer = "vn_folding"),
         otherFields = {
             @InnerField(suffix = "keyword", type = FieldType.Keyword),
-            @InnerField(suffix = "search", type = FieldType.Search_As_You_Type, searchAnalyzer = "vn_folding")
+            @InnerField(suffix = "search", type = FieldType.Search_As_You_Type, analyzer = "vn_folding")
         }
     )
     private String fullName;
