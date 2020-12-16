@@ -14,3 +14,5 @@ include 'qldp-household-service'
 include 'qldp-people-service'
 
 include 'qldp-elasticsearch-service'
+
+include 'qldp-request-management-service'

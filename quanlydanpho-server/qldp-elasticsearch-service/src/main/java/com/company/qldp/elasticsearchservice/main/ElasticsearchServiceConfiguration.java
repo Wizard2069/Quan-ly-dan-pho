@@ -8,7 +8,8 @@ import org.springframework.data.elasticsearch.repository.config.EnableReactiveEl
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan(basePackages = {
-    "com.company.qldp.elasticsearchservice"
+    "com.company.qldp.elasticsearchservice",
+    "com.company.qldp.userservice"
 })
 @EnableReactiveElasticsearchRepositories(basePackages = {
     "com.company.qldp.elasticsearchservice"

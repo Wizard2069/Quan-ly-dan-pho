@@ -4,6 +4,7 @@ import com.company.qldp.elasticsearchservice.main.ElasticsearchServiceConfigurat
 import com.company.qldp.householdservice.main.HouseholdServiceConfiguration;
 import com.company.qldp.oauth.main.properties.ResourceServerProperties;
 import com.company.qldp.peopleservice.main.PeopleServiceConfiguration;
+import com.company.qldp.requestmanagementservice.main.RequestManagementConfiguration;
 import com.company.qldp.userservice.main.UserServiceConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -34,7 +35,8 @@ import org.springframework.hateoas.support.WebStack;
     UserServiceConfiguration.class,
     HouseholdServiceConfiguration.class,
     PeopleServiceConfiguration.class,
-    ElasticsearchServiceConfiguration.class
+    ElasticsearchServiceConfiguration.class,
+    RequestManagementConfiguration.class
 })
 public class ResourceServerConfiguration {
     

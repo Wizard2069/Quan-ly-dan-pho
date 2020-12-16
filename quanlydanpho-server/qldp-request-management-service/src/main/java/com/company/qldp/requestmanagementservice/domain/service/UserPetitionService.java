@@ -1,0 +1,36 @@
+package com.company.qldp.requestmanagementservice.domain.service;
+
+import com.company.qldp.domain.Petition;
+import com.company.qldp.requestmanagementservice.domain.repository.PetitionRepository;
+import com.company.qldp.userservice.domain.exception.UserNotFoundException;
+import com.company.qldp.userservice.domain.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserPetitionService {
+    
+    private PetitionRepository petitionRepository;
+    private UserRepository userRepository;
+    
+    @Autowired
+    public UserPetitionService(
+        PetitionRepository petitionRepository,
+        UserRepository userRepository
+    ) {
+        this.petitionRepository = petitionRepository;
+        this.userRepository = userRepository;
+    }
+    
+    public Petition getPetition(String keycloakUid, Integer petitionId) {
+        if (userNotExists(keycloakUid)) {
+            throw new UserNotFoundException();
+        }
+        
+        return petitionRepository.findBySender_KeycloakUidAndId(keycloakUid, petitionId);
+    }
+    
+    private boolean userNotExists(String uid) {
+        return userRepository.findByKeycloakUid(uid) == null;
+    }
+}
