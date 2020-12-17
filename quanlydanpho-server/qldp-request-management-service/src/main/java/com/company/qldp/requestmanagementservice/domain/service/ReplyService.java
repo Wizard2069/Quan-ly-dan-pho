@@ -16,6 +16,7 @@ import com.company.qldp.requestmanagementservice.domain.exception.PetitionNotFou
 import com.company.qldp.requestmanagementservice.domain.exception.ReplyNotFoundException;
 import com.company.qldp.requestmanagementservice.domain.repository.PetitionRepository;
 import com.company.qldp.requestmanagementservice.domain.repository.ReplyRepository;
+import com.company.qldp.requestmanagementservice.domain.util.GetInfo;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +76,7 @@ public class ReplyService {
             .replier(replier)
             .build();
         Reply savedReply = replyRepository.save(reply);
-        getReplyInfo(savedReply);
+        GetInfo.getReplyInfo(savedReply);
         
         petitionSearchRepository.findById(replyDto.getToPetition()).map(petitionSearch -> {
             ReplySearch replySearch = ReplySearch.builder()
@@ -97,7 +98,7 @@ public class ReplyService {
     public Reply getReply(Integer id) {
         Reply reply = replyRepository.findById(id)
             .orElseThrow(ReplyNotFoundException::new);
-        getReplyInfo(reply);
+        GetInfo.getReplyInfo(reply);
         
         return reply;
     }
@@ -119,7 +120,7 @@ public class ReplyService {
             Reply savedReply = replyRepository.save(reply);
             saveReplySearchStatus(savedReply);
             
-            getReplyInfo(savedReply);
+            GetInfo.getReplyInfo(savedReply);
             
             return savedReply;
         } else {
@@ -136,10 +137,5 @@ public class ReplyService {
         
             return replySearchRepository.save(replySearch);
         }).subscribe(Mono::subscribe);
-    }
-    
-    private void getReplyInfo(Reply reply) {
-        reply.getReplier().hashCode();
-        reply.getPetition().getSender().hashCode();
     }
 }

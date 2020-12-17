@@ -2,6 +2,7 @@ package com.company.qldp.requestmanagementservice.domain.service;
 
 import com.company.qldp.domain.Petition;
 import com.company.qldp.requestmanagementservice.domain.repository.PetitionRepository;
+import com.company.qldp.requestmanagementservice.domain.util.GetInfo;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,10 @@ public class UserPetitionService {
             throw new UserNotFoundException();
         }
         
-        return petitionRepository.findBySender_KeycloakUidAndId(keycloakUid, petitionId);
+        Petition petition = petitionRepository.findBySender_KeycloakUidAndId(keycloakUid, petitionId);
+        GetInfo.getPetitionInfo(petition);
+        
+        return petition;
     }
     
     private boolean userNotExists(String uid) {

@@ -10,6 +10,7 @@ import com.company.qldp.requestmanagementservice.domain.dto.PetitionDto;
 import com.company.qldp.requestmanagementservice.domain.exception.InvalidPetitionUpdateStatusException;
 import com.company.qldp.requestmanagementservice.domain.exception.PetitionNotFoundException;
 import com.company.qldp.requestmanagementservice.domain.repository.PetitionRepository;
+import com.company.qldp.requestmanagementservice.domain.util.GetInfo;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class PetitionService {
             .sender(user)
             .build();
         Petition savedPetition = petitionRepository.save(petition);
-        getPetitionInfo(savedPetition);
+        GetInfo.getPetitionInfo(savedPetition);
     
         PetitionSearch petitionSearch = PetitionSearch.builder()
             .id(savedPetition.getId())
@@ -76,7 +77,7 @@ public class PetitionService {
     public Petition getPetitionById(Integer id) {
         Petition petition = petitionRepository.findById(id)
             .orElseThrow(PetitionNotFoundException::new);
-        getPetitionInfo(petition);
+        GetInfo.getPetitionInfo(petition);
         
         return petition;
     }
@@ -93,7 +94,7 @@ public class PetitionService {
             Petition savedPetition = petitionRepository.save(petition);
             savePetitionSearchStatus(savedPetition);
             
-            getPetitionInfo(savedPetition);
+            GetInfo.getPetitionInfo(savedPetition);
             
             return savedPetition;
         } else {
@@ -113,7 +114,7 @@ public class PetitionService {
             Petition savedPetition = petitionRepository.save(petition);
             savePetitionSearchStatus(savedPetition);
             
-            getPetitionInfo(savedPetition);
+            GetInfo.getPetitionInfo(savedPetition);
             
             return savedPetition;
         } else {
@@ -127,9 +128,5 @@ public class PetitionService {
         
             return petitionSearchRepository.save(petitionSearch);
         }).subscribe(Mono::subscribe);
-    }
-    
-    private void getPetitionInfo(Petition petition) {
-        petition.getSender().hashCode();
     }
 }

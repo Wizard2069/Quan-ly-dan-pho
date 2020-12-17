@@ -28,7 +28,7 @@ public class SecurityConfig {
                             .permitAll()
                         .pathMatchers(HttpMethod.PUT, "/reset-password")
                             .permitAll()
-                        .pathMatchers(HttpMethod.GET, "/presidents/replies/**")
+                        .pathMatchers(HttpMethod.GET, "/presidents/replies/**", "/presidents/petitions/**")
                             .hasRole("president")
                         .pathMatchers(HttpMethod.GET, "/users/petitions/**", "/users/replies/**")
                             .hasRole("user")

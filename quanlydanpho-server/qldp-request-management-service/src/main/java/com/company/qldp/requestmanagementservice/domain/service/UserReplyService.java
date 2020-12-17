@@ -2,6 +2,7 @@ package com.company.qldp.requestmanagementservice.domain.service;
 
 import com.company.qldp.domain.Reply;
 import com.company.qldp.requestmanagementservice.domain.repository.ReplyRepository;
+import com.company.qldp.requestmanagementservice.domain.util.GetInfo;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +31,12 @@ public class UserReplyService {
         }
         
         Reply reply = replyRepository.findByPetition_Sender_KeycloakUidAndId(keycloakUid, id);
-        getReplyInfo(reply);
+        GetInfo.getReplyInfo(reply);
         
         return reply;
     }
     
     private boolean userNotExists(String keycloakUid) {
         return userRepository.findByKeycloakUid(keycloakUid) == null;
-    }
-    
-    private void getReplyInfo(Reply reply) {
-        reply.getReplier().hashCode();
-        reply.getPetition().getSender().hashCode();
     }
 }
