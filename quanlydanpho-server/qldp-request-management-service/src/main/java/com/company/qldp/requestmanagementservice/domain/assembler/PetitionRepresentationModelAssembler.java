@@ -32,7 +32,7 @@ public class PetitionRepresentationModelAssembler
                 .map((Function<Link, Object>) petitionModel::add).subscribe();
             
             linkTo(methodOn(PetitionController.class).acceptPetition(resource.getContent().getId(), exchange), exchange)
-                .withSelfRel().toMono()
+                .withRel("accept").toMono()
                 .map((Function<Link, Object>) petitionModel::add).subscribe();
         }
         

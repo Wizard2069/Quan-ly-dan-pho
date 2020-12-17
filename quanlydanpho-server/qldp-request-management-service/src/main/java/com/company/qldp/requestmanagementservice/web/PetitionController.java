@@ -43,13 +43,15 @@ public class PetitionController {
         @Valid PetitionDto petitionDto,
         ServerWebExchange exchange
     ) {
-        Petition petition = petitionService.createPetition(petitionDto);
-        
-        return assembler.toModel(petition, exchange)
-            .map(petitionModel -> ResponseEntity
-                .created(petitionModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .body(petitionModel)
-            );
+        return exchange.getPrincipal().flatMap(principal -> {
+            Petition petition = petitionService.createPetition(principal.getName(), petitionDto);
+    
+            return assembler.toModel(petition, exchange)
+                .map(petitionModel -> ResponseEntity
+                    .created(petitionModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                    .body(petitionModel)
+                );
+        });
     }
     
     @GetMapping(path = "/{id}")

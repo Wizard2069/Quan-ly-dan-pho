@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PetitionDto {
+public class ReplyDto {
     
     @NotNull
     @Length(min = 1)
@@ -25,4 +25,7 @@ public class PetitionDto {
     @NotNull
     @Length(min = 1)
     private String date;
+    
+    @NotNull
+    private Integer toPetition;
 }

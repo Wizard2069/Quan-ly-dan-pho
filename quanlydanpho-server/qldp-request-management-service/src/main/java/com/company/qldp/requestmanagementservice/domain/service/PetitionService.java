@@ -39,8 +39,8 @@ public class PetitionService {
     }
     
     @Transactional
-    public Petition createPetition(PetitionDto petitionDto) {
-        User user = userRepository.findByUsername(petitionDto.getUsername());
+    public Petition createPetition(String keycloakUid, PetitionDto petitionDto) {
+        User user = userRepository.findByKeycloakUid(keycloakUid);
         
         if (user == null) {
             throw new UserNotFoundException();
@@ -58,6 +58,7 @@ public class PetitionService {
             .sender(user)
             .build();
         Petition savedPetition = petitionRepository.save(petition);
+        getPetitionInfo(savedPetition);
     
         PetitionSearch petitionSearch = PetitionSearch.builder()
             .id(savedPetition.getId())
@@ -66,17 +67,21 @@ public class PetitionService {
             .date(savedPetition.getBody().getDate())
             .status(savedPetition.getBody().getStatus())
             .build();
-        
         petitionSearchRepository.save(petitionSearch).subscribe();
         
         return savedPetition;
     }
     
+    @Transactional
     public Petition getPetitionById(Integer id) {
-        return petitionRepository.findById(id)
+        Petition petition = petitionRepository.findById(id)
             .orElseThrow(PetitionNotFoundException::new);
+        getPetitionInfo(petition);
+        
+        return petition;
     }
     
+    @Transactional
     public Petition rejectPetition(Integer id) {
         Petition petition = getPetitionById(id);
         
@@ -88,12 +93,15 @@ public class PetitionService {
             Petition savedPetition = petitionRepository.save(petition);
             savePetitionSearchStatus(savedPetition);
             
+            getPetitionInfo(savedPetition);
+            
             return savedPetition;
         } else {
             throw new InvalidPetitionUpdateStatusException(petition.getBody().getStatus().toString());
         }
     }
     
+    @Transactional
     public Petition acceptPetition(Integer id) {
         Petition petition = getPetitionById(id);
         
@@ -104,6 +112,8 @@ public class PetitionService {
             
             Petition savedPetition = petitionRepository.save(petition);
             savePetitionSearchStatus(savedPetition);
+            
+            getPetitionInfo(savedPetition);
             
             return savedPetition;
         } else {
@@ -117,5 +127,9 @@ public class PetitionService {
         
             return petitionSearchRepository.save(petitionSearch);
         }).subscribe(Mono::subscribe);
+    }
+    
+    private void getPetitionInfo(Petition petition) {
+        petition.getSender().hashCode();
     }
 }
