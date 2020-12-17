@@ -5,6 +5,7 @@ import com.company.qldp.common.Status;
 import com.company.qldp.domain.Petition;
 import com.company.qldp.domain.Reply;
 import com.company.qldp.domain.User;
+import com.company.qldp.elasticsearchservice.domain.entity.PetitionSearch;
 import com.company.qldp.elasticsearchservice.domain.entity.ReplySearch;
 import com.company.qldp.elasticsearchservice.domain.repository.PetitionSearchRepository;
 import com.company.qldp.elasticsearchservice.domain.repository.ReplySearchRepository;
@@ -115,13 +116,6 @@ public class ReplyService {
             petitionBody.setStatus(Status.REPLIED);
             petition.setBody(petitionBody);
             
-            Petition savedPetition = petitionRepository.save(petition);
-            petitionSearchRepository.findById(savedPetition.getId()).map(petitionSearch -> {
-                petitionSearch.setStatus(savedPetition.getBody().getStatus());
-                
-                return petitionSearchRepository.save(petitionSearch);
-            }).subscribe(Mono::subscribe);
-            
             Reply savedReply = replyRepository.save(reply);
             saveReplySearchStatus(savedReply);
             
@@ -135,6 +129,9 @@ public class ReplyService {
     
     private void saveReplySearchStatus(Reply reply) {
         replySearchRepository.findById(reply.getId()).map(replySearch -> {
+            PetitionSearch petitionSearch = replySearch.getPetition();
+            petitionSearch.setStatus(Status.REPLIED);
+            
             replySearch.setStatus(reply.getBody().getStatus());
         
             return replySearchRepository.save(replySearch);
@@ -143,6 +140,6 @@ public class ReplyService {
     
     private void getReplyInfo(Reply reply) {
         reply.getReplier().hashCode();
-        reply.getPetition().hashCode();
+        reply.getPetition().getSender().hashCode();
     }
 }
