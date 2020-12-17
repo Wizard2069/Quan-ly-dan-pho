@@ -19,9 +19,9 @@ import {
   MDBPageNav
 } from 'mdbreact';
 import '../components/buttons/buttons.css';
-import './people.css';
+import './household.css';
 import DatePickerPage from "../components/date/date";
-const People = () => {
+const Household = () => {
   return (
     <div id='profile-v1'>
       <MDBContainer fluid>
@@ -70,11 +70,14 @@ const People = () => {
         <MDBCard narrow className='pb-3'>
           <MDBView
               cascade
-              className='gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center'
+              className='gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-end align-items-center'
           >
-            <a href='#!' className='white-text mx-3'>
-              Table name
-            </a>
+            <div className="text-center">
+              <a href='#!' className='white-text mx-3'>
+                Table name
+              </a>
+            </div>
+
             <div className="text-right">
               <MDBBtn color='blue accent-3'>
                 Thêm nhân khẩu
@@ -95,38 +98,16 @@ const People = () => {
                     />
                   </th>
                   <th className='th-lg text-center'>
-                    Mã nhân khẩu
-
+                    Mã hộ khẩu
                   </th>
                   <th className='th-lg text-center'>
-                    Họ tên
-
+                   Tên chủ hộ
                   </th>
                   <th className='th-lg text-center'>
-                    Năm sinh
-
+                    Địa chỉ
                   </th>
                   <th className='th-lg text-center'>
-                    Giới tính
-
-                  </th>
-                  <th className='th-lg text-center'>
-                    Nghề nghiệp
-                  </th>
-                  <th className='th-lg text-center'>
-                    Địa chỉ hiện nay
-                  </th>
-                  <th className='th-lg text-center'>
-                    Số hộ chiếu
-                  </th>
-                  <th className='th-lg text-center'>
-                    Ngày chuyển đến
-                  </th>
-                  <th className='th-lg text-center'>
-                    Ngày chuyển đi
-                  </th>
-                  <th className='th-lg text-center'>
-                    Ghi chú
+                    Ngày tạo
                   </th>
                 </tr>
               </thead>
@@ -140,56 +121,10 @@ const People = () => {
                     />
                     <label htmlFor='checkbox1' className='label-table' />
                   </th>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                  <td>markotto@gmail.com</td>
-                  <td>USA</td>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                  <td>jacobt@gmail.com</td>
-                  <td>France</td>
-                </tr>
-                <tr>
-                  <th scope='row'>
-                    <input
-                      className='form-check-input'
-                      type='checkbox'
-                      id='checkbox2'
-                    />
-                    <label htmlFor='checkbox2' className='label-table' />
-                  </th>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                  <td>jacobt@gmail.com</td>
-                  <td>France</td>
-                  <td>France</td>
-                  <td>France</td>
-                  <td>France</td>
-                  <td>France</td>
-                  <td>France</td>
-                </tr>
-                <tr>
-                  <th scope='row'>
-                    <input
-                      className='form-check-input'
-                      type='checkbox'
-                      id='checkbox3'
-                    />
-                    <label htmlFor='checkbox3' className='label-table' />
-                  </th>
-                  <td>Larry</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-                  <td>larrybird@gmail.com</td>
-                  <td>Germany</td>
-                  <td>Jacobđasadsaaasdkljsdjlkfdslkfakfalfgfgfjfdsgjldfsglkfsjgfdslgjldfsgkldklgsj</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                  <td>jacobt@gmail.com</td>
-                  <td>France</td>
+                  <td className='text-center'>Mark</td>
+                  <td className='text-center'>Otto</td>
+                  <td className='text-center'>@mdo</td>
+                  <td className='text-center'>markotto@gmail.com</td>
                 </tr>
               </tbody>
             </MDBTable>
@@ -246,4 +181,4 @@ const People = () => {
   );
 };
 
-export default People;
+export default Household;
