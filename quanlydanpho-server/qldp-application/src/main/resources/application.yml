@@ -11,7 +11,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/qldp?useSSL=false
     username: user
-    password: test
+    password: 12345
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   security:

@@ -9,6 +9,6 @@ dependencies {
 flyway {
     url = 'jdbc:mysql://localhost:3306/qldp?useSSL=false'
     user = 'user'
-    password = 'test'
+    password = '12345'
     schemas = ['qldp']
 }
