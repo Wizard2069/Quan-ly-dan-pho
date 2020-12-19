@@ -1,15 +1,14 @@
 package com.company.qldp.peopleservice.domain.service;
 
-import com.company.qldp.domain.Death;
-import com.company.qldp.domain.People;
-import com.company.qldp.domain.User;
+import com.company.qldp.common.Event;
+import com.company.qldp.domain.*;
+import com.company.qldp.householdservice.api.repository.FamilyMemberRepository;
+import com.company.qldp.householdservice.api.repository.HouseholdHistoryRepository;
 import com.company.qldp.peopleservice.domain.dto.DeathDto;
 import com.company.qldp.peopleservice.domain.exception.DeathAlreadyExistException;
 import com.company.qldp.peopleservice.domain.exception.DeathNotFoundException;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
-import com.company.qldp.peopleservice.domain.repository.DeathRepository;
-import com.company.qldp.peopleservice.domain.repository.IDCardRepository;
-import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
+import com.company.qldp.peopleservice.domain.repository.*;
 import com.company.qldp.userservice.domain.exception.UserNotFoundException;
 import com.company.qldp.userservice.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,18 +30,24 @@ public class DeathService {
     private IDCardRepository idCardRepository;
     private PeopleRepository peopleRepository;
     private UserRepository userRepository;
+    private HouseholdHistoryRepository householdHistoryRepository;
+    private FamilyMemberRepository familyMemberRepository;
     
     @Autowired
     public DeathService(
         DeathRepository deathRepository,
         IDCardRepository idCardRepository,
         PeopleRepository peopleRepository,
-        UserRepository userRepository
+        UserRepository userRepository,
+        HouseholdHistoryRepository householdHistoryRepository,
+        FamilyMemberRepository familyMemberRepository
     ) {
         this.deathRepository = deathRepository;
         this.idCardRepository = idCardRepository;
         this.peopleRepository = peopleRepository;
         this.userRepository = userRepository;
+        this.householdHistoryRepository = householdHistoryRepository;
+        this.familyMemberRepository = familyMemberRepository;
     }
     
     @Transactional
@@ -71,7 +76,7 @@ public class DeathService {
         deathPerson.setDeletedDate(new Date());
         deathPerson.setDeletedManager(deletedManager);
         deathPerson.setDeletedReason("death");
-        peopleRepository.save(deathPerson);
+        People savedDeathPerson = peopleRepository.save(deathPerson);
         
         Death createdDeath = Death.builder()
             .deathCertNumber(deathDto.getDeathCertNumber())
@@ -81,6 +86,16 @@ public class DeathService {
             .deathDay(Date.from(Instant.parse(deathDto.getDeathDay())))
             .deathReason(deathDto.getDeathReason())
             .build();
+    
+        Household household = familyMemberRepository.findByPerson_Id(deathPerson.getId())
+            .getHousehold();
+        HouseholdHistory householdHistory = HouseholdHistory.builder()
+            .household(household)
+            .affectPerson(savedDeathPerson)
+            .date(createdDeath.getDeathDay())
+            .event(Event.DEATH)
+            .build();
+        householdHistoryRepository.save(householdHistory);
         
         return deathRepository.save(createdDeath);
     }

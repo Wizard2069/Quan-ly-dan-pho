@@ -10,7 +10,8 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(basePackages = {
     "com.company.qldp.peopleservice",
     "com.company.qldp.userservice",
-    "com.company.qldp.elasticsearchservice"
+    "com.company.qldp.elasticsearchservice",
+    "com.company.qldp.householdservice"
 })
 @EntityScan(basePackages = {"com.company.qldp.domain"})
 public class PeopleServiceConfiguration {

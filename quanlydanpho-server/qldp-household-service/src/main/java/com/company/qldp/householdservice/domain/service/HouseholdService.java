@@ -1,18 +1,17 @@
 package com.company.qldp.householdservice.domain.service;
 
+import com.company.qldp.common.Event;
 import com.company.qldp.common.util.RandomCodeGenerator;
-import com.company.qldp.domain.FamilyMember;
-import com.company.qldp.domain.Household;
-import com.company.qldp.domain.People;
-import com.company.qldp.domain.User;
+import com.company.qldp.domain.*;
 import com.company.qldp.elasticsearchservice.domain.entity.HouseholdSearch;
 import com.company.qldp.elasticsearchservice.domain.repository.HouseholdSearchRepository;
 import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
+import com.company.qldp.householdservice.api.repository.HouseholdHistoryRepository;
 import com.company.qldp.householdservice.domain.dto.HouseholdDto;
 import com.company.qldp.householdservice.domain.dto.LeaveHouseholdDto;
 import com.company.qldp.householdservice.domain.dto.SeparateHouseholdDto;
 import com.company.qldp.householdservice.domain.exception.HouseholdNotFoundException;
-import com.company.qldp.householdservice.domain.repository.FamilyMemberRepository;
+import com.company.qldp.householdservice.api.repository.FamilyMemberRepository;
 import com.company.qldp.householdservice.domain.repository.HouseholdRepository;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
@@ -37,6 +36,7 @@ public class HouseholdService {
     private PeopleSearchRepository peopleSearchRepository;
     private FamilyMemberRepository familyMemberRepository;
     private UserRepository userRepository;
+    private HouseholdHistoryRepository householdHistoryRepository;
     
     @Autowired
     public HouseholdService(
@@ -45,7 +45,8 @@ public class HouseholdService {
         HouseholdSearchRepository householdSearchRepository,
         PeopleSearchRepository peopleSearchRepository,
         FamilyMemberRepository familyMemberRepository,
-        UserRepository userRepository
+        UserRepository userRepository,
+        HouseholdHistoryRepository householdHistoryRepository
     ) {
         this.householdRepository = householdRepository;
         this.peopleRepository = peopleRepository;
@@ -53,6 +54,7 @@ public class HouseholdService {
         this.peopleSearchRepository = peopleSearchRepository;
         this.familyMemberRepository = familyMemberRepository;
         this.userRepository = userRepository;
+        this.householdHistoryRepository = householdHistoryRepository;
     }
     
     public Household createHousehold(HouseholdDto householdDto) {
@@ -126,6 +128,8 @@ public class HouseholdService {
     
     @Transactional
     public Household separateHousehold(Integer id, SeparateHouseholdDto separateHouseholdDto) {
+        Household household = householdRepository.findById(id)
+            .orElseThrow(HouseholdNotFoundException::new);
         People host = peopleRepository.findById(separateHouseholdDto.getHostId())
             .orElseThrow(PersonNotFoundException::new);
         User performer = userRepository.findByUsername(separateHouseholdDto.getPerformerName());
@@ -135,10 +139,10 @@ public class HouseholdService {
         }
         
         List<FamilyMember> members = familyMemberRepository.findAllByHousehold_Id(id);
-        members = members.stream()
-            .filter(member -> !member.getPerson().getId().equals(host.getId()))
+        List<FamilyMember> deleteMembers = members.stream()
+            .filter(member -> member.getPerson().getId().equals(host.getId()))
             .collect(Collectors.toList());
-        familyMemberRepository.saveAll(members);
+        familyMemberRepository.deleteAll(deleteMembers);
         host.setPermanentAddress(separateHouseholdDto.getNewAddress());
         peopleRepository.save(host);
         
@@ -165,6 +169,14 @@ public class HouseholdService {
             
             return householdSearchRepository.save(householdSearch);
         }).subscribe(Mono::subscribe);
+        
+        HouseholdHistory householdHistory = HouseholdHistory.builder()
+            .household(household)
+            .newHousehold(savedHousehold)
+            .date(savedHousehold.getCreatedDay())
+            .event(Event.SEPARATE)
+            .build();
+        householdHistoryRepository.save(householdHistory);
         
         return savedHousehold;
     }

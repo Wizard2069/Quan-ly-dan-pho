@@ -1,11 +1,12 @@
 package com.company.qldp.peopleservice.domain.service;
 
 import com.company.qldp.common.DateInterval;
+import com.company.qldp.common.Event;
 import com.company.qldp.common.util.RandomCodeGenerator;
-import com.company.qldp.domain.People;
-import com.company.qldp.domain.PersonalMobilization;
-import com.company.qldp.domain.TempAbsent;
+import com.company.qldp.domain.*;
 import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
+import com.company.qldp.householdservice.api.repository.FamilyMemberRepository;
+import com.company.qldp.householdservice.api.repository.HouseholdHistoryRepository;
 import com.company.qldp.peopleservice.domain.dto.TempAbsentDto;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.exception.TempAbsentNotFoundException;
@@ -31,18 +32,24 @@ public class TempAbsentService {
     private IDCardRepository idCardRepository;
     private PeopleRepository peopleRepository;
     private PeopleSearchRepository peopleSearchRepository;
+    private FamilyMemberRepository familyMemberRepository;
+    private HouseholdHistoryRepository householdHistoryRepository;
     
     @Autowired
     public TempAbsentService(
         TempAbsentRepository tempAbsentRepository,
         IDCardRepository idCardRepository,
         PeopleRepository peopleRepository,
-        PeopleSearchRepository peopleSearchRepository
+        PeopleSearchRepository peopleSearchRepository,
+        FamilyMemberRepository familyMemberRepository,
+        HouseholdHistoryRepository householdHistoryRepository
     ) {
         this.tempAbsentRepository = tempAbsentRepository;
         this.idCardRepository = idCardRepository;
         this.peopleRepository = peopleRepository;
         this.peopleSearchRepository = peopleSearchRepository;
+        this.familyMemberRepository = familyMemberRepository;
+        this.householdHistoryRepository = householdHistoryRepository;
     }
     
     @Transactional
@@ -96,6 +103,16 @@ public class TempAbsentService {
             
             return peopleSearchRepository.save(peopleSearch);
         }).subscribe(Mono::subscribe);
+    
+        Household household = familyMemberRepository.findByPerson_Id(savedPeople.getId())
+            .getHousehold();
+        HouseholdHistory householdHistory = HouseholdHistory.builder()
+            .household(household)
+            .affectPerson(savedPeople)
+            .date(savedPeople.getMobilization().getLeaveDate())
+            .event(Event.TEMP_ABSENT)
+            .build();
+        householdHistoryRepository.save(householdHistory);
         
         return tempAbsentRepository.save(tempAbsent);
     }

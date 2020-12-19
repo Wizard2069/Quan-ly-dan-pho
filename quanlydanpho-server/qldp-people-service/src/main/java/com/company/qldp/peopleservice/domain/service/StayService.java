@@ -1,11 +1,12 @@
 package com.company.qldp.peopleservice.domain.service;
 
 import com.company.qldp.common.DateInterval;
+import com.company.qldp.common.Event;
 import com.company.qldp.common.util.RandomCodeGenerator;
-import com.company.qldp.domain.People;
-import com.company.qldp.domain.PersonalMobilization;
-import com.company.qldp.domain.Stay;
+import com.company.qldp.domain.*;
 import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
+import com.company.qldp.householdservice.api.repository.FamilyMemberRepository;
+import com.company.qldp.householdservice.api.repository.HouseholdHistoryRepository;
 import com.company.qldp.peopleservice.domain.dto.StayDto;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.exception.StayNotFoundException;
@@ -31,18 +32,24 @@ public class StayService {
     private IDCardRepository idCardRepository;
     private PeopleRepository peopleRepository;
     private PeopleSearchRepository peopleSearchRepository;
+    private FamilyMemberRepository familyMemberRepository;
+    private HouseholdHistoryRepository householdHistoryRepository;
     
     @Autowired
     public StayService(
         StayRepository stayRepository,
         IDCardRepository idCardRepository,
         PeopleRepository peopleRepository,
-        PeopleSearchRepository peopleSearchRepository
+        PeopleSearchRepository peopleSearchRepository,
+        FamilyMemberRepository familyMemberRepository,
+        HouseholdHistoryRepository householdHistoryRepository
     ) {
         this.stayRepository = stayRepository;
         this.idCardRepository = idCardRepository;
         this.peopleRepository = peopleRepository;
         this.peopleSearchRepository = peopleSearchRepository;
+        this.familyMemberRepository = familyMemberRepository;
+        this.householdHistoryRepository = householdHistoryRepository;
     }
     
     @Transactional
@@ -94,6 +101,16 @@ public class StayService {
             
             return peopleSearchRepository.save(peopleSearch);
         }).subscribe(Mono::subscribe);
+    
+        Household household = familyMemberRepository.findByPerson_Id(savedPeople.getId())
+            .getHousehold();
+        HouseholdHistory householdHistory = HouseholdHistory.builder()
+            .household(household)
+            .affectPerson(savedPeople)
+            .date(savedPeople.getMobilization().getArrivalDate())
+            .event(Event.STAY)
+            .build();
+        householdHistoryRepository.save(householdHistory);
         
         return stayRepository.save(stay);
     }

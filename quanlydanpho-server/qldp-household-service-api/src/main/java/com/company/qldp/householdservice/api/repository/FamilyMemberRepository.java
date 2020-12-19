@@ -1,4 +1,4 @@
-package com.company.qldp.householdservice.domain.repository;
+package com.company.qldp.householdservice.api.repository;
 
 import com.company.qldp.domain.FamilyMember;
 import com.company.qldp.domain.HouseholdPeopleId;
@@ -11,4 +11,6 @@ public interface FamilyMemberRepository extends JpaRepository<FamilyMember, Hous
     List<FamilyMember> findAllByHousehold_Id(Integer id);
     
     FamilyMember findByHousehold_IdAndPerson_Id(Integer id, Integer personId);
+    
+    FamilyMember findByPerson_Id(Integer personId);
 }

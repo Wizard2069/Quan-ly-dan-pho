@@ -89,7 +89,7 @@ public class PeopleService {
             .note(personDto.getNote())
             .build();
         People savedPeople = peopleRepository.save(people);
-    
+        
         PeopleSearch peopleSearch = PeopleSearch.builder()
             .id(savedPeople.getId())
             .peopleCode(peopleCode)

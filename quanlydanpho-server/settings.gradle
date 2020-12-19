@@ -11,6 +11,7 @@ include 'qldp-oauth-resource-server'
 include 'qldp-user-service'
 
 include 'qldp-household-service'
+include 'qldp-household-service-api'
 include 'qldp-people-service'
 
 include 'qldp-elasticsearch-service'
