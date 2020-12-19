@@ -4,13 +4,11 @@ import { MDBDatePicker } from 'mdbreact';
 class DatePickerPage extends React.Component  {
     getPickerValue = (value) => {
         console.log(value);
-    }
+    };
 
     render() {
         return(
-            <div>
-                <MDBDatePicker getValue={this.getPickerValue} />
-            </div>
+            <MDBDatePicker getValue={this.getPickerValue} className='my-0 d-inline ml-3' />
         );
     }
 };

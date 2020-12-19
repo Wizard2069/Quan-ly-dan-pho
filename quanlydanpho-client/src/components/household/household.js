@@ -27,33 +27,14 @@ const Household = () => {
       <MDBContainer fluid>
         <MDBCard className='p-2 mb-5'>
           <MDBRow>
-            <MDBCol lg='2' md='12'>
-              <MDBSelect className='colorful-select dropdown-primary mx-2'>
-                <MDBSelectInput selected='Lọc theo' />
-                <MDBSelectOptions>
-                  <MDBSelectOption disabled>Lọc theo</MDBSelectOption>
-                  <MDBSelectOption value='1'>Ngày đến</MDBSelectOption>
-                  <MDBSelectOption value='2'>Ngày đi</MDBSelectOption>
-                </MDBSelectOptions>
-              </MDBSelect>
-            </MDBCol>
-            <MDBCol lg ='2' className="d-flex justify-content-end align-items-center">
-              <DatePickerPage/>
-            </MDBCol>
-            <MDBCol lg='2' className="d-flex justify-content-end align-items-center">
-              <DatePickerPage/>
-            </MDBCol>
-
-
+            <MDBCol lg='6'/>
             <MDBCol lg='2' md='12'>
               <MDBSelect className='colorful-select dropdown-primary mx-2'>
                 <MDBSelectInput selected='Tìm kiếm theo' />
                 <MDBSelectOptions>
                   <MDBSelectOption disabled>Tìm kiếm theo</MDBSelectOption>
-                  <MDBSelectOption value='1'>Mã nhân khẩu</MDBSelectOption>
-                  <MDBSelectOption value='2'>Chứng minh thư</MDBSelectOption>
-                  <MDBSelectOption value='3'>Họ tên</MDBSelectOption>
-
+                  <MDBSelectOption value='1'>Tên chủ hộ</MDBSelectOption>
+                  <MDBSelectOption value='2'>Địa chỉ</MDBSelectOption>
                 </MDBSelectOptions>
               </MDBSelect>
             </MDBCol>
@@ -70,19 +51,21 @@ const Household = () => {
         <MDBCard narrow className='pb-3'>
           <MDBView
               cascade
-              className='gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-end align-items-center'
+              className='gradient-card-header blue-gradient narrower py-2 mx-4 mb-3'
           >
-            <div className="text-center">
-              <a href='#!' className='white-text mx-3'>
-                Table name
-              </a>
-            </div>
-
-            <div className="text-right">
-              <MDBBtn color='blue accent-3'>
-                Thêm nhân khẩu
-              </MDBBtn>
-            </div>
+            <MDBRow>
+              <MDBCol lg={3}/>
+              <MDBCol lg={6} className="d-flex justify-content-center align-items-center">
+                <a href='#!' className='white-text mx-3'>
+                  Quản lý hộ khẩu
+                </a>
+              </MDBCol>
+              <MDBCol lg={3}>
+                <MDBBtn color='blue accent-3'>
+                  Thêm hộ  khẩu
+                </MDBBtn>
+              </MDBCol>
+            </MDBRow>
 
           </MDBView>
 

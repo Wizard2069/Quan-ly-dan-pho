@@ -37,14 +37,14 @@ const People = () => {
                 </MDBSelectOptions>
               </MDBSelect>
             </MDBCol>
-            <MDBCol lg ='2' className="d-flex justify-content-end align-items-center">
+            <MDBCol lg ='2'>
+              <small className='grey-text'>Từ ngày:</small>
               <DatePickerPage/>
             </MDBCol>
-            <MDBCol lg='2' className="d-flex justify-content-end align-items-center">
+            <MDBCol lg='2'>
+              <small className='grey-text'>Đến ngày:</small>
               <DatePickerPage/>
             </MDBCol>
-
-
             <MDBCol lg='2' md='12'>
               <MDBSelect className='colorful-select dropdown-primary mx-2'>
                 <MDBSelectInput selected='Tìm kiếm theo' />
@@ -70,17 +70,21 @@ const People = () => {
         <MDBCard narrow className='pb-3'>
           <MDBView
               cascade
-              className='gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center'
+              className='gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 '
           >
-            <a href='#!' className='white-text mx-3'>
-              Table name
-            </a>
-            <div className="text-right">
-              <MDBBtn color='blue accent-3'>
-                Thêm nhân khẩu
-              </MDBBtn>
-            </div>
-
+            <MDBRow>
+              <MDBCol lg={3}/>
+              <MDBCol lg={6} className="d-flex justify-content-center align-items-center">
+                <a href='#!' className='white-text mx-3'>
+                  Quản lý nhân khẩu
+                </a>
+              </MDBCol>
+              <MDBCol lg={3}>
+                <MDBBtn color='blue accent-3'>
+                  Thêm nhân khẩu
+                </MDBBtn>
+              </MDBCol>
+            </MDBRow>
           </MDBView>
 
 

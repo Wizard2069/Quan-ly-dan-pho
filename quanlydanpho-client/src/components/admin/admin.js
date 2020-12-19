@@ -26,23 +26,25 @@ const Admin = () => {
       <div id='profile-v1'>
         <MDBContainer fluid>
           <MDBCard className='p-2 mb-5'>
-            <MDBRow>
-
-            </MDBRow>
           </MDBCard>
           <MDBCard narrow className='pb-3'>
             <MDBView
                 cascade
-                className='gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center'
+                className='gradient-card-header blue-gradient narrower py-2 mx-4 mb-3'
             >
-              <a href='#!' className='white-text mx-3'>
-                Quản lý người dùng
-              </a>
-              <div className="text-right">
-                <MDBBtn color='blue accent-3'>
-                 Thêm người dùng
-                </MDBBtn>
-              </div>
+              <MDBRow>
+                <MDBCol lg={3}/>
+                <MDBCol lg={6} className="d-flex justify-content-center align-items-center">
+                  <a href='#!' className='white-text mx-3'>
+                    Quản lý người dùng
+                  </a>
+                </MDBCol>
+                <MDBCol lg={3}>
+                  <MDBBtn color='blue accent-3'>
+                    Thêm người dùng
+                  </MDBBtn>
+                </MDBCol>
+              </MDBRow>
 
             </MDBView>
 
