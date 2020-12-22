@@ -5,82 +5,171 @@ import {
   MDBCard,
   MDBCardBody,
   MDBInput,
-  MDBContainer,
-  MDBAvatar,
-  MDBIcon,
+  MDBCardImage,
   MDBBtn
 } from 'mdbreact';
-import './Form.css';
 
-const PV1 = () => {
-  return (
-    <div id='profile-v1' className='mb-5'>
-      <MDBContainer fluid className='mb-5'>
-        <section className='section team-section mb-5'>
-          <MDBRow center className='text-center'>
-            <MDBCol md='8' className='mb-r'>
-              <MDBCard cascade className='cascading-admin-card user-card'>
-                <div className='admin-up d-flex justify-content-start'>
-                  <MDBIcon icon='users' className='info-color py-4 z-depth-2' />{' '}
-                  <div className='data'>
-                    <h5 className='font-weight-bold dark-grey-text'>
-                      Edit Profile -{' '}
-                      <span className='text-muted'>Complete your profile</span>
-                    </h5>
-                  </div>
-                </div>
-                <MDBCardBody>
-                  <MDBRow>
-                    <MDBCol lg='4'>
-                      <MDBInput type='text' label='Username' />
-                    </MDBCol>
-                    <MDBCol lg='4'>
-                      <MDBInput type='text' label='Email adress' />
-                    </MDBCol>
-                    <MDBCol lg='4'>
-                      <MDBInput type='text' label='Company' />
-                    </MDBCol>
-                  </MDBRow>
-                  <MDBRow>
-                    <MDBCol md='6'>
-                      <MDBInput type='text' label='First name' />
-                    </MDBCol>
-                    <MDBCol md='6'>
-                      <MDBInput type='text' label='Last name' />
-                    </MDBCol>
-                  </MDBRow>
-                  <MDBRow>
-                    <MDBCol md='12'>
-                      <MDBInput type='text' label='Address' />
-                    </MDBCol>
-                  </MDBRow>
-                  <MDBRow>
-                    <MDBCol lg='4' md='12'>
-                      <MDBInput type='text' label='City' />
-                    </MDBCol>
-                    <MDBCol lg='4' md='6'>
-                      <MDBInput type='text' label='Country' />
-                    </MDBCol>
-                    <MDBCol lg='4' md='6'>
-                      <MDBInput type='text' label='Postal code' />
-                    </MDBCol>
-                  </MDBRow>
-                  <MDBRow>
-                    <MDBCol md='12' className='about-text'>
-                      <h4 className='text-muted text-left my-4'>
-                        <strong>About me</strong>
-                      </h4>
-                      <MDBInput type='textarea' label="Don't be shy..." />
-                    </MDBCol>
-                  </MDBRow>
-                </MDBCardBody>
-              </MDBCard>
-            </MDBCol>
-          </MDBRow>
+class Form extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      fname: 'Mark',
+      lname: 'Otto',
+      email: '',
+      city: '',
+      state: '',
+      zip: ''
+    };
+  }
+
+  submitHandler = event => {
+    event.preventDefault();
+    event.target.className += ' was-validated';
+  };
+
+  changeHandler = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
+  render() {
+    return (
+        <section>
+          <MDBCard narrow className='mb-5'>
+            <MDBCardImage
+                className='view view-cascade gradient-card-header blue-gradient'
+                cascade
+                tag='div'
+            >
+              <h2 className='h2-responsive mb-2'>Validation</h2>
+            </MDBCardImage>
+            <MDBCardBody cascade>
+              <h4 className='h4-responsive text-center'>
+                Error &amp; Success messages{' '}
+              </h4>
+              <form
+                  className='needs-validation'
+                  onSubmit={this.submitHandler}
+                  noValidate
+              >
+                <MDBRow>
+                  <MDBCol md='4'>
+                    <MDBInput
+                        icon='user'
+                        value={this.state.fname}
+                        name='fname'
+                        onChange={this.changeHandler}
+                        type='text'
+                        id='materialFormRegisterNameEx'
+                        label='First name'
+                        required
+                    >
+                      <div className='valid-feedback ml-4 pl-3'>Looks good!</div>
+                    </MDBInput>
+                  </MDBCol>
+                  <MDBCol md='4'>
+                    <MDBInput
+                        value={this.state.lname}
+                        name='lname'
+                        onChange={this.changeHandler}
+                        type='text'
+                        id='materialFormRegisterEmailEx2'
+                        label='Last name'
+                        required
+                    >
+                      <div className='valid-feedback ml-4 pl-3'>Looks good!</div>
+                    </MDBInput>
+                  </MDBCol>
+                  <MDBCol md='4'>
+                    <MDBInput
+                        value={this.state.email}
+                        onChange={this.changeHandler}
+                        type='email'
+                        id='materialFormRegisterConfirmEx3'
+                        name='email'
+                        label='Your Email address'
+                        required
+                    >
+                      <small id='emailHelp' className='form-text text-muted'>
+                        We'll never share your email with anyone else.
+                      </small>
+                    </MDBInput>
+                  </MDBCol>
+                </MDBRow>
+                <MDBRow>
+                  <MDBCol md='4'>
+                    <MDBInput
+                        icon='city'
+                        value={this.state.city}
+                        onChange={this.changeHandler}
+                        type='text'
+                        id='materialFormRegisterPasswordEx4'
+                        name='city'
+                        label='City'
+                        required
+                    >
+                      <div className='invalid-feedback ml-4 pl-3'>
+                        Please provide a valid city.
+                      </div>
+                      <div className='valid-feedback ml-4 pl-3'>Looks good!</div>
+                    </MDBInput>
+                  </MDBCol>
+                  <MDBCol md='4'>
+                    <MDBInput
+                        icon='map-marked-alt'
+                        value={this.state.state}
+                        onChange={this.changeHandler}
+                        type='text'
+                        id='materialFormRegisterPasswordEx4'
+                        name='state'
+                        label='State'
+                        required
+                    >
+                      <div className='invalid-feedback ml-4 pl-3'>
+                        Please provide a valid state.
+                      </div>
+                      <div className='valid-feedback ml-4 pl-3'>Looks good!</div>
+                    </MDBInput>
+                  </MDBCol>
+                  <MDBCol md='4'>
+                    <MDBInput
+                        icon='location-arrow'
+                        value={this.state.zip}
+                        onChange={this.changeHandler}
+                        type='text'
+                        id='materialFormRegisterPasswordEx4'
+                        name='zip'
+                        label='Zip'
+                        required
+                    >
+                      <div className='invalid-feedback ml-4 pl-3'>
+                        Please provide a valid zip.
+                      </div>
+                      <div className='valid-feedback ml-4 pl-3'>Looks good!</div>
+                    </MDBInput>
+                  </MDBCol>
+                </MDBRow>
+                <MDBRow>
+                  <MDBInput
+                      type='checkbox'
+                      value='conditions'
+                      id='materialInvalidCheck'
+                      required
+                      label='Agree to terms and conditions'
+                  >
+                    <div className='invalid-feedback'>
+                      You must agree before submitting.
+                    </div>
+                  </MDBInput>
+                </MDBRow>
+                <MDBBtn color='primary' type='submit'>
+                  Submit Form
+                </MDBBtn>
+              </form>
+            </MDBCardBody>
+          </MDBCard>
         </section>
-      </MDBContainer>
-    </div>
-  );
-};
+    );
+  }
+}
 
-export default PV1;
+export default Form;
