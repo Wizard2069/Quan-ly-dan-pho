@@ -16,12 +16,25 @@ import org.springframework.security.web.server.util.matcher.ServerWebExchangeMat
 import org.springframework.web.cors.CorsConfiguration;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @EnableWebFluxSecurity
 public class SecurityConfig {
     
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) throws Exception {
-        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+        http.cors().configurationSource(request -> {
+            CorsConfiguration configuration = new CorsConfiguration();
+            
+            configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8000"));
+            configuration.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+            configuration.setAllowCredentials(true);
+            configuration.setAllowedHeaders(List.of("*"));
+            configuration.setExposedHeaders(List.of("X-Auth-Token", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
+            
+            return configuration;
+        }
+        )
                 .and()
                     .authorizeExchange()
                         .pathMatchers(HttpMethod.POST, "/login")

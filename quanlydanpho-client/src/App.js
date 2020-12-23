@@ -1,10 +1,10 @@
-import Table from './components/Table/Table';
+import React from 'react';
+
+import Routes from './routes/Routes';
 
 const App = () => {
   return (
-    <div>
-        <Table/>
-    </div>
+    <Routes/>
   );
 }
 

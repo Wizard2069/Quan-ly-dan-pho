@@ -1,6 +1,7 @@
 package com.company.qldp.elasticsearchservice.domain.repository;
 
 import com.company.qldp.elasticsearchservice.domain.entity.HouseholdSearch;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -28,21 +29,23 @@ public class CustomHouseholdSearchRepositoryImpl implements CustomHouseholdSearc
         
         String hostName = queryParams.getFirst("host");
         String address = queryParams.getFirst("address");
+    
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
         
         if (hostName != null) {
-            queryBuilder = queryBuilder.withQuery(
+            boolQueryBuilder = boolQueryBuilder.must(
                 multiMatchQuery(hostName, "host.full_name", "host.full_name.search", "host.full_name.search._2gram", "host.full_name.search._3gram")
                     .type(Type.BOOL_PREFIX)
             );
         }
         if (address != null) {
-            queryBuilder = queryBuilder.withQuery(
+            boolQueryBuilder = boolQueryBuilder.must(
                 multiMatchQuery(address, "address.search", "address.search._2gram", "address.search._3gram")
                     .type(Type.BOOL_PREFIX)
             );
         }
         
-        Flux<HouseholdSearch> householdSearchFlux = operations.search(queryBuilder.build(), HouseholdSearch.class)
+        Flux<HouseholdSearch> householdSearchFlux = operations.search(queryBuilder.withQuery(boolQueryBuilder).build(), HouseholdSearch.class)
             .map(SearchHit::getContent);
         
         return householdSearchFlux;
