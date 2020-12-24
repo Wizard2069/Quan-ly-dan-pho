@@ -8,14 +8,13 @@ import {
     MDBCardImage,
     MDBBtn
 } from 'mdbreact';
+import ModalPage from "../components/modals/modal";
 
-class Form_addhousehold extends React.Component {
+class FormAddHousehold extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id:'',
             maHoKhau:'',
-            idCHuHo:'',
             maKhuVuc:'',
             diaChi:'',
             ngayLap:'',
@@ -54,19 +53,6 @@ class Form_addhousehold extends React.Component {
                             <MDBRow>
                                 <MDBCol md='4'>
                                     <MDBInput
-                                        value={this.state.id}
-                                        name='id'
-                                        onChange={this.changeHandler}
-                                        type='text'
-                                        id='materialFormRegisterNameEx'
-                                        label='ID'
-                                        required
-                                    >
-                                        <div className='valid-feedback ml-4 pl-3'>Looks good!</div>
-                                    </MDBInput>
-                                </MDBCol>
-                                <MDBCol md='4'>
-                                    <MDBInput
                                         value={this.state.maHoKhau}
                                         name='maHoKhau'
                                         onChange={this.changeHandler}
@@ -78,21 +64,9 @@ class Form_addhousehold extends React.Component {
                                         <div className='valid-feedback ml-4 pl-3'>Looks good!</div>
                                     </MDBInput>
                                 </MDBCol>
-                                <MDBCol md='4'>
-                                    <MDBInput
-                                        value={this.state.idCHuHo}
-                                        onChange={this.changeHandler}
-                                        type='text'
-                                        id='materialFormRegisterConfirmEx3'
-                                        name='idChuHo'
-                                        label='ID chủ hộ'
-                                        required
-                                    >
-                                    </MDBInput>
-                                    <div className='invalid-feedback ml-4 pl-3'>
-                                        Please provide a valid city.
-                                    </div>
-                                    <div className='valid-feedback ml-4 pl-3'>Looks good!</div>
+                                <MDBCol md={2}/>
+                                <MDBCol>
+                                    <ModalPage/>
                                 </MDBCol>
                             </MDBRow>
                             <MDBRow>
@@ -218,4 +192,4 @@ class Form_addhousehold extends React.Component {
     }
 }
 
-export default Form_addhousehold;
+export default FormAddHousehold;

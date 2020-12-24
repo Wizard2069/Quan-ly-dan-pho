@@ -10,7 +10,7 @@ import {
 } from 'mdbreact';
 import LinkCard from '../LinkCard';
 
-class Form_addpeople extends React.Component {
+class FormAddPeople extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -620,4 +620,4 @@ class Form_addpeople extends React.Component {
     }
 }
 
-export default Form_addpeople;
+export default FormAddPeople;
