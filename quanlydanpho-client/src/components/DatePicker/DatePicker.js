@@ -9,7 +9,9 @@ const DatePicker = (props) => {
             className='my-0 d-inline ml-3'
             getValue={props.getPickerValue}
             locale={moment.locale('vi')}
-            autoOk={true}
+            autoOk
+            keyboard={props.keyboard ?? false}
+            format='DD-MM-YYYY'
         />
     );
 };

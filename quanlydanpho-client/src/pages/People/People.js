@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     MDBContainer,
     MDBCard,
@@ -25,6 +25,7 @@ import Select from '../../components/Select/Select';
 import {getPeople} from '../../store/actions/people';
 import {toVnDateFormat, toVnSex} from '../../utils/utils';
 import Pagination from '../../components/Pagination/Pagination';
+import {Link} from 'react-router-dom';
 
 const People = () => {
     const peopleData = useSelector(state => state.people);
@@ -40,7 +41,7 @@ const People = () => {
     const [sex, setSex] = useState(null);
     const [age, setAge] = useState(null);
     
-    const [selectedStatusText, setSelectedStatusText] = useState('Lọc theo');
+    const [selectedStatusText, setSelectedStatusText] = useState('Thời gian');
     const [selectedSearchTypeText, setSelectedSearchTypeText] = useState('Tìm kiếm theo');
     const [selectedAgeText, setSelectedAgeText] = useState('Độ tuổi');
     
@@ -92,7 +93,7 @@ const People = () => {
         setStatus(null);
         setFromDate(null);
         setToDate(null);
-        setSelectedStatusText('Lọc theo');
+        setSelectedStatusText('Thời gian');
         setSelectedSearchTypeText('Tìm kiếm theo');
         setSelectedAgeText('Độ tuổi');
         setResetSearchInput('true');
@@ -175,17 +176,17 @@ const People = () => {
                             >
                                 <MDBSelectInput selected={selectedStatusText}/>
                                 <MDBSelectOptions>
-                                    <MDBSelectOption disabled>Lọc theo</MDBSelectOption>
+                                    <MDBSelectOption disabled>Thời gian</MDBSelectOption>
                                     <MDBSelectOption value='arrival'>Ngày đến</MDBSelectOption>
                                     <MDBSelectOption value='leave'>Ngày đi</MDBSelectOption>
                                 </MDBSelectOptions>
                             </MDBSelect>
                         </MDBCol>
-                        <MDBCol lg='2' md='4' style={{marginTop: '7px'}}>
+                        <MDBCol lg='2' md='3' style={{marginTop: '7px'}}>
                             <small className='grey-text'>Từ ngày:</small>
                             <DatePicker getPickerValue={onGetPickerValueFrom}/>
                         </MDBCol>
-                        <MDBCol lg='2' md='4' style={{marginTop: '7px'}}>
+                        <MDBCol lg='2' md='3' style={{marginTop: '7px'}}>
                             <small className='grey-text'>Đến ngày:</small>
                             <DatePicker getPickerValue={onGetPickerValueTo}/>
                         </MDBCol>
@@ -216,7 +217,7 @@ const People = () => {
                         </MDBCol>
                     </MDBRow>
                     <MDBRow>
-                        <MDBCol md='4'>
+                        <MDBCol md='3'>
                             <MDBSelect
                                 key={selectedAgeText}
                                 className='colorful-select dropdown-primary mx-2 mt-0'
@@ -258,7 +259,7 @@ const People = () => {
                                 />
                             </MDBFormInline>
                         </MDBCol>
-                        <MDBCol md='4'>
+                        <MDBCol md='4' className='offset-md-1'>
                             <MDBBtn color='primary' onClick={handleOnResetClick}>Xoá bộ lọc</MDBBtn>
                         </MDBCol>
                     </MDBRow>
@@ -276,7 +277,9 @@ const People = () => {
                             </MDBCol>
                             <MDBCol md='3'>
                                 <MDBBtn color='blue accent-3'>
-                                    Thêm nhân khẩu
+                                    <Link to='/people/add' className='white-text'>
+                                        Thêm nhân khẩu
+                                    </Link>
                                 </MDBBtn>
                             </MDBCol>
                         </MDBRow>

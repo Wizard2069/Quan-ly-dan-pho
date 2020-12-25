@@ -1,11 +1,18 @@
 import * as types from '../constants/types';
-import {getPeopleData} from '../../api/people';
+import {createPersonData, getPeopleData} from '../../api/people';
 import {clearError, createError} from './error';
 
 export const updateAvailablePeople = (people) => {
     return {
         type: types.people.GET,
         people
+    };
+};
+
+export const createNewPerson = (person) => {
+    return {
+        type: types.people.CREATE,
+        person
     };
 };
 
@@ -28,5 +35,18 @@ export const getPeople = (
             .catch(err => {
                 dispatch(createError(err));
             });
+    };
+};
+
+export const createPerson = (personDto) => {
+    return dispatch => {
+        createPersonData(personDto)
+            .then(data => {
+                dispatch(clearError());
+                dispatch(createNewPerson(data));
+            })
+            .catch(err => {
+                dispatch(createError(err));
+            })
     };
 };

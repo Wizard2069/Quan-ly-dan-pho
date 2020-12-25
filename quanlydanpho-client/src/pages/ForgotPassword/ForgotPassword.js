@@ -3,14 +3,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import {MDBBtn, MDBInput, MDBNotification} from 'mdbreact';
 
-import {clearSent, clearSentEmail, sendMail} from '../../store/actions/auth';
+import {clearSent, sendMail} from '../../store/actions/auth';
 
 const ForgotPassword = () => {
     const history = useHistory();
     let sent = useSelector(state => state.user.sent);
     const dispatch = useDispatch();
     
-    const [sentEmail, setSentEmail] = useState(false);
     const [email, setEmail] = useState('');
     
     const handleReturnSubmit = (e) => {
@@ -30,12 +29,7 @@ const ForgotPassword = () => {
     let notification = null;
     
     useEffect(() => {
-        if (sent) {
-            setSentEmail(true);
-        }
-        
         return () => {
-            setSentEmail(false);
             dispatch(clearSent());
         };
     }, [dispatch]);

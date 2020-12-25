@@ -32,11 +32,14 @@ const RoutesWithNavigation = () => {
             case '/account':
                 locationString = 'Tài khoản';
                 break;
-            case '/admin/users':
+            case '/users/list':
                 locationString = 'Quản lý người dùng';
                 break;
-            case '/manager/people':
+            case '/people/list':
                 locationString = 'Quản lý nhân khẩu';
+                break;
+            case '/people/add':
+                locationString = 'Thêm nhân khẩu';
                 break;
             default:
         }
@@ -81,7 +84,7 @@ const RoutesWithNavigation = () => {
                 </main>
                 <Footer
                     style={{ ...dynamicLeftPadding, position: 'fixed', width: '100%' }}
-                    className='d-lg-block'
+                    className='d-block'
                 />
             </div>
         </div>

@@ -38,11 +38,15 @@ const SideNavigation = (props) => {
                     >
                         {rSNL('/account', 'Tài khoản')}
                         {roles.includes('admin', 0) ?
-                            rSNL('/admin/users', 'Quản lý người dùng')
+                            rSNL('/users/list', 'Quản lý người dùng')
                             : null
                         }
                         {roles.includes('manager', 0) ?
-                            rSNL('/manager/people', 'Quản lý nhân khẩu')
+                            rSNL('/people/list', 'Quản lý nhân khẩu')
+                            : null
+                        }
+                        {roles.includes('manager', 0) ?
+                            rSNL('/people/add', 'Thêm nhân khẩu')
                             : null
                         }
                     </MDBSideNavCat>

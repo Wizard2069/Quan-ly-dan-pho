@@ -7,6 +7,10 @@ export const people = (state = initialState.people, action) => {
             const {people} = action;
             
             return people;
+        case types.people.CREATE:
+            const {person} = action;
+            
+            return person;
         default:
             return state;
     }
