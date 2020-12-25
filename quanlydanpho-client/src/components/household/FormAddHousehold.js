@@ -53,6 +53,7 @@ class FormAddHousehold extends React.Component {
                             <MDBRow>
                                 <MDBCol md='4'>
                                     <MDBInput
+                                        outline
                                         value={this.state.maHoKhau}
                                         name='maHoKhau'
                                         onChange={this.changeHandler}
@@ -64,7 +65,6 @@ class FormAddHousehold extends React.Component {
                                         <div className='valid-feedback ml-4 pl-3'>Looks good!</div>
                                     </MDBInput>
                                 </MDBCol>
-                                <MDBCol md={2}/>
                                 <MDBCol>
                                     <ModalPage/>
                                 </MDBCol>
@@ -72,6 +72,7 @@ class FormAddHousehold extends React.Component {
                             <MDBRow>
                                 <MDBCol md='4'>
                                     <MDBInput
+                                        outline
                                         value={this.state.maKhuVuc}
                                         onChange={this.changeHandler}
                                         type='text'
@@ -88,6 +89,7 @@ class FormAddHousehold extends React.Component {
                                 </MDBCol>
                                 <MDBCol md='4'>
                                     <MDBInput
+                                        outline
                                         value={this.state.diaChi}
                                         onChange={this.changeHandler}
                                         type='text'
@@ -104,6 +106,7 @@ class FormAddHousehold extends React.Component {
                                 </MDBCol>
                                 <MDBCol md='4'>
                                     <MDBInput
+                                        outline
                                         value={this.state.ngayLap}
                                         onChange={this.changeHandler}
                                         type='text'
@@ -120,6 +123,7 @@ class FormAddHousehold extends React.Component {
                                 </MDBCol>
                                 <MDBCol md='4'>
                                     <MDBInput
+                                        outline
 
                                         value={this.state.ngayChuyenDi}
                                         onChange={this.changeHandler}
@@ -137,6 +141,7 @@ class FormAddHousehold extends React.Component {
                                 </MDBCol>
                                 <MDBCol md='4'>
                                     <MDBInput
+                                        outline
                                         value={this.state.lyDoChuyen}
                                         onChange={this.changeHandler}
                                         type='text'
@@ -153,6 +158,7 @@ class FormAddHousehold extends React.Component {
                                 </MDBCol>
                                 <MDBCol md='4'>
                                     <MDBInput
+                                        outline
                                         value={this.state.nguoiThucHien}
                                         onChange={this.changeHandler}
                                         type='text'
@@ -169,21 +175,12 @@ class FormAddHousehold extends React.Component {
                                 </MDBCol>
                             </MDBRow>
                             <MDBRow>
-                                <MDBInput
-                                    type='checkbox'
-                                    value='conditions'
-                                    id='materialInvalidCheck'
-                                    required
-                                    label='Agree to terms and conditions'
-                                >
-                                    <div className='invalid-feedback'>
-                                        You must agree before submitting.
-                                    </div>
-                                </MDBInput>
+                                <MDBCol md='3' className='offset-md-5'>
+                                    <MDBBtn color='primary' type='submit'>
+                                        Lưu thay đổi
+                                    </MDBBtn>
+                                </MDBCol>
                             </MDBRow>
-                            <MDBBtn color='primary' type='submit'>
-                                Submit Form
-                            </MDBBtn>
                         </form>
                     </MDBCardBody>
                 </MDBCard>

@@ -20,7 +20,7 @@ import {
 } from 'mdbreact';
 import '../components/buttons/buttons.css';
 import './stay.css';
-import DatePickerPage from "../components/date/date";
+import DatePickerPage from "../components/DatePicker/DatePicker";
 const Stay = () => {
     return (
         <div id='profile-v1'>
@@ -60,12 +60,6 @@ const Stay = () => {
                         <MDBTable responsive hover>
                             <thead>
                                 <tr>
-                                    <th>
-                                        <label
-                                            htmlFor='checkbox'
-                                            className='form-check-label mr-2 label-table'
-                                        />
-                                    </th>
                                     <th className='th-lg text-center'>
                                         Mã nhân khẩu
                                     </th>
@@ -88,14 +82,6 @@ const Stay = () => {
                             </thead>
                             <tbody>
                                 <tr className='text-center'>
-                                    <th scope='row'>
-                                        <input
-                                            className='form-check-input'
-                                            type='checkbox'
-                                            id='checkbox1'
-                                        />
-                                        <label htmlFor='checkbox1' className='label-table' />
-                                    </th>
                                     <td>Mark</td>
                                     <td>Otto</td>
                                     <td>@mdo</td>

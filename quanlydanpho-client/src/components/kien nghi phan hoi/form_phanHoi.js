@@ -19,7 +19,7 @@ import {
     MDBPageNav
 } from 'mdbreact';
 import '../components/buttons/buttons.css';
-import DatePickerPage from "../components/date/date";
+import DatePickerPage from "../components/DatePicker/DatePicker";
 const Form_phanHoi = () => {
     return (
         <div id='profile-v1'>

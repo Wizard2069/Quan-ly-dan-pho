@@ -3,7 +3,7 @@ import React from "react";
 import Buttons from "./components/components/buttons/buttons";
 import Admin from "./components/admin/admin";
 import People from "./components/people/people";
-import DatePickerPage from "./components/components/date/date";
+import DatePickerPage from "./components/components/DatePicker/DatePicker";
 import Household from "./components/household/household";
 import TempAbsent from "./components/TempAbsent/tempAbsent";
 import Stay from "./components/stay/stay";
@@ -16,16 +16,17 @@ import Form_kienNghi from "./components/kien nghi phan hoi/form_kienNghi";
 import Form_phanHoi from "./components/kien nghi phan hoi/form_phanHoi";
 import Form_phanHoiChiTiet from "./components/kien nghi phan hoi/form_phanHoiChiTiet";
 import ModalPage from "./components/components/modals/modal";
+import PersonDetail from "./components/people/PersonDetail";
+import HouseholdDetail from "./components/household/HouseholdDetail";
+import DeathDeclare from "./DeathDeclare/DeathDeclare";
 
 
 const App = () => {
   return (
     <div>
         <main style={{paddingLeft: 0, margin: "8rem 6% 6rem"}}>
-            <FormAddHousehold />
-            <DatePickerPage/>
+          <DeathDeclare/>
         </main>
-
     </div>
   );
 };

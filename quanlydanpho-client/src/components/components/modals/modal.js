@@ -25,9 +25,9 @@ class ModalPage extends Component {
 
     render() {
         return (
-            <MDBContainer>
+            <MDBContainer className='ml-0 pl-0'>
                 <div>
-                    <MDBInput style={{width:'20rem'}} label='Chủ hộ' className='d-inline'>
+                    <MDBInput outline style={{width:'20rem'}} label='Chủ hộ' className='d-inline'>
                         <MDBIcon className='d-inline' onClick={this.toggle} icon='edit'/>
                     </MDBInput>
                 </div>

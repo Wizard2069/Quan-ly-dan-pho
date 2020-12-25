@@ -20,7 +20,7 @@ import {
 } from 'mdbreact';
 import '../components/buttons/buttons.css';
 import './tempAbsent.css';
-import DatePickerPage from "../components/date/date";
+import DatePickerPage from "../components/DatePicker/DatePicker";
 const TempAbsent = () => {
     return (
         <div id='profile-v1'>
