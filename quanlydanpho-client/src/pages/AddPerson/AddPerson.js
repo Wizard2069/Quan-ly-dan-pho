@@ -14,10 +14,16 @@ import {
 } from 'mdbreact';
 import {useHistory} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
+import {useFormik} from 'formik';
+import * as yup from 'yup';
 
 import DatePicker from '../../components/DatePicker/DatePicker';
+import Input from '../../components/Input/Input';
 import {createPerson} from '../../store/actions/people';
 import {getUser} from '../../utils/utils';
+import {fieldsToVietnamese} from '../../utils/fieldUtils';
+
+import './AddPerson.css';
 
 const AddPerson = () => {
     const user = getUser();
@@ -31,21 +37,85 @@ const AddPerson = () => {
         createdDate: new Date().toISOString()
     });
     
-    const submitHandler = (e) => {
-        e.preventDefault();
-        e.target.className = ' was-validated';
-    };
+    const validationSchema = yup.object({
+        fullName: yup.string()
+            .required('fullName is required'),
+        birthPlace: yup.string()
+            .required('birthPlace is required'),
+        domicile: yup.string()
+            .required('domicile is required'),
+        nation: yup.string()
+            .required('nation is required'),
+        religion: yup.string()
+            .required('religion is required'),
+        nationality: yup.string()
+            .required('nationality is required'),
+        permanentAddress: yup.string()
+            .required('permanentAddress is required'),
+        currentAddress: yup.string()
+            .required('currentAddress is required')
+    });
     
-    const changeHandler = (e) => {
-        const {name, value} = e.target;
-        
-        setPersonDto(prevPersonDto => {
-            return {
-                ...prevPersonDto,
-                [name]: value
+    const formik = useFormik({
+        initialValues: {
+            fullName: '',
+            alias: '',
+            birthPlace: '',
+            domicile: '',
+            nation: '',
+            religion: '',
+            nationality: '',
+            passportNumber: '',
+            permanentAddress: '',
+            currentAddress: '',
+            academicLevel: '',
+            qualification: '',
+            ethnicLanguage: '',
+            languageLevel: '',
+            job: '',
+            workplace: '',
+            criminalRecord: '',
+            note: ''
+        },
+        validationSchema,
+        onSubmit: (values) => {
+            const personBody = {
+                ...personDto,
+                ...values
             };
-        });
-    };
+            dispatch(createPerson(personBody));
+        }
+    });
+    
+    let colInputs = [];
+    for (const key in formik.values) {
+        if (key === 'note') {
+            colInputs.push(
+                <MDBCol key={key}>
+                    <MDBInput
+                        outline
+                        type='textarea'
+                        rows='5'
+                        onChange={formik.handleChange}
+                        name={key}
+                        label={fieldsToVietnamese(key)}
+                        icon="pencil-alt"
+                        className={formik.touched[key] ? (formik.errors[key] ? 'is-invalid' : 'is-valid') : null}
+                    />
+                </MDBCol>
+            )
+        } else {
+            colInputs.push(
+                <Input
+                    key={key}
+                    handleChange={formik.handleChange}
+                    name={key}
+                    label={fieldsToVietnamese(key)}
+                    className={formik.touched[key] ? (formik.errors[key] ? 'is-invalid' : 'is-valid') : null}
+                />
+            );
+        }
+    }
     
     const onGetDateValue = (value) => {
         setPersonDto(prevPersonDto => {
@@ -65,6 +135,12 @@ const AddPerson = () => {
         });
     };
     
+    useEffect(() => {
+        if (person.id) {
+            history.push('/people/list');
+        }
+    }, [person]);
+    
     return (
         <section>
             <MDBCard narrow className='mb-5'>
@@ -78,34 +154,13 @@ const AddPerson = () => {
                 <MDBCardBody cascade>
                     <form
                         className='needs-validation'
-                        onSubmit={submitHandler}
+                        onSubmit={formik.handleSubmit}
                         noValidate
                         style={{backgroundPosition: 'none'}}
                     >
                         <MDBRow>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='fullName'
-                                    label='Họ và tên'
-                                    required
-                                >
-                                    <div className='invalid-feedback ml-4 pl-3'>
-                                        * Bắt buộc
-                                    </div>
-                                </MDBInput>
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='alias'
-                                    label='Biệt danh'
-                                />
-                            </MDBCol>
+                            {colInputs[0]}
+                            {colInputs[1]}
                             <MDBCol md='3' style={{marginTop: '7px'}}>
                                 <small className='grey-text'>Ngày sinh</small>
                                 <DatePicker keyboard getPickerValue={onGetDateValue}/>
@@ -125,189 +180,10 @@ const AddPerson = () => {
                                     </MDBSelectOptions>
                                 </MDBSelect>
                             </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='birthPlace'
-                                    label='Nơi sinh'
-                                    required
-                                >
-                                    <div className='invalid-feedback ml-4 pl-3'>
-                                        * Bắt buộc
-                                    </div>
-                                </MDBInput>
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='domicile'
-                                    label='Nguyên quán'
-                                    required
-                                >
-                                    <div className='invalid-feedback ml-4 pl-3'>
-                                        * Bắt buộc
-                                    </div>
-                                </MDBInput>
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='religion'
-                                    label='Dân tộc'
-                                    required
-                                >
-                                    <div className='invalid-feedback ml-4 pl-3'>
-                                        * Bắt buộc
-                                    </div>
-                                </MDBInput>
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='nationality'
-                                    label='Tôn giáo'
-                                    required
-                                >
-                                    <div className='invalid-feedback ml-4 pl-3'>
-                                        * Bắt buộc
-                                    </div>
-                                </MDBInput>
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='nationality'
-                                    label='Quốc tịch'
-                                    required
-                                >
-                                    <div className='invalid-feedback ml-4 pl-3'>
-                                        * Bắt buộc
-                                    </div>
-                                </MDBInput>
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='passportNumber'
-                                    label='Số hộ chiếu'
-                                />
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='permanentAddress'
-                                    label='Nơi thường trú'
-                                    required
-                                >
-                                    <div className='invalid-feedback ml-4 pl-3'>
-                                        * Bắt buộc
-                                    </div>
-                                </MDBInput>
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='currentAddress'
-                                    label='Địa chỉ hiện tại'
-                                    required
-                                >
-                                    <div className='invalid-feedback ml-4 pl-3'>
-                                        * Bắt buộc
-                                    </div>
-                                </MDBInput>
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='academicLevel'
-                                    label='Trình độ học vấn'
-                                />
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='qualification'
-                                    label='Trình độ chuyên môn'
-                                />
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='ethnicLanguage'
-                                    label='Biết tiếng dân tộc'
-                                />
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='languageLevel'
-                                    label='Trình độ ngoại ngữ'
-                                />
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='job'
-                                    label='Nghề nghiệp'
-                                />
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='workplace'
-                                    label='Nơi làm việc'
-                                />
-                            </MDBCol>
-                            <MDBCol md='4'>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='text'
-                                    name='criminalRecord'
-                                    label='Tiền Án'
-                                />
-                            </MDBCol>
+                            {colInputs.slice(2, colInputs.length - 1)}
                         </MDBRow>
                         <MDBRow>
-                            <MDBCol>
-                                <MDBInput
-                                    outline
-                                    onChange={changeHandler}
-                                    type='textarea'
-                                    name='note'
-                                    label='Ghi chú'
-                                    rows="5"
-                                    icon="pencil-alt"
-                                />
-                            </MDBCol>
+                            {colInputs[colInputs.length - 1]}
                         </MDBRow>
                         <MDBRow>
                             <MDBCol md='3' className='offset-md-5'>
@@ -324,4 +200,4 @@ const AddPerson = () => {
     );
 };
 
-export default AddPerson;
+export default React.memo(AddPerson);
