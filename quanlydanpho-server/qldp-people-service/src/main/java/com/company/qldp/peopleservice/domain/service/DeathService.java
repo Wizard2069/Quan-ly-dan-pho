@@ -2,6 +2,7 @@ package com.company.qldp.peopleservice.domain.service;
 
 import com.company.qldp.common.Event;
 import com.company.qldp.domain.*;
+import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
 import com.company.qldp.householdservice.api.repository.FamilyMemberRepository;
 import com.company.qldp.householdservice.api.repository.HouseholdHistoryRepository;
 import com.company.qldp.peopleservice.domain.dto.DeathDto;
@@ -16,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
+import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.util.Date;
@@ -32,6 +34,7 @@ public class DeathService {
     private UserRepository userRepository;
     private HouseholdHistoryRepository householdHistoryRepository;
     private FamilyMemberRepository familyMemberRepository;
+    private PeopleSearchRepository peopleSearchRepository;
     
     @Autowired
     public DeathService(
@@ -40,7 +43,8 @@ public class DeathService {
         PeopleRepository peopleRepository,
         UserRepository userRepository,
         HouseholdHistoryRepository householdHistoryRepository,
-        FamilyMemberRepository familyMemberRepository
+        FamilyMemberRepository familyMemberRepository,
+        PeopleSearchRepository peopleSearchRepository
     ) {
         this.deathRepository = deathRepository;
         this.idCardRepository = idCardRepository;
@@ -48,6 +52,7 @@ public class DeathService {
         this.userRepository = userRepository;
         this.householdHistoryRepository = householdHistoryRepository;
         this.familyMemberRepository = familyMemberRepository;
+        this.peopleSearchRepository = peopleSearchRepository;
     }
     
     @Transactional
@@ -75,8 +80,14 @@ public class DeathService {
         
         deathPerson.setDeletedDate(new Date());
         deathPerson.setDeletedManager(deletedManager);
-        deathPerson.setDeletedReason("death");
+        deathPerson.setDeletedReason("đã chết");
         People savedDeathPerson = peopleRepository.save(deathPerson);
+        
+        peopleSearchRepository.findById(savedDeathPerson.getId()).map(peopleSearch -> {
+            peopleSearch.setLiveStatus("death");
+            
+            return peopleSearchRepository.save(peopleSearch);
+        }).subscribe(Mono::subscribe);
         
         Death createdDeath = Death.builder()
             .deathCertNumber(deathDto.getDeathCertNumber())

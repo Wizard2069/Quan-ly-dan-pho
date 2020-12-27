@@ -1,6 +1,7 @@
 package com.company.qldp.peopleservice.domain.service;
 
 import com.company.qldp.common.PeopleInfo;
+import com.company.qldp.common.util.SexUtils;
 import com.company.qldp.domain.*;
 import com.company.qldp.elasticsearchservice.domain.entity.PeopleSearch;
 import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
@@ -186,7 +187,7 @@ public class PeopleService {
             .birthday(Date.from(Instant.parse(updatePersonDto.getBirthday())))
             .currentAddress(updatePersonDto.getCurrentAddress())
             .job(updatePersonDto.getJob())
-            .sex(updatePersonDto.getSex())
+            .sex(SexUtils.getSex(updatePersonDto.getSex()))
             .build();
         person.setInfo(peopleInfo);
         

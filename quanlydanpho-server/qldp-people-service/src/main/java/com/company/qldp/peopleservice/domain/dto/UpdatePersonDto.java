@@ -30,13 +30,4 @@ public class UpdatePersonDto {
     private String workplace;
     private String criminalRecord;
     private String note;
-    
-    public Sex getSex() {
-        return switch (sex) {
-            case "male" -> Sex.MALE;
-            case "female" -> Sex.FEMALE;
-            case "other" -> Sex.OTHER;
-            default -> throw new RuntimeException("Sex not found: " + sex);
-        };
-    }
 }

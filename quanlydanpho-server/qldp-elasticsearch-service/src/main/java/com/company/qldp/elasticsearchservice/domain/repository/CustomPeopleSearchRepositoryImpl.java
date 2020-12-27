@@ -40,7 +40,9 @@ public class CustomPeopleSearchRepositoryImpl implements CustomPeopleSearchRepos
         String dateRange = queryParams.getFirst("date");
         String status = queryParams.getFirst("status");
     
-        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder().must(
+            matchQuery("live_status", "live")
+        );
         
         if (name != null) {
             boolQueryBuilder = boolQueryBuilder.must(
@@ -91,8 +93,7 @@ public class CustomPeopleSearchRepositoryImpl implements CustomPeopleSearchRepos
             }
         }
         
-        Flux<PeopleSearch> peopleSearchFlux = operations.search(queryBuilder.withQuery(boolQueryBuilder).build(), PeopleSearch.class)
-            .map(SearchHit::getContent);
+        Flux<PeopleSearch> peopleSearchFlux = operations.search(queryBuilder.withQuery(boolQueryBuilder).build(), PeopleSearch.class).map(SearchHit::getContent);
         
         if (idCard != null) {
             NativeSearchQueryBuilder idCardQueryBuilder = new NativeSearchQueryBuilder();

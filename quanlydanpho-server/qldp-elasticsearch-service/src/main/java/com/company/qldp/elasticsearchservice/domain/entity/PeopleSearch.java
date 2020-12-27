@@ -64,4 +64,7 @@ public class PeopleSearch {
     private Date leaveDate;
     
     private String note;
+    
+    @Field(name = "live_status")
+    private String liveStatus = "live";
 }
