@@ -12,6 +12,7 @@ const DatePicker = (props) => {
             autoOk
             keyboard={props.keyboard ?? false}
             format='DD-MM-YYYY'
+            valueDefault={props.date ?? new Date()}
         />
     );
 };

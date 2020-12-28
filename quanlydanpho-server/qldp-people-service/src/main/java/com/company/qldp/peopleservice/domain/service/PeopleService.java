@@ -101,6 +101,7 @@ public class PeopleService {
             .note(savedPeople.getNote())
             .sex(savedPeople.getInfo().getSex())
             .passportNumber(savedPeople.getPassportNumber())
+            .liveStatus("live")
             .build();
         peopleSearchRepository.save(peopleSearch).subscribe();
         

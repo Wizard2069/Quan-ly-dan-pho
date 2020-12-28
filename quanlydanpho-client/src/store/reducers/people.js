@@ -4,13 +4,20 @@ import initialState from '../constants/initialState';
 export const people = (state = initialState.people, action) => {
     switch (action.type) {
         case types.people.GET:
-            const {people} = action;
-            
-            return people;
+            return action.people;
+        default:
+            return state;
+    }
+};
+
+export const person = (state = initialState.person, action) => {
+    switch (action.type) {
         case types.people.CREATE:
-            const {person} = action;
-            
-            return person;
+            return action.person;
+        case types.people.GET_BY_ID:
+            return action.person;
+        case types.people.UPDATE:
+            return action.person;
         default:
             return state;
     }

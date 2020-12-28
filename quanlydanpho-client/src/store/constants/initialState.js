@@ -10,7 +10,9 @@ const initialState = {
         sent: false
     },
     users: {},
-    people: {}
+    people: {},
+    person: {},
+    family: {}
 };
 
 export default initialState;

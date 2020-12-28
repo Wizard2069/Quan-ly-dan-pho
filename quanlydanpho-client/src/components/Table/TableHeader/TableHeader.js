@@ -13,6 +13,11 @@ const TableHeader = (props) => {
     return (
         <MDBTableHead>
             <tr>
+                {props.checkbox ?
+                    <th>
+                    
+                    </th> : null
+                }
                 {header}
             </tr>
         </MDBTableHead>

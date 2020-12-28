@@ -66,5 +66,5 @@ public class PeopleSearch {
     private String note;
     
     @Field(name = "live_status")
-    private String liveStatus = "live";
+    private String liveStatus;
 }

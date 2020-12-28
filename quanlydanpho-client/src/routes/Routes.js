@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Redirect, Route, Switch} from 'react-router-dom';
 
 import RoutesWithNavigation from './RoutesWithNavigation';
 import AuthRoutes from './Auth/AuthRoutes';
@@ -12,6 +12,7 @@ const Routes = () => {
                     <AuthRoutes/>
                 </Route>
                 <RoutesWithNavigation/>
+                <Redirect to='/login'/>
             </Switch>
         </>
     );

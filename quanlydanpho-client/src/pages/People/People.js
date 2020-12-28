@@ -18,16 +18,17 @@ import {
 } from 'mdbreact';
 import {useDispatch, useSelector} from 'react-redux';
 import {useDebounce} from 'use-debounce';
+import {Link, useHistory} from 'react-router-dom';
 
 import DatePicker from '../../components/DatePicker/DatePicker';
-import TableHeader from '../../components/TableHeader/TableHeader';
+import TableHeader from '../../components/Table/TableHeader/TableHeader';
 import Select from '../../components/Select/Select';
 import {getPeople} from '../../store/actions/people';
 import {toVnDateFormat, toVnSex} from '../../utils/utils';
 import Pagination from '../../components/Pagination/Pagination';
-import {Link} from 'react-router-dom';
 
 const People = () => {
+    const history = useHistory();
     const peopleData = useSelector(state => state.people);
     const dispatch = useDispatch();
     
@@ -136,7 +137,12 @@ const People = () => {
         
         for (const person of people) {
             personList.push(
-                <tr key={person.id} style={{cursor: 'pointer'}}>
+                <tr key={person.id} style={{cursor: 'pointer'}} onClick={
+                    () => {
+                        history.push(`/people/${person.id}`);
+                        history.go(0);
+                    }
+                }>
                     <td>{person.peopleCode}</td>
                     <td>{person.fullName}</td>
                     <td>{toVnDateFormat(person.birthday)}</td>
@@ -284,8 +290,7 @@ const People = () => {
                             </MDBCol>
                         </MDBRow>
                     </MDBView>
-                
-                
+                    
                     <MDBCardBody>
                         <MDBTable responsive hover>
                             <TableHeader fields={[

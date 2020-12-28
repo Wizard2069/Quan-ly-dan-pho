@@ -1,5 +1,5 @@
 import * as types from '../constants/types';
-import {createPersonData, getPeopleData} from '../../api/people';
+import {createPersonData, getPeopleData, getPersonData, updatePersonInfo} from '../../api/people';
 import {clearError, createError} from './error';
 
 export const updateAvailablePeople = (people) => {
@@ -12,6 +12,20 @@ export const updateAvailablePeople = (people) => {
 export const createNewPerson = (person) => {
     return {
         type: types.people.CREATE,
+        person
+    };
+};
+
+export const getPerson = (person) => {
+    return {
+        type: types.people.GET_BY_ID,
+        person
+    };
+};
+
+export const updatePerson = (person) => {
+    return {
+        type: types.people.UPDATE,
         person
     };
 };
@@ -44,6 +58,32 @@ export const createPerson = (personDto) => {
             .then(data => {
                 dispatch(clearError());
                 dispatch(createNewPerson(data));
+            })
+            .catch(err => {
+                dispatch(createError(err));
+            })
+    };
+};
+
+export const getPersonById = (id) => {
+    return dispatch => {
+        getPersonData(id)
+            .then(data => {
+                dispatch(clearError());
+                dispatch(getPerson(data));
+            })
+            .catch(err => {
+                dispatch(createError(err));
+            })
+    };
+};
+
+export const updatePersonById = (id, personDto) => {
+    return dispatch => {
+        updatePersonInfo(id, personDto)
+            .then(data => {
+                dispatch(clearError());
+                dispatch(updatePerson(data));
             })
             .catch(err => {
                 dispatch(createError(err));

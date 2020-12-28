@@ -41,6 +41,9 @@ const RoutesWithNavigation = () => {
             case '/people/add':
                 locationString = 'Thêm nhân khẩu';
                 break;
+            case String(location.match(/\/people\/[0-9]+/g)):
+                locationString = 'Thông tin nhân khẩu'
+                break;
             default:
         }
         

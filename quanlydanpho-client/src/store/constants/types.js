@@ -19,5 +19,12 @@ export const users = {
 
 export const people = {
     CREATE: 'qldp/people/create',
-    GET: 'qldp/people/get'
+    GET: 'qldp/people/get',
+    GET_BY_ID: 'qldp/people/getById',
+    UPDATE: 'qldp/people/update'
+};
+
+export const family = {
+    ADD_PERSON: 'qldp/family/addPerson',
+    GET: 'qldp/family/get'
 };

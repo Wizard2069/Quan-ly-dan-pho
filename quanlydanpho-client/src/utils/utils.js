@@ -32,6 +32,10 @@ export const toVnDateFormat = (day) => {
     return date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
 };
 
+export const toVnISOString = (date) => {
+    return new Date(date.toLocaleString() + " UTC").toISOString();
+};
+
 export const toVnSex = (sex) => {
     switch (sex) {
         case 'MALE':

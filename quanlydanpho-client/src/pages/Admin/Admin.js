@@ -15,7 +15,7 @@ import {
 import {getUsers} from '../../store/actions/users';
 import Pagination from '../../components/Pagination/Pagination';
 import Select from '../../components/Select/Select';
-import TableHeader from '../../components/TableHeader/TableHeader';
+import TableHeader from '../../components/Table/TableHeader/TableHeader';
 
 const Admin = () => {
     const usersData = useSelector(state => state.users);

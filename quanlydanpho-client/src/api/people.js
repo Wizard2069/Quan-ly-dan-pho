@@ -58,6 +58,46 @@ export const getPeopleData = async (
 };
 
 export const createPersonData = async (personDto) => {
+    const params = makePersonFormData(personDto);
+    
+    try {
+        let config = apiConfig();
+        
+        const res = await axios.post('/people', params, config);
+        
+        return res.data;
+    } catch (err) {
+        await Promise.reject(new Error(err.message));
+    }
+};
+
+export const getPersonData = async (id) => {
+    try {
+        let config = apiConfig();
+        
+        const res = await axios.get(`/people/${id}`, config);
+        
+        return res.data;
+    } catch (err) {
+        await Promise.reject(new Error(err.message));
+    }
+};
+
+export const updatePersonInfo = async (id, personDto) => {
+    const params = makePersonFormData(personDto);
+    
+    try {
+        let config = apiConfig();
+        
+        const res = await axios.patch(`/people/${id}`, params, config);
+        
+        return res.data;
+    } catch (err) {
+        await Promise.reject(new Error(err.message));
+    }
+};
+
+const makePersonFormData = (personDto) => {
     const params = new URLSearchParams();
     params.append('fullName', personDto.fullName);
     params.append('birthday', personDto.birthday);
@@ -82,13 +122,5 @@ export const createPersonData = async (personDto) => {
     params.append('createdDate', personDto.createdDate);
     params.append('note', personDto.note);
     
-    try {
-        let config = apiConfig();
-        
-        const res = await axios.post('/people', params, config);
-        
-        return res.data;
-    } catch (err) {
-        await Promise.reject(new Error(err.message));
-    }
+    return params;
 };
