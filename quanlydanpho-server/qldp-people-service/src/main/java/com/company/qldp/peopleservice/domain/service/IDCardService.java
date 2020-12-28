@@ -7,6 +7,7 @@ import com.company.qldp.elasticsearchservice.domain.entity.PeopleSearch;
 import com.company.qldp.elasticsearchservice.domain.repository.IDCardSearchRepository;
 import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
 import com.company.qldp.peopleservice.domain.dto.IDCardDto;
+import com.company.qldp.peopleservice.domain.exception.IDCardNotFoundException;
 import com.company.qldp.peopleservice.domain.exception.IDCardNumberAlreadyExistException;
 import com.company.qldp.peopleservice.domain.exception.PersonAlreadyHasIDCardException;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
@@ -82,6 +83,12 @@ public class IDCardService {
     }
     
     public IDCard getIDCardByPeopleId(Integer peopleId) {
-        return idCardRepository.findByPerson_Id(peopleId);
+        IDCard idCard = idCardRepository.findByPerson_Id(peopleId);
+        
+        if (idCard == null) {
+            throw new IDCardNotFoundException();
+        }
+        
+        return idCard;
     }
 }

@@ -1,27 +1,27 @@
 import * as types from '../constants/types';
-import {createUserData, getUsersData} from '../../api/users';
+import {createDeathData, getDeathsData} from '../../api/deaths';
 import {clearError, createError} from './error';
 
-export const updateAvailableUsers = (users) => {
+export const getDeaths = (deaths) => {
     return {
-        type: types.users.GET,
-        users
+        type: types.deaths.GET,
+        deaths
     };
 };
 
-export const createUser = (user) => {
+export const createDeath = (death) => {
     return {
-        type: types.users.CREATE,
-        user
+        type: types.deaths.CREATE,
+        death
     };
 };
 
-export const getUsers = (page = 1, limit = 10) => {
+export const getAllDeaths = (page = 1, limit = 10, date = null) => {
     return dispatch => {
-        getUsersData(page, limit)
+        getDeathsData(page, limit, date)
             .then(data => {
                 dispatch(clearError());
-                dispatch(updateAvailableUsers(data));
+                dispatch(getDeaths(data));
             })
             .catch(err => {
                 dispatch(createError(err));
@@ -29,12 +29,12 @@ export const getUsers = (page = 1, limit = 10) => {
     };
 };
 
-export const createNewUser = (userDto) => {
+export const createNewDeath = (deathDto) => {
     return dispatch => {
-        createUserData(userDto)
+        createDeathData(deathDto)
             .then(data => {
                 dispatch(clearError());
-                dispatch(createUser(data));
+                dispatch(createDeath(data));
             })
             .catch(err => {
                 dispatch(createError(err));

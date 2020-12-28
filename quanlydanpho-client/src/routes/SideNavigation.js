@@ -34,7 +34,6 @@ const SideNavigation = (props) => {
                     <li>
                         {rSNL('/account', ' Tài khoản', <MDBIcon icon='user'/>, 'ml-2')}
                     </li>
-                    <>
                     {roles.includes('admin', 0) ?
                         <MDBSideNavCat
                             name='Quản lý người dùng'
@@ -42,23 +41,49 @@ const SideNavigation = (props) => {
                             icon='tachometer-alt'
                         >
                             {rSNL('/users/list', 'Thống kê người dùng')}
-                        </MDBSideNavCat> : null
+                            {rSNL('/users/add', 'Thêm người dùng')}
+                        </MDBSideNavCat> : <li/>
                     }
-                    </>
-                    <MDBSideNavCat
-                        name='Quản lý nhân khẩu'
-                        id='people'
-                        icon='tachometer-alt'
-                    >
-                        {roles.includes('manager', 0) ?
-                            rSNL('/people/list', 'Thống kê nhân khẩu')
-                            : null
-                        }
-                        {roles.includes('manager', 0) ?
-                            rSNL('/people/add', 'Thêm nhân khẩu')
-                            : null
-                        }
-                    </MDBSideNavCat>
+                    {roles.includes('manager', 0) ?
+                        <MDBSideNavCat
+                            name='Quản lý nhân khẩu'
+                            id='people'
+                            icon='tachometer-alt'
+                        >
+                            {rSNL('/people/list', 'Thống kê nhân khẩu')}
+                            {rSNL('/people/add', 'Thêm nhân khẩu')}
+                        </MDBSideNavCat> : <li/>
+                    }
+                    {roles.includes('manager', 0) ?
+                        <MDBSideNavCat
+                            name='Quản lý tạm vắng'
+                            id='tempAbsents'
+                            icon='tachometer-alt'
+                        >
+                            {rSNL('/tempAbsents/list', 'Thống kê tạm vắng')}
+                            {rSNL('/tempAbsents/add', 'Thêm tạm vắng')}
+                        </MDBSideNavCat> : <li/>
+                    }
+                    {roles.includes('manager', 0) ?
+                        <MDBSideNavCat
+                            name='Quản lý tạm trú'
+                            id='stays'
+                            icon='tachometer-alt'
+                        >
+                            {rSNL('/stays/list', 'Thống kê tạm trú')}
+                            {rSNL('/stays/add', 'Thêm tạm trú')}
+                        </MDBSideNavCat> : <li/>
+                    }
+                    {roles.includes('manager', 0) ?
+                        <MDBSideNavCat
+                            name='Quản lý khai tử'
+                            id='deaths'
+                            icon='tachometer-alt'
+                        >
+                            {rSNL('/deaths/list', 'Thống kê khai tử')}
+                            {rSNL('/deaths/add', 'Thêm khai tử')}
+                        </MDBSideNavCat> : <li/>
+                    }
                 </MDBSideNavNav>
             </MDBSideNav>
         </div>

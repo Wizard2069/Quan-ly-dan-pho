@@ -27,7 +27,6 @@ public class Death {
         fetch = FetchType.LAZY
     )
     @JoinColumn(name = "declared_person_id")
-    @JsonIgnore
     private People declaredPerson;
     
     @OneToOne(

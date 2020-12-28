@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {MDBInput, MDBIcon, MDBBtn} from 'mdbreact';
 
-import {login} from '../../store/actions/auth';
+import {login} from '../../../store/actions/auth';
 
 const Login = () => {
     const history = useHistory();

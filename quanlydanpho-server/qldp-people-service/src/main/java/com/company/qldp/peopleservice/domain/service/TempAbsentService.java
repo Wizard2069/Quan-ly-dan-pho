@@ -103,16 +103,20 @@ public class TempAbsentService {
             
             return peopleSearchRepository.save(peopleSearch);
         }).subscribe(Mono::subscribe);
-    
-        Household household = familyMemberRepository.findByPerson_Id(savedPeople.getId())
-            .getHousehold();
-        HouseholdHistory householdHistory = HouseholdHistory.builder()
-            .household(household)
-            .affectPerson(savedPeople)
-            .date(savedPeople.getMobilization().getLeaveDate())
-            .event(Event.TEMP_ABSENT)
-            .build();
-        householdHistoryRepository.save(householdHistory);
+        
+        FamilyMember familyMember = familyMemberRepository.findByPerson_Id(savedPeople.getId());
+        
+        if (familyMember != null) {
+            Household household = familyMember
+                .getHousehold();
+            HouseholdHistory householdHistory = HouseholdHistory.builder()
+                .household(household)
+                .affectPerson(savedPeople)
+                .date(savedPeople.getMobilization().getLeaveDate())
+                .event(Event.TEMP_ABSENT)
+                .build();
+            householdHistoryRepository.save(householdHistory);
+        }
         
         return tempAbsentRepository.save(tempAbsent);
     }

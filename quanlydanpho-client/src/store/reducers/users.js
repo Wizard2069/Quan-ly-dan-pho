@@ -11,3 +11,12 @@ export const users = (state = initialState.users, action) => {
             return state;
     }
 };
+
+export const singleUser = (state = initialState.singleUser, action) => {
+    switch (action.type) {
+        case types.users.CREATE:
+            return action.user;
+        default:
+            return state;
+    }
+};

@@ -134,5 +134,6 @@ public class DeathService {
     
     private void getDeathInfo(Death death) {
         death.getDeathPerson().hashCode();
+        death.getDeclaredPerson().hashCode();
     }
 }

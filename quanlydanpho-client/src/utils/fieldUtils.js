@@ -36,6 +36,34 @@ export const fieldsToVietnamese = (field) => {
             return 'Tiền án';
         case 'note':
             return 'Ghi chú';
+        case 'idCardNumber':
+            return 'Số chứng minh thư';
+        case 'tempResidentPlace':
+            return 'Nơi tạm trú';
+        case 'reason':
+            return 'Lý do';
+        case 'phoneNumber':
+            return 'Số điện thoại';
+        case 'issuedPlace':
+            return 'Nơi cấp';
+        case 'issuedDay':
+            return 'Ngày cấp';
+        case 'address':
+            return 'Địa chỉ';
+        case 'deathCertNumber':
+            return 'Số giấy chứng tử';
+        case 'declaredPersonIdCardNumber':
+            return 'Số chứng minh thư người khai';
+        case 'deathPersonCode':
+            return 'Mã nhân khẩu người chết';
+        case 'deathReason':
+            return 'Nguyên nhân chết';
+        case 'username':
+            return 'Tên tài khoản';
+        case 'email':
+            return 'Email';
+        case 'password':
+            return 'Mật khẩu';
         default:
     }
 };

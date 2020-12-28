@@ -10,9 +10,19 @@ const initialState = {
         sent: false
     },
     users: {},
+    singleUser: {},
     people: {},
     person: {},
-    family: {}
+    family: {},
+    tempAbsents: {},
+    tempAbsent: {},
+    stays: {},
+    stay: {},
+    idCard: {},
+    stories: {},
+    story: {},
+    deaths: {},
+    death: {}
 };
 
 export default initialState;

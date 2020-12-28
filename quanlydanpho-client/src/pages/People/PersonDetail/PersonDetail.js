@@ -2,16 +2,18 @@ import React, {useEffect, useState} from 'react';
 import {useHistory, useParams} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 
-import PersonForm from '../../components/Form/Person/PersonForm';
-import {getPersonById, updatePersonById} from '../../store/actions/people';
-import {toVnDateFormat, toVnSex} from '../../utils/utils';
+import PersonForm from '../../../components/Form/Person/PersonForm';
+import {getPersonById, updatePersonById} from '../../../store/actions/people';
+import {toVnDateFormat, toVnSex} from '../../../utils/utils';
 import {MDBBtn, MDBCard, MDBCardBody, MDBCol, MDBRow, MDBTable, MDBTableBody, MDBView} from 'mdbreact';
-import TableHeader from '../../components/Table/TableHeader/TableHeader';
-import Select from '../../components/Select/Select';
-import Input from '../../components/Input/Input';
-import {getFamilyByPersonId} from '../../store/actions/family';
-import Pagination from '../../components/Pagination/Pagination';
-import FamilyModal from '../../components/Modal/FamilyModal/FamilyModal';
+import TableHeader from '../../../components/Table/TableHeader/TableHeader';
+import Select from '../../../components/Select/Select';
+import Input from '../../../components/Input/Input';
+import {getFamilyByPersonId} from '../../../store/actions/family';
+import Pagination from '../../../components/Pagination/Pagination';
+import FamilyModal from '../../../components/Modal/Family/FamilyModal';
+import IDCardForm from '../../../components/Form/IDCard/IDCardForm';
+import StoryTable from '../../../components/Table/Story/StoryTable';
 
 const PersonDetail = () => {
     const {id} = useParams();
@@ -167,9 +169,9 @@ const PersonDetail = () => {
                         >
                             <MDBRow>
                                 <MDBCol md='6' className="d-flex justify-content-center align-items-center offset-md-3">
-                                    <a href='#!' className='white-text mx-3'>
+                                    <h3 className='white-text mx-3 mb-0'>
                                         Gia đình
-                                    </a>
+                                    </h3>
                                 </MDBCol>
                                 <MDBCol md='3'>
                                     <MDBBtn color='blue accent-3' onClick={handleToggle}>
@@ -199,6 +201,12 @@ const PersonDetail = () => {
                         </MDBCardBody>
                     </MDBCard>
                 </section>
+                <IDCardForm
+                    personId={person.id}
+                />
+                <StoryTable
+                    personId={person.id}
+                />
                 <FamilyModal
                     modal={modal}
                     toggle={handleToggle}

@@ -1,27 +1,27 @@
 import * as types from '../constants/types';
-import {createUserData, getUsersData} from '../../api/users';
+import {createStayData, getStaysData} from '../../api/stays';
 import {clearError, createError} from './error';
 
-export const updateAvailableUsers = (users) => {
+export const getStays = (stays) => {
     return {
-        type: types.users.GET,
-        users
+        type: types.stays.GET,
+        stays
     };
 };
 
-export const createUser = (user) => {
+export const createStay = (stay) => {
     return {
-        type: types.users.CREATE,
-        user
+        type: types.stays.CREATE,
+        stay
     };
 };
 
-export const getUsers = (page = 1, limit = 10) => {
+export const getAllStays = (page = 1, limit = 10, date = null) => {
     return dispatch => {
-        getUsersData(page, limit)
+        getStaysData(page, limit, date)
             .then(data => {
                 dispatch(clearError());
-                dispatch(updateAvailableUsers(data));
+                dispatch(getStays(data));
             })
             .catch(err => {
                 dispatch(createError(err));
@@ -29,12 +29,12 @@ export const getUsers = (page = 1, limit = 10) => {
     };
 };
 
-export const createNewUser = (userDto) => {
+export const createNewStay = (stayDto) => {
     return dispatch => {
-        createUserData(userDto)
+        createStayData(stayDto)
             .then(data => {
                 dispatch(clearError());
-                dispatch(createUser(data));
+                dispatch(createStay(data));
             })
             .catch(err => {
                 dispatch(createError(err));

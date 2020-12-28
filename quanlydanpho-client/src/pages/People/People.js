@@ -277,9 +277,9 @@ const People = () => {
                     >
                         <MDBRow>
                             <MDBCol md='6' className="d-flex justify-content-center align-items-center offset-md-3">
-                                <a href='#!' className='white-text mx-3'>
+                                <h3 className='white-text mx-3 mb-0'>
                                     Quản lý nhân khẩu
-                                </a>
+                                </h3>
                             </MDBCol>
                             <MDBCol md='3'>
                                 <MDBBtn color='blue accent-3'>

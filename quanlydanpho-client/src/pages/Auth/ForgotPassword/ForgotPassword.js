@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import {MDBBtn, MDBInput, MDBNotification} from 'mdbreact';
 
-import {clearSent, sendMail} from '../../store/actions/auth';
+import {clearSent, sendMail} from '../../../store/actions/auth';
 
 const ForgotPassword = () => {
     const history = useHistory();

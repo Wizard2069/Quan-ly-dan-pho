@@ -3,8 +3,8 @@ import {MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBMask, MDBRow, MDBView} fr
 import {Route, Switch} from 'react-router-dom';
 import './AuthRoutes.css';
 
-import Login from '../../pages/Login/Login';
-import ForgotPassword from '../../pages/ForgotPassword/ForgotPassword';
+import Login from '../../pages/Auth/Login/Login';
+import ForgotPassword from '../../pages/Auth/ForgotPassword/ForgotPassword';
 
 const AuthRoutes = () => {
     return (

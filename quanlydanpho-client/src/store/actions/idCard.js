@@ -1,27 +1,27 @@
 import * as types from '../constants/types';
-import {createUserData, getUsersData} from '../../api/users';
+import {createIdCardData, getIdCardData} from '../../api/idCard';
 import {clearError, createError} from './error';
 
-export const updateAvailableUsers = (users) => {
+export const getIdCard = (idCard) => {
     return {
-        type: types.users.GET,
-        users
+        type: types.idCard.GET,
+        idCard
     };
 };
 
-export const createUser = (user) => {
+export const createIdCard = (idCard) => {
     return {
-        type: types.users.CREATE,
-        user
+        type: types.idCard.CREATE,
+        idCard
     };
 };
 
-export const getUsers = (page = 1, limit = 10) => {
+export const getIdCardByPersonId = (personId) => {
     return dispatch => {
-        getUsersData(page, limit)
+        getIdCardData(personId)
             .then(data => {
                 dispatch(clearError());
-                dispatch(updateAvailableUsers(data));
+                dispatch(getIdCard(data));
             })
             .catch(err => {
                 dispatch(createError(err));
@@ -29,12 +29,12 @@ export const getUsers = (page = 1, limit = 10) => {
     };
 };
 
-export const createNewUser = (userDto) => {
+export const createIdCardByPersonId = (personId, idCardDto) => {
     return dispatch => {
-        createUserData(userDto)
+        createIdCardData(personId, idCardDto)
             .then(data => {
                 dispatch(clearError());
-                dispatch(createUser(data));
+                dispatch(createIdCard(data));
             })
             .catch(err => {
                 dispatch(createError(err));

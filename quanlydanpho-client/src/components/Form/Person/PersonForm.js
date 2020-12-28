@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {getUser, toVnDateFormat, toVnISOString} from '../../../utils/utils';
-import {useHistory, useLocation} from 'react-router-dom';
-import {useSelector} from 'react-redux';
+import {useLocation} from 'react-router-dom';
 import * as yup from 'yup';
 import {useFormik} from 'formik';
 import {
@@ -17,7 +16,7 @@ import {
     MDBSelectOptions
 } from 'mdbreact';
 
-import './PersonForm.css';
+import '../Form.css';
 import {fieldsToVietnamese} from '../../../utils/fieldUtils';
 import Input from '../../Input/Input';
 import DatePicker from '../../DatePicker/DatePicker';
@@ -201,7 +200,6 @@ const PersonForm = (props) => {
                     </form>
                 </MDBCardBody>
             </MDBCard>
-        
         </section>
     );
 };

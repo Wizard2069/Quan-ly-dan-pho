@@ -2,8 +2,8 @@ import React from 'react';
 import {useDispatch} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 
-import PersonForm from '../../components/Form/Person/PersonForm';
-import {createPerson} from '../../store/actions/people';
+import PersonForm from '../../../components/Form/Person/PersonForm';
+import {createPerson} from '../../../store/actions/people';
 
 const AddPerson = () => {
     const history = useHistory();

@@ -11,6 +11,7 @@ import {
     MDBView,
     MDBTableBody
 } from 'mdbreact';
+import {Link} from 'react-router-dom';
 
 import {getUsers} from '../../store/actions/users';
 import Pagination from '../../components/Pagination/Pagination';
@@ -50,7 +51,7 @@ const Admin = () => {
         
         for (const user of users) {
             userList.push(
-                <tr key={user.id} style={{cursor: 'pointer'}}>
+                <tr key={user.id}>
                     <td>{user.id}</td>
                     <td>{user.username}</td>
                     <td>{user.email}</td>
@@ -79,13 +80,15 @@ const Admin = () => {
                     >
                         <MDBRow>
                             <MDBCol md='6' className="d-flex justify-content-center align-items-center offset-md-3">
-                                <a href='#!' className='white-text mx-3'>
+                                <h3 className='white-text mx-3 mb-0'>
                                     Quản lý người dùng
-                                </a>
+                                </h3>
                             </MDBCol>
                             <MDBCol md='3'>
                                 <MDBBtn color='blue accent-3'>
-                                    Thêm người dùng
+                                    <Link to='/users/add' className='white-text'>
+                                        Thêm người dùng
+                                    </Link>
                                 </MDBBtn>
                             </MDBCol>
                         </MDBRow>

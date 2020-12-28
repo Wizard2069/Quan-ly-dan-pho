@@ -35,14 +35,35 @@ const RoutesWithNavigation = () => {
             case '/users/list':
                 locationString = 'Quản lý người dùng';
                 break;
+            case '/users/add':
+                locationString = 'Thêm người dùng';
+                break;
             case '/people/list':
-                locationString = 'Quản lý nhân khẩu';
+                locationString = 'Thống kê nhân khẩu';
                 break;
             case '/people/add':
                 locationString = 'Thêm nhân khẩu';
                 break;
             case String(location.match(/\/people\/[0-9]+/g)):
                 locationString = 'Thông tin nhân khẩu'
+                break;
+            case '/tempAbsents/list':
+                locationString = 'Thống kê tạm vắng';
+                break;
+            case '/tempAbsents/add':
+                locationString = 'Thêm tạm vắng';
+                break;
+            case '/stays/list':
+                locationString = 'Thống kê tạm trú';
+                break;
+            case '/stays/add':
+                locationString = 'Thêm tạm trú';
+                break;
+            case '/deaths/list':
+                locationString = 'Thống kê khai tử';
+                break;
+            case '/deaths/add':
+                locationString = 'Thêm khai tử';
                 break;
             default:
         }
