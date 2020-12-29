@@ -14,6 +14,7 @@ import Pagination from '../../../components/Pagination/Pagination';
 import FamilyModal from '../../../components/Modal/Family/FamilyModal';
 import IDCardForm from '../../../components/Form/IDCard/IDCardForm';
 import StoryTable from '../../../components/Table/Story/StoryTable';
+import LeaveModal from '../../../components/Modal/People/LeaveModal';
 
 const PersonDetail = () => {
     const {id} = useParams();
@@ -29,6 +30,7 @@ const PersonDetail = () => {
     const [pageLimit, setPageLimit] = useState(null);
     
     const [modal, setModal] = useState(false);
+    const [leaveModal, setLeaveModal] = useState(false);
     
     useEffect(() => {
          dispatch(getPersonById(id));
@@ -70,6 +72,10 @@ const PersonDetail = () => {
         setUpdate(true);
     };
     
+    const handleLeaveToggle = () => {
+        setLeaveModal(prevLeaveModal => !prevLeaveModal);
+    };
+    
     const handleOnChangePage = (data) => {
         setCurrentPage(data.page);
         setPageLimit(data.pageLimit);
@@ -87,12 +93,36 @@ const PersonDetail = () => {
     
     let personDetail;
     const extraCols = (
-        <Input
-            disabled={true}
-            name={person.peopleCode}
-            label='Mã nhân khẩu'
-            value={person.peopleCode}
-        />
+        <>
+            {person.mobilization ?
+                <>
+                    <Input
+                        disabled={true}
+                        name={person.mobilization.leaveDate}
+                        label='Ngày chuyển đi'
+                        value={person.mobilization.leaveDate}
+                    />
+                    <Input
+                        disabled={true}
+                        name={person.mobilization.newAddress}
+                        label='Địa chỉ mới'
+                        value={person.mobilization.newAddress}
+                    />
+                    <Input
+                    disabled={true}
+                    name={person.mobilization.leaveReason}
+                    label='Lý do chuyển đi'
+                    value={person.mobilization.leaveReason}
+                    />
+                </> : null
+            }
+            <Input
+                disabled={true}
+                name={person.peopleCode}
+                label='Mã nhân khẩu'
+                value={person.peopleCode}
+            />
+        </>
     );
     
     if (initialValues === null) {
@@ -110,6 +140,7 @@ const PersonDetail = () => {
                     onCancelClick={() => setEdit(false)}
                     onHandleSubmit={handleSubmit}
                     extraCols={extraCols}
+                    handleLeaveToggle={handleLeaveToggle}
                 />
             );
         } else {
@@ -122,6 +153,7 @@ const PersonDetail = () => {
                     edit={false}
                     onEditClick={() => setEdit(true)}
                     extraCols={extraCols}
+                    handleLeaveToggle={handleLeaveToggle}
                 />
             );
         }
@@ -161,6 +193,11 @@ const PersonDetail = () => {
         return (
             <>
                 {personDetail}
+                <LeaveModal
+                    modal={leaveModal}
+                    toggle={handleLeaveToggle}
+                    personId={person.id}
+                />
                 <section>
                     <MDBCard narrow className='pb-3'>
                         <MDBView
@@ -201,16 +238,16 @@ const PersonDetail = () => {
                         </MDBCardBody>
                     </MDBCard>
                 </section>
-                <IDCardForm
-                    personId={person.id}
-                />
-                <StoryTable
-                    personId={person.id}
-                />
                 <FamilyModal
                     modal={modal}
                     toggle={handleToggle}
-                    personId={person.id}
+                    personId={id}
+                />
+                <IDCardForm
+                    personId={id}
+                />
+                <StoryTable
+                    personId={id}
                 />
             </>
         );

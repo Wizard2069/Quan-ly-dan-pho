@@ -117,6 +117,11 @@ public class PeopleService {
             .orElseThrow(PersonNotFoundException::new);
         
         PersonalMobilization mobilization = people.getMobilization();
+        
+        if (mobilization == null) {
+            mobilization = PersonalMobilization.builder().build();
+        }
+        
         mobilization.setLeaveDate(Date.from(Instant.parse(leavePeopleDto.getLeaveDate())));
         mobilization.setLeaveReason(leavePeopleDto.getLeaveReason());
         mobilization.setNewAddress(leavePeopleDto.getNewAddress());

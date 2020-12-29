@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import {getUser, toVnISOString} from '../../../utils/utils';
-import {useHistory} from 'react-router-dom';
-import {useDispatch} from 'react-redux';
+import {getUser, toVnDateFormat, toVnISOString} from '../../../utils/utils';
+import {useLocation} from 'react-router-dom';
 import * as yup from 'yup';
 import {useFormik} from 'formik';
 import {
@@ -18,14 +17,12 @@ import '../Form.css';
 import {fieldsToVietnamese} from '../../../utils/fieldUtils';
 import Input from '../../Input/Input';
 import DatePicker from '../../DatePicker/DatePicker';
-import HostModal from '../../Modal/Household/HostModal';
-import {createNewHousehold} from '../../../store/actions/households';
+import HostModal from '../../Modal/Household/Host/HostModal';
 
-const HouseholdForm = () => {
+const HouseholdForm = (props) => {
     const user = getUser();
     
-    const history = useHistory();
-    const dispatch = useDispatch();
+    const location = useLocation();
     
     const [modal, setModal] = useState(false);
     
@@ -44,8 +41,7 @@ const HouseholdForm = () => {
     
     const formik = useFormik({
         initialValues: {
-            areaCode: '',
-            address: ''
+            ...props.initialValues
         },
         validationSchema,
         onSubmit: (values) => {
@@ -53,9 +49,7 @@ const HouseholdForm = () => {
                 ...householdDto,
                 ...values
             };
-            dispatch(createNewHousehold(householdBody));
-            history.push('/households/list');
-            history.go(0);
+            props.onHandleSubmit(householdBody);
         }
     });
     
@@ -64,6 +58,7 @@ const HouseholdForm = () => {
         if (formik.values.hasOwnProperty(key)) {
             colInputs.push(
                 <Input
+                    disabled={!props.edit}
                     key={key}
                     handleChange={formik.handleChange}
                     name={key}
@@ -107,7 +102,18 @@ const HouseholdForm = () => {
                     cascade
                     tag='div'
                 >
-                    <h2 className='h2-responsive mb-2'>Thêm hộ khẩu</h2>
+                    <MDBRow>
+                        <MDBCol md='4' className='offset-md-4 d-flex justify-content-center align-items-center'>
+                            <h2 className='h2-responsive mb-0'>{props.title}</h2>
+                        </MDBCol>
+                        {location.pathname.match(/\/households\/[0-9]+/) && props.title !== 'Tách hộ' ?
+                            <MDBCol className='text-right'>
+                                <MDBBtn color='blue accent-3' onClick={props.handleLeaveToggle}>
+                                    Chuyển đi
+                                </MDBBtn>
+                            </MDBCol> : null
+                        }
+                    </MDBRow>
                 </MDBCardImage>
                 <MDBCardBody cascade>
                     <form
@@ -118,14 +124,22 @@ const HouseholdForm = () => {
                     >
                         <MDBRow>
                             <MDBCol md='4'>
-                                <MDBInput
-                                    disabled
-                                    outline
-                                    label='Chủ hộ'
-                                    icon='user'
-                                    onIconClick={toggle}
-                                    value={name ?? ''}
-                                />
+                                {props.edit ?
+                                    <MDBInput
+                                        disabled
+                                        outline
+                                        label='Chủ hộ'
+                                        icon='user'
+                                        onIconClick={toggle}
+                                        value={name ?? ''}
+                                    /> :
+                                    <MDBInput
+                                        disabled
+                                        outline
+                                        label='Chủ hộ'
+                                        value={props.host}
+                                    />
+                                }
                             </MDBCol>
                             <HostModal
                                 modal={modal}
@@ -133,18 +147,29 @@ const HouseholdForm = () => {
                                 handleOnDone={(id, name) => handleOnGetHost(id, name)}
                             />
                             {colInputs}
-                            <MDBCol md='3' style={{marginTop: '7px', marginLeft: '2rem'}}>
-                                <small className='grey-text'>Ngày lập</small>
-                                <DatePicker keyboard getPickerValue={getCreatedDateValue}/>
-                            </MDBCol>
+                            {props.edit ?
+                                <MDBCol md='3' style={{marginTop: '7px', marginLeft: '2rem'}}>
+                                    <small className='grey-text'>Ngày lập</small>
+                                    <DatePicker keyboard getPickerValue={getCreatedDateValue}/>
+                                </MDBCol> :
+                                <Input
+                                    disabled={true}
+                                    name={props.date}
+                                    label='Ngày lập'
+                                    value={toVnDateFormat(props.date)}
+                                />
+                            }
+                            {props.extraCols}
                         </MDBRow>
-                        <MDBRow>
-                            <MDBCol className='text-right'>
-                                <MDBBtn color='primary' type='submit'>
-                                    Thêm
-                                </MDBBtn>
-                            </MDBCol>
-                        </MDBRow>
+                        {props.edit ?
+                            <MDBRow>
+                                <MDBCol className='text-right'>
+                                    <MDBBtn color='primary' type='submit'>
+                                        Thêm
+                                    </MDBBtn>
+                                </MDBCol>
+                            </MDBRow> : null
+                        }
                     </form>
                 </MDBCardBody>
             </MDBCard>

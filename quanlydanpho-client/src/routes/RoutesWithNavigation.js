@@ -71,6 +71,9 @@ const RoutesWithNavigation = () => {
             case '/households/add':
                 locationString = 'Thêm hộ khẩu';
                 break;
+            case String(location.match(/\/households\/[0-9]+/g)):
+                locationString = 'Thông tin hộ khẩu';
+                break;
             default:
         }
         

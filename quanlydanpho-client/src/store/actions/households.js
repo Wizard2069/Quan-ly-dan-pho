@@ -1,5 +1,11 @@
 import * as types from '../constants/types';
-import {createHouseholdData, getHouseholdData, getHouseholdsData} from '../../api/households';
+import {
+    createHouseholdData,
+    getHouseholdData,
+    getHouseholdsData,
+    leaveHouseholdData,
+    separateHouseholdData
+} from '../../api/households';
 import {clearError, createError} from './error';
 
 export const getHouseholds = (households) => {
@@ -19,6 +25,20 @@ export const createHousehold = (household) => {
 export const getHousehold = (household) => {
     return {
         type: types.households.GET_BY_ID,
+        household
+    };
+};
+
+export const leaveHousehold = (household) => {
+    return {
+        type: types.households.LEAVE,
+        household
+    };
+};
+
+export const separateHousehold = (household) => {
+    return {
+        type: types.households.SEPARATE,
         household
     };
 };
@@ -55,6 +75,32 @@ export const getHouseholdById = (householdId) => {
             .then(data => {
                 dispatch(clearError());
                 dispatch(getHousehold(data));
+            })
+            .catch(err => {
+                dispatch(createError(err));
+            });
+    };
+};
+
+export const leaveHouseholdById = (householdId, leaveDto) => {
+    return dispatch => {
+        leaveHouseholdData(householdId, leaveDto)
+            .then(data => {
+                dispatch(clearError());
+                dispatch(leaveHousehold(data));
+            })
+            .catch(err => {
+                dispatch(createError(err));
+            });
+    };
+};
+
+export const separateHouseholdById = (householdId, separateDto) => {
+    return dispatch => {
+        separateHouseholdData(householdId, separateDto)
+            .then(data => {
+                dispatch(clearError());
+                dispatch(separateHousehold(data));
             })
             .catch(err => {
                 dispatch(createError(err));

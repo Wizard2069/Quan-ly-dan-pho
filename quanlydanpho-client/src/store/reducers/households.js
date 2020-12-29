@@ -16,6 +16,10 @@ export const household = (state = initialState.household, action) => {
             return action.household;
         case types.households.GET_BY_ID:
             return action.household;
+        case types.households.LEAVE:
+            return action.household;
+        case types.households.SEPARATE:
+            return action.household;
         default:
             return state;
     }

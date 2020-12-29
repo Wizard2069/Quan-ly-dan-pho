@@ -14,6 +14,7 @@ const initialState = {
     people: {},
     person: {},
     family: {},
+    addedFamily: {},
     tempAbsents: {},
     tempAbsent: {},
     stays: {},
@@ -24,7 +25,12 @@ const initialState = {
     deaths: {},
     death: {},
     households: {},
-    household: {}
+    household: {},
+    familyMembers: {},
+    familyMember: {},
+    corrections: {},
+    correction: {},
+    householdHistories: {}
 };
 
 export default initialState;

@@ -1,5 +1,5 @@
 import * as types from '../constants/types';
-import {createPersonData, getPeopleData, getPersonData, updatePersonInfo} from '../../api/people';
+import {createPersonData, getPeopleData, getPersonData, leavePersonData, updatePersonInfo} from '../../api/people';
 import {clearError, createError} from './error';
 
 export const updateAvailablePeople = (people) => {
@@ -26,6 +26,13 @@ export const getPerson = (person) => {
 export const updatePerson = (person) => {
     return {
         type: types.people.UPDATE,
+        person
+    };
+};
+
+export const leavePerson = (person) => {
+    return {
+        type: types.people.LEAVE,
         person
     };
 };
@@ -88,5 +95,18 @@ export const updatePersonById = (id, personDto) => {
             .catch(err => {
                 dispatch(createError(err));
             })
+    };
+};
+
+export const leavePersonById = (id, leaveDto) => {
+    return dispatch => {
+        leavePersonData(id, leaveDto)
+            .then(data => {
+                dispatch(clearError());
+                dispatch(leavePerson(data));
+            })
+            .catch(err => {
+                dispatch(createError(err));
+            });
     };
 };

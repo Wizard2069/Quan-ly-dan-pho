@@ -58,3 +58,38 @@ export const getHouseholdData = async (householdId) => {
         await Promise.reject(new Error(err.message));
     }
 };
+
+export const leaveHouseholdData = async (householdId, leaveDto) => {
+    const config = apiConfig();
+    const params = new URLSearchParams();
+    params.append('leaveDate', leaveDto.leaveDate);
+    params.append('leaveReason', leaveDto.leaveReason);
+    params.append('performerName', leaveDto.performerName);
+    params.append('newAddress', leaveDto.newAddress);
+    
+    try {
+        const res = await axios.patch(`/households/${householdId}`, params, config);
+        
+        return res.data;
+    } catch (err) {
+        await Promise.reject(new Error(err.message));
+    }
+};
+
+export const separateHouseholdData = async (householdId, separateDto) => {
+    const config = apiConfig();
+    const params = new URLSearchParams();
+    params.append('hostId', separateDto.hostPersonId);
+    params.append('areaCode', separateDto.areaCode);
+    params.append('newAddress', separateDto.address);
+    params.append('createdDay', separateDto.createdDay);
+    params.append('performerName', separateDto.performerName);
+    
+    try {
+        const res = await axios.patch(`/households/${householdId}/separate`, params, config);
+        
+        return res.data;
+    } catch (err) {
+        await Promise.reject(new Error(err.message));
+    }
+};

@@ -124,3 +124,19 @@ const makePersonFormData = (personDto) => {
     
     return params;
 };
+
+export const leavePersonData = async (id, leaveDto) => {
+    const config = apiConfig();
+    const params = new URLSearchParams();
+    params.append('leaveDate', leaveDto.leaveDate);
+    params.append('leaveReason', leaveDto.leaveReason);
+    params.append('newAddress', leaveDto.newAddress);
+    
+    try {
+        const res = await axios.patch(`/people/${id}/leave`, params, config);
+        
+        return res.data;
+    } catch (err) {
+        await Promise.reject(new Error(err.message));
+    }
+};

@@ -66,6 +66,14 @@ export const fieldsToVietnamese = (field) => {
             return 'Mật khẩu';
         case 'areaCode':
             return 'Mã khu vực';
+        case 'newAddress':
+            return 'Địa chỉ mới';
+        case 'leaveReason':
+            return 'Lý do chuyển đi';
+        case 'changeFrom':
+            return 'Thay đổi từ';
+        case 'changeTo':
+            return 'Thay đổi thành';
         default:
     }
 };

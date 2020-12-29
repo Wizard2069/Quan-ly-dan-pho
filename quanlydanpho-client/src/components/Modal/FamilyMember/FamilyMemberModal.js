@@ -18,12 +18,12 @@ import {useDebounce} from 'use-debounce';
 import TableHeader from '../../Table/TableHeader/TableHeader';
 import {getPeople} from '../../../store/actions/people';
 import {toVnDateFormat, toVnSex} from '../../../utils/utils';
-import {addFamilyByPersonId} from '../../../store/actions/family';
+import {addFamilyMemberToHousehold} from '../../../store/actions/familyMembers';
 
-const FamilyModal = (props) => {
+const FamilyMemberModal = (props) => {
     const history = useHistory();
     const peopleData = useSelector(state => state.people);
-    const addedFamilyData = useSelector(state => state.addedFamily);
+    const familyMemberData = useSelector(state => state.familyMember);
     const dispatch = useDispatch();
     
     const [ids, setIds] = useState([]);
@@ -32,11 +32,11 @@ const FamilyModal = (props) => {
     const [value] = useDebounce(keyword, 500);
     
     const [next, setNext] = useState(false);
-    const [relation, setRelation] = useState({
-        memberId: null,
-        memberRelation: null
+    const [member, setMember] = useState({
+        id: null,
+        hostRelation: null
     });
-    const [relations, setRelations] = useState([]);
+    const [members, setMembers] = useState([]);
     
     const handleOnCheck = (e) => {
         const foundId = ids.indexOf(e.target.id);
@@ -68,25 +68,25 @@ const FamilyModal = (props) => {
     };
     
     const handleOnDone = () => {
-        relations.push(relation);
-        dispatch(addFamilyByPersonId(props.personId, relations));
+        members.push(member);
+        dispatch(addFamilyMemberToHousehold(props.householdId, members));
         props.toggle();
         setNext(false);
     };
     
     const handleOnRelationChange = (e, personId) => {
         e.persist();
-        setRelation(prevRelation => {
-            if (prevRelation.memberId !== personId && prevRelation.memberId !== null) {
-                setRelations([
-                    ...relations,
-                    prevRelation
+        setMember(prevMember => {
+            if (prevMember.id !== personId && prevMember.id !== null) {
+                setMembers([
+                    ...members,
+                    prevMember
                 ]);
             }
-    
+            
             return {
-                memberId: personId,
-                memberRelation: e.target.value
+                id: personId,
+                hostRelation: e.target.value
             };
         });
     };
@@ -98,18 +98,18 @@ const FamilyModal = (props) => {
     }, [dispatch, props.modal, value]);
     
     useEffect(() => {
-        if (addedFamilyData._embedded) {
+        if (familyMemberData._embedded) {
             history.go(0);
         }
-    }, [addedFamilyData]);
-
+    }, [familyMemberData]);
+    
     let personList = [];
     let people;
-    let familyBody = [];
-
+    let familyMemberBody = [];
+    
     if (peopleData._embedded) {
         people = peopleData._embedded.people;
-
+        
         for (const person of people) {
             personList.push(
                 <tr key={person.id}>
@@ -133,9 +133,9 @@ const FamilyModal = (props) => {
                     <td>{person.currentAddress}</td>
                 </tr>
             );
-    
+            
             if (ids.includes(person.id.toString(), 0)) {
-                familyBody.push(
+                familyMemberBody.push(
                     <MDBRow key={person.id}>
                         <MDBCol md='5'>
                             <MDBInput
@@ -148,7 +148,7 @@ const FamilyModal = (props) => {
                         <MDBCol md='6'>
                             <MDBInput
                                 outline
-                                label='Quan hệ với nhân khẩu'
+                                label='Quan hệ với chủ hộ'
                                 onChange={(e) => handleOnRelationChange(e, person.id)}
                             />
                         </MDBCol>
@@ -164,7 +164,7 @@ const FamilyModal = (props) => {
                 <MDBModalHeader toggle={handleOnClose}>Thêm thành viên</MDBModalHeader>
                 <MDBModalBody>
                     <form>
-                        {familyBody}
+                        {familyMemberBody}
                     </form>
                 </MDBModalBody>
                 <MDBModalFooter>
@@ -188,7 +188,7 @@ const FamilyModal = (props) => {
                             />
                         </MDBCol>
                     </MDBRow>
-                
+                    
                     <MDBTable responsive hover>
                         <TableHeader
                             fields={[
@@ -201,7 +201,7 @@ const FamilyModal = (props) => {
                             ]}
                             checkbox={true}
                         />
-                    
+                        
                         <MDBTableBody>
                             {personList}
                         </MDBTableBody>
@@ -216,4 +216,4 @@ const FamilyModal = (props) => {
     }
 };
 
-export default React.memo(FamilyModal);
+export default React.memo(FamilyMemberModal);

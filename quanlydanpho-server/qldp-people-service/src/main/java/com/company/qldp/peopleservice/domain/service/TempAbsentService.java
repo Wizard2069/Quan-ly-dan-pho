@@ -4,14 +4,12 @@ import com.company.qldp.common.DateInterval;
 import com.company.qldp.common.Event;
 import com.company.qldp.common.util.RandomCodeGenerator;
 import com.company.qldp.domain.*;
-import com.company.qldp.elasticsearchservice.domain.repository.PeopleSearchRepository;
 import com.company.qldp.householdservice.api.repository.FamilyMemberRepository;
 import com.company.qldp.householdservice.api.repository.HouseholdHistoryRepository;
 import com.company.qldp.peopleservice.domain.dto.TempAbsentDto;
 import com.company.qldp.peopleservice.domain.exception.PersonNotFoundException;
 import com.company.qldp.peopleservice.domain.exception.TempAbsentNotFoundException;
 import com.company.qldp.peopleservice.domain.repository.IDCardRepository;
-import com.company.qldp.peopleservice.domain.repository.PeopleRepository;
 import com.company.qldp.peopleservice.domain.repository.TempAbsentRepository;
 import com.company.qldp.common.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -30,8 +27,6 @@ public class TempAbsentService {
     
     private TempAbsentRepository tempAbsentRepository;
     private IDCardRepository idCardRepository;
-    private PeopleRepository peopleRepository;
-    private PeopleSearchRepository peopleSearchRepository;
     private FamilyMemberRepository familyMemberRepository;
     private HouseholdHistoryRepository householdHistoryRepository;
     
@@ -39,15 +34,11 @@ public class TempAbsentService {
     public TempAbsentService(
         TempAbsentRepository tempAbsentRepository,
         IDCardRepository idCardRepository,
-        PeopleRepository peopleRepository,
-        PeopleSearchRepository peopleSearchRepository,
         FamilyMemberRepository familyMemberRepository,
         HouseholdHistoryRepository householdHistoryRepository
     ) {
         this.tempAbsentRepository = tempAbsentRepository;
         this.idCardRepository = idCardRepository;
-        this.peopleRepository = peopleRepository;
-        this.peopleSearchRepository = peopleSearchRepository;
         this.familyMemberRepository = familyMemberRepository;
         this.householdHistoryRepository = householdHistoryRepository;
     }
@@ -79,40 +70,15 @@ public class TempAbsentService {
             .reason(tempAbsentDto.getReason())
             .build();
         
-        PersonalMobilization mobilization;
-        
-        if (people.getMobilization() == null) {
-            mobilization = PersonalMobilization.builder()
-                .leaveDate(tempAbsent.getInterval().getFrom())
-                .leaveReason(tempAbsent.getReason())
-                .newAddress(tempAbsent.getTempResidencePlace())
-                .build();
-        } else {
-            mobilization = people.getMobilization();
-            mobilization.setLeaveDate(tempAbsent.getInterval().getFrom());
-            mobilization.setLeaveReason(tempAbsent.getReason());
-            mobilization.setNewAddress(tempAbsent.getTempResidencePlace());
-        }
-        
-        people.setMobilization(mobilization);
-        
-        People savedPeople = peopleRepository.save(people);
-        
-        peopleSearchRepository.findById(savedPeople.getId()).map(peopleSearch -> {
-            peopleSearch.setLeaveDate(savedPeople.getMobilization().getLeaveDate());
-            
-            return peopleSearchRepository.save(peopleSearch);
-        }).subscribe(Mono::subscribe);
-        
-        FamilyMember familyMember = familyMemberRepository.findByPerson_Id(savedPeople.getId());
+        FamilyMember familyMember = familyMemberRepository.findByPerson_Id(people.getId());
         
         if (familyMember != null) {
             Household household = familyMember
                 .getHousehold();
             HouseholdHistory householdHistory = HouseholdHistory.builder()
                 .household(household)
-                .affectPerson(savedPeople)
-                .date(savedPeople.getMobilization().getLeaveDate())
+                .affectPerson(people)
+                .date(interval.getFrom())
                 .event(Event.TEMP_ABSENT)
                 .build();
             householdHistoryRepository.save(householdHistory);

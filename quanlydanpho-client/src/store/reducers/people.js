@@ -18,6 +18,8 @@ export const person = (state = initialState.person, action) => {
             return action.person;
         case types.people.UPDATE:
             return action.person;
+        case types.people.LEAVE:
+            return action.person;
         default:
             return state;
     }

@@ -21,7 +21,8 @@ export const people = {
     CREATE: 'qldp/people/create',
     GET: 'qldp/people/get',
     GET_BY_ID: 'qldp/people/getById',
-    UPDATE: 'qldp/people/update'
+    UPDATE: 'qldp/people/update',
+    LEAVE: 'qldp/people/leave'
 };
 
 export const family = {
@@ -57,5 +58,21 @@ export const deaths = {
 export const households = {
     CREATE: 'qldp/households/create',
     GET: 'qldp/households/get',
-    GET_BY_ID: 'qldp/households/getById'
+    GET_BY_ID: 'qldp/households/getById',
+    LEAVE: 'qldp/households/leave',
+    SEPARATE: 'qldp/households/separate'
+};
+
+export const familyMembers = {
+    ADD_MEMBER: 'qldp/familyMembers/addMember',
+    GET: 'qldp/familyMembers/get'
+};
+
+export const corrections = {
+    CREATE: 'qldp/corrections/create',
+    GET: 'qldp/corrections/get'
+};
+
+export const householdHistories = {
+    GET: 'qldp/householdHistories/get'
 };

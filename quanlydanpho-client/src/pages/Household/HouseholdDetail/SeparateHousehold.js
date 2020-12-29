@@ -3,9 +3,9 @@ import {useHistory} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 
 import HouseholdForm from '../../../components/Form/Household/HouseholdForm';
-import {createNewHousehold} from '../../../store/actions/households';
+import {separateHouseholdById} from '../../../store/actions/households';
 
-const AddHousehold = () => {
+const SeparateHousehold = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
     
@@ -15,7 +15,7 @@ const AddHousehold = () => {
     };
     
     const onSubmit = (householdBody) => {
-        dispatch(createNewHousehold(householdBody));
+        dispatch(separateHouseholdById(props.householdId, householdBody));
         history.push('/households/list');
         history.go(0);
     };
@@ -23,11 +23,11 @@ const AddHousehold = () => {
     return (
         <HouseholdForm
             edit={true}
-            title='Thêm hộ khẩu'
+            title='Tách hộ'
             initialValues={initialValues}
             onHandleSubmit={onSubmit}
         />
     );
 };
 
-export default AddHousehold;
+export default SeparateHousehold;

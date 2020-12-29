@@ -126,7 +126,18 @@ const PersonForm = (props) => {
                     cascade
                     tag='div'
                 >
-                    <h2 className='h2-responsive mb-2'>{props.title}</h2>
+                    <MDBRow>
+                        <MDBCol md='4' className='offset-md-4 d-flex justify-content-center align-items-center'>
+                            <h2 className='h2-responsive mb-0'>{props.title}</h2>
+                        </MDBCol>
+                        {location.pathname.match(/\/people\/[0-9]+/) ?
+                            <MDBCol className='text-right'>
+                                <MDBBtn color='blue accent-3' onClick={props.handleLeaveToggle}>
+                                    Chuyển đi
+                                </MDBBtn>
+                            </MDBCol> : null
+                        }
+                    </MDBRow>
                 </MDBCardImage>
                 <MDBCardBody cascade>
                     <form
@@ -136,7 +147,6 @@ const PersonForm = (props) => {
                         style={{backgroundPosition: 'none'}}
                     >
                         <MDBRow>
-                            {props.extraCols}
                             {colInputs[0]}
                             {colInputs[1]}
                             {props.edit ?
@@ -152,7 +162,7 @@ const PersonForm = (props) => {
                                 />
                             }
                             {props.edit ?
-                                <MDBCol md='4' className='offset-md-1'>
+                                <MDBCol md='4'>
                                     <MDBSelect
                                         className='colorful-select dropdown-primary mx-2'
                                         getValue={onGetSexValue}
@@ -173,6 +183,7 @@ const PersonForm = (props) => {
                                 />
                             }
                             {colInputs.slice(2, colInputs.length - 1)}
+                            {props.extraCols}
                         </MDBRow>
                         <MDBRow>
                             {colInputs[colInputs.length - 1]}

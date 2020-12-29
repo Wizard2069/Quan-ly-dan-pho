@@ -15,9 +15,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useDebounce} from 'use-debounce';
 
 import './HostModal.css';
-import {getPeople} from '../../../store/actions/people';
-import {toVnDateFormat, toVnSex} from '../../../utils/utils';
-import TableHeader from '../../Table/TableHeader/TableHeader';
+import {getPeople} from '../../../../store/actions/people';
+import {toVnDateFormat, toVnSex} from '../../../../utils/utils';
+import TableHeader from '../../../Table/TableHeader/TableHeader';
 
 const HostModal = (props) => {
     const peopleData = useSelector(state => state.people);

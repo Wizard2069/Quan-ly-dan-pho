@@ -122,8 +122,12 @@ public class HouseholdService {
         household.setLeaveDay(Date.from(Instant.parse(leaveHouseholdDto.getLeaveDate())));
         household.setLeaveReason(leaveHouseholdDto.getLeaveReason());
         household.setPerformer(performer);
+        household.setAddress(leaveHouseholdDto.getNewAddress());
         
-        return householdRepository.save(household);
+        Household savedHousehold = householdRepository.save(household);
+        getHouseholdExtraInfo(savedHousehold);
+        
+        return savedHousehold;
     }
     
     @Transactional

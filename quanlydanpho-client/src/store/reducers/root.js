@@ -5,13 +5,16 @@ import {error} from './error';
 import {loading} from './loading';
 import {users, singleUser} from './users';
 import {people, person} from './people';
-import {family} from './family';
+import {family, addedFamily} from './family';
 import {tempAbsents, tempAbsent} from './tempAbsents';
 import {stays, stay} from './stays';
 import {idCard} from './idCard';
 import {stories, story} from './stories';
 import {deaths, death} from './deaths';
 import {households, household} from './households';
+import {familyMembers, familyMember} from './familyMembers';
+import {corrections, correction} from './corrections';
+import {householdHistories} from './householdHistories';
 
 const rootReducer = combineReducers({
     user: auth,
@@ -22,6 +25,7 @@ const rootReducer = combineReducers({
     people,
     person,
     family,
+    addedFamily,
     tempAbsents,
     tempAbsent,
     stays,
@@ -32,7 +36,12 @@ const rootReducer = combineReducers({
     deaths,
     death,
     households,
-    household
+    household,
+    familyMembers,
+    familyMember,
+    corrections,
+    correction,
+    householdHistories
 });
 
 export default rootReducer;

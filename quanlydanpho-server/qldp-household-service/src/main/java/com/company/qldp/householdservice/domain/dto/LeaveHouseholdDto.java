@@ -20,6 +20,8 @@ public class LeaveHouseholdDto {
     
     @NotNull
     @Length(min = 1)
+    private String newAddress;
+    
     private String leaveReason;
     
     @NotNull

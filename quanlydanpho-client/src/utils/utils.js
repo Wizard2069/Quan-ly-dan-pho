@@ -33,7 +33,7 @@ export const toVnDateFormat = (day) => {
 };
 
 export const toVnISOString = (date) => {
-    return new Date(date.toLocaleString() + " UTC").toISOString();
+    return new Date(date.toLocaleDateString() + " UTC").toISOString();
 };
 
 export const toVnSex = (sex) => {
