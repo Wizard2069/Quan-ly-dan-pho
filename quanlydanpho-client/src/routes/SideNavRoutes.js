@@ -15,6 +15,8 @@ import AddStay from '../pages/Stay/AddStay/AddStay';
 import Death from '../pages/Death/Death';
 import AddDeath from '../pages/Death/AddDeath/AddDeath';
 import AddUser from '../pages/Admin/AddUser/AddUser';
+import Household from '../pages/Household/Household';
+import AddHousehold from '../pages/Household/AddHousehold/AddHousehold';
 
 const SideNavRoutes = () => {
     return (
@@ -36,6 +38,9 @@ const SideNavRoutes = () => {
             
             <RoleRoute path='/deaths/list' exact component={Death} role='manager'/>
             <RoleRoute path='/deaths/add' exact component={AddDeath} role='manager'/>
+            
+            <RoleRoute path='/households/list' exact component={Household} role='manager'/>
+            <RoleRoute path='/households/add' exact component={AddHousehold} role='manager'/>
             
             <Redirect to='/account'/>
         </Switch>

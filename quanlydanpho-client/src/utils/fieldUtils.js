@@ -64,6 +64,8 @@ export const fieldsToVietnamese = (field) => {
             return 'Email';
         case 'password':
             return 'Mật khẩu';
+        case 'areaCode':
+            return 'Mã khu vực';
         default:
     }
 };

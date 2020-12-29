@@ -75,7 +75,7 @@ const AddIDCardForm = (props) => {
             <MDBRow>
                 {colInputs[0]}
                 {colInputs[1]}
-                <MDBCol md='4' style={{marginTop: '7px'}}>
+                <MDBCol md='3' style={{marginTop: '7px'}}>
                     <small className='grey-text'>Ngày cấp</small>
                     <DatePicker keyboard getPickerValue={onGetDateValue}/>
                 </MDBCol>

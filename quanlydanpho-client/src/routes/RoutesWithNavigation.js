@@ -65,6 +65,12 @@ const RoutesWithNavigation = () => {
             case '/deaths/add':
                 locationString = 'Thêm khai tử';
                 break;
+            case '/households/list':
+                locationString = 'Thống kê hộ khẩu';
+                break;
+            case '/households/add':
+                locationString = 'Thêm hộ khẩu';
+                break;
             default:
         }
         

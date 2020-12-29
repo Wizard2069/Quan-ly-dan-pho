@@ -22,7 +22,9 @@ const initialState = {
     stories: {},
     story: {},
     deaths: {},
-    death: {}
+    death: {},
+    households: {},
+    household: {}
 };
 
 export default initialState;

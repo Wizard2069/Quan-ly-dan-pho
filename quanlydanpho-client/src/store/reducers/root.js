@@ -11,6 +11,7 @@ import {stays, stay} from './stays';
 import {idCard} from './idCard';
 import {stories, story} from './stories';
 import {deaths, death} from './deaths';
+import {households, household} from './households';
 
 const rootReducer = combineReducers({
     user: auth,
@@ -29,7 +30,9 @@ const rootReducer = combineReducers({
     stories,
     story,
     deaths,
-    death
+    death,
+    households,
+    household
 });
 
 export default rootReducer;

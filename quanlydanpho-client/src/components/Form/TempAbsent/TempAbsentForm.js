@@ -102,14 +102,12 @@ const TempAbsentForm = () => {
                         style={{backgroundPosition: 'none'}}
                     >
                         <MDBRow>
-                            {colInputs[0]}
-                            {colInputs[1]}
-                            {colInputs[2]}
-                            <MDBCol md='4' style={{marginTop: '7px'}}>
+                            {colInputs}
+                            <MDBCol md='3' style={{marginTop: '7px'}}>
                                 <small className='grey-text'>Từ ngày</small>
                                 <DatePicker keyboard getPickerValue={getDateFromValue}/>
                             </MDBCol>
-                            <MDBCol md='4' style={{marginTop: '7px'}}>
+                            <MDBCol md='3' style={{marginTop: '7px'}} className='offset-md-1'>
                                 <small className='grey-text'>Đến ngày</small>
                                 <DatePicker keyboard getPickerValue={getDateToValue}/>
                             </MDBCol>

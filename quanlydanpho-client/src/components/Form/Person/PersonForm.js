@@ -28,7 +28,7 @@ const PersonForm = (props) => {
     
     const [personDto, setPersonDto] = useState({
         createdManagerUsername: user.username,
-        createdDate: new Date().toISOString()
+        createdDate: toVnISOString(new Date())
     });
     
     const validationSchema = yup.object({
@@ -140,7 +140,7 @@ const PersonForm = (props) => {
                             {colInputs[0]}
                             {colInputs[1]}
                             {props.edit ?
-                                <MDBCol md='4' style={{marginTop: '7px'}}>
+                                <MDBCol md='3' style={{marginTop: '7px'}}>
                                     <small className='grey-text'>Ngày sinh</small>
                                     <DatePicker date={props.date} keyboard getPickerValue={onGetDateValue}/>
                                 </MDBCol> :
@@ -152,7 +152,7 @@ const PersonForm = (props) => {
                                 />
                             }
                             {props.edit ?
-                                <MDBCol md='4'>
+                                <MDBCol md='4' className='offset-md-1'>
                                     <MDBSelect
                                         className='colorful-select dropdown-primary mx-2'
                                         getValue={onGetSexValue}

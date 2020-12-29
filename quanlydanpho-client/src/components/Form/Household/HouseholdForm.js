@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {getUser, toVnISOString} from '../../../utils/utils';
 import {useHistory} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import * as yup from 'yup';
@@ -9,50 +10,51 @@ import {
     MDBCardBody,
     MDBCardImage,
     MDBCol,
-    MDBRow
+    MDBRow,
+    MDBInput
 } from 'mdbreact';
 
 import '../Form.css';
 import {fieldsToVietnamese} from '../../../utils/fieldUtils';
-import {getUser, toVnISOString} from '../../../utils/utils';
 import Input from '../../Input/Input';
 import DatePicker from '../../DatePicker/DatePicker';
-import {createNewDeath} from '../../../store/actions/deaths';
+import HostModal from '../../Modal/Household/HostModal';
+import {createNewHousehold} from '../../../store/actions/households';
 
-const DeathForm = () => {
+const HouseholdForm = () => {
     const user = getUser();
     
     const history = useHistory();
     const dispatch = useDispatch();
     
-    const [deathDto, setDeathDto] = useState({
-        deletedManagerUsername: user.username
+    const [modal, setModal] = useState(false);
+    
+    const [name, setName] = useState(null);
+    
+    const [householdDto, setHouseholdDto] = useState({
+        performerName: user.username
     });
     
     const validationSchema = yup.object({
-        deathCertNumber: yup.string()
-            .required('deathCertNumber is required'),
-        declaredPersonIdCardNumber: yup.string()
-            .required('declaredPersonIdCardNumber is required'),
-        deathPersonCode: yup.string()
-            .required('deathPersonCode is required')
+        areaCode: yup.string()
+            .required('areaCode is required'),
+        address: yup.string()
+            .required('address is required')
     });
     
     const formik = useFormik({
         initialValues: {
-            deathCertNumber: '',
-            declaredPersonIdCardNumber: '',
-            deathPersonCode: '',
-            deathReason: ''
+            areaCode: '',
+            address: ''
         },
         validationSchema,
         onSubmit: (values) => {
-            const deathBody = {
-                ...deathDto,
+            const householdBody = {
+                ...householdDto,
                 ...values
             };
-            dispatch(createNewDeath(deathBody));
-            history.push('/deaths/list');
+            dispatch(createNewHousehold(householdBody));
+            history.push('/households/list');
             history.go(0);
         }
     });
@@ -73,22 +75,28 @@ const DeathForm = () => {
         }
     }
     
-    const getDeclaredDateValue = (value) => {
-        setDeathDto(prevDeathDto => {
+    const toggle = () => {
+        setModal(prevModal => !prevModal);
+    };
+    
+    const getCreatedDateValue = (value) => {
+        setHouseholdDto(prevHouseholdDto => {
             return {
-                ...prevDeathDto,
-                declaredDay: toVnISOString(value)
+                ...prevHouseholdDto,
+                createdDay: toVnISOString(value)
             };
         });
     };
     
-    const getDeathDateValue = (value) => {
-        setDeathDto(prevDeathDto => {
+    const handleOnGetHost = (id, name) => {
+        setHouseholdDto(prevHouseholdDto => {
             return {
-                ...prevDeathDto,
-                deathDay: toVnISOString(value)
+                ...prevHouseholdDto,
+                hostPersonId: id
             };
         });
+        setName(name);
+        toggle();
     };
     
     return (
@@ -99,7 +107,7 @@ const DeathForm = () => {
                     cascade
                     tag='div'
                 >
-                    <h2 className='h2-responsive mb-2'>Thêm khai tử</h2>
+                    <h2 className='h2-responsive mb-2'>Thêm hộ khẩu</h2>
                 </MDBCardImage>
                 <MDBCardBody cascade>
                     <form
@@ -109,14 +117,25 @@ const DeathForm = () => {
                         style={{backgroundPosition: 'none'}}
                     >
                         <MDBRow>
-                            {colInputs}
-                            <MDBCol md='3' style={{marginTop: '7px'}}>
-                                <small className='grey-text'>Ngày khai</small>
-                                <DatePicker keyboard getPickerValue={getDeclaredDateValue}/>
+                            <MDBCol md='4'>
+                                <MDBInput
+                                    disabled
+                                    outline
+                                    label='Chủ hộ'
+                                    icon='user'
+                                    onIconClick={toggle}
+                                    value={name ?? ''}
+                                />
                             </MDBCol>
-                            <MDBCol md='3' style={{marginTop: '7px'}} className='offset-md-1'>
-                                <small className='grey-text'>Ngày chết</small>
-                                <DatePicker keyboard getPickerValue={getDeathDateValue}/>
+                            <HostModal
+                                modal={modal}
+                                toggle={toggle}
+                                handleOnDone={(id, name) => handleOnGetHost(id, name)}
+                            />
+                            {colInputs}
+                            <MDBCol md='3' style={{marginTop: '7px', marginLeft: '2rem'}}>
+                                <small className='grey-text'>Ngày lập</small>
+                                <DatePicker keyboard getPickerValue={getCreatedDateValue}/>
                             </MDBCol>
                         </MDBRow>
                         <MDBRow>
@@ -133,4 +152,4 @@ const DeathForm = () => {
     );
 };
 
-export default React.memo(DeathForm);
+export default React.memo(HouseholdForm);

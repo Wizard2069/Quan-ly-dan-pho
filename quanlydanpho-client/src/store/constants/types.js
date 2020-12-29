@@ -53,3 +53,9 @@ export const deaths = {
     CREATE: 'qldp/deaths/create',
     GET: 'qldp/deaths/get'
 };
+
+export const households = {
+    CREATE: 'qldp/households/create',
+    GET: 'qldp/households/get',
+    GET_BY_ID: 'qldp/households/getById'
+};
