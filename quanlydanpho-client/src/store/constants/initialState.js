@@ -30,7 +30,19 @@ const initialState = {
     familyMember: {},
     corrections: {},
     correction: {},
-    householdHistories: {}
+    householdHistories: {},
+    userPetitions: {},
+    userPetition: {},
+    petitions: {},
+    petition: {},
+    presidentPetitions: {},
+    presidentPetition: {},
+    userReplies: {},
+    userReply: {},
+    replies: {},
+    reply: {},
+    presidentReplies: {},
+    presidentReply: {}
 };
 
 export default initialState;

@@ -1,6 +1,7 @@
-package com.company.qldp.requestmanagementservice.domain.assembler;
+package com.company.qldp.requestmanagementservice.web;
 
 import com.company.qldp.domain.Reply;
+import com.company.qldp.requestmanagementservice.domain.assembler.UserReplyRepresentationModelAssembler;
 import com.company.qldp.requestmanagementservice.domain.service.UserReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;

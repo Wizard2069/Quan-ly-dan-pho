@@ -76,3 +76,38 @@ export const corrections = {
 export const householdHistories = {
     GET: 'qldp/householdHistories/get'
 };
+
+export const userPetitions = {
+    CREATE: 'qldp/userPetitions/create',
+    GET: 'qldp/userPetitions/get',
+    GET_BY_ID: 'qldp/userPetitions/getById'
+};
+
+export const petitions = {
+    GET: 'qldp/petitions/get',
+    GET_BY_ID: 'qldp/petitions/getById',
+    ACCEPT: 'qldp/petitions/accept',
+    REJECT: 'qldp/petitions/reject'
+};
+
+export const presidentPetitions = {
+    GET: 'qldp/presidentPetitions/get',
+    GET_BY_ID: 'qldp/presidentPetitions/getById'
+};
+
+export const userReplies = {
+    GET: 'qldp/userReplies/get',
+    GET_BY_ID: 'qldp/userReplies/getById'
+};
+
+export const replies = {
+    GET: 'qldp/replies/get',
+    GET_BY_ID: 'qldp/replies/getById',
+    ACCEPT: 'qldp/replies/accept'
+};
+
+export const presidentReplies = {
+    CREATE: 'qldp/presidentReplies/create',
+    GET: 'qldp/presidentReplies/get',
+    GET_BY_ID: 'qldp/presidentReplies/getById'
+};

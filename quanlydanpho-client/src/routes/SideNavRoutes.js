@@ -18,6 +18,11 @@ import AddUser from '../pages/Admin/AddUser/AddUser';
 import Household from '../pages/Household/Household';
 import AddHousehold from '../pages/Household/AddHousehold/AddHousehold';
 import HouseholdDetail from '../pages/Household/HouseholdDetail/HouseholdDetail';
+import Petition from '../pages/Petition/Petition';
+import AddPetition from '../pages/Petition/AddPetition/AddPetition';
+import SinglePetitionDetail from '../pages/Petition/PetitionDetail/SinglePetitionDetail';
+import Reply from '../pages/Reply/Reply';
+import SingleReplyDetail from '../pages/Reply/ReplyDetail/SingleReplyDetail';
 
 const SideNavRoutes = () => {
     return (
@@ -44,6 +49,13 @@ const SideNavRoutes = () => {
             <RoleRoute path='/households/add' exact component={AddHousehold} role='manager'/>
             <RoleRoute path='/households/:id' exact component={HouseholdDetail} role='manager'/>
             
+            <PrivateRoute path='/petitions/list' exact component={Petition}/>
+            <RoleRoute path='/petitions/add' exact component={AddPetition} role='user'/>
+            <PrivateRoute path='/petitions/:id' exact component={SinglePetitionDetail}/>
+            
+            <PrivateRoute path='/replies/list' exact component={Reply}/>
+            <PrivateRoute path='/replies/:id' exact component={SingleReplyDetail}/>
+        
             <Redirect to='/account'/>
         </Switch>
     );

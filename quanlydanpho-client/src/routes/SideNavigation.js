@@ -94,6 +94,23 @@ const SideNavigation = (props) => {
                             {rSNL('/households/add', 'Thêm hộ khẩu')}
                         </MDBSideNavCat> : <li/>
                     }
+                    <MDBSideNavCat
+                        name='Kiến nghị'
+                        id='petitions'
+                        icon='tachometer-alt'
+                    >
+                        {rSNL('/petitions/list', 'Xem kiến nghị')}
+                        {roles.includes('user', 0) ?
+                            rSNL('/petitions/add', 'Tạo kiến nghị') : null
+                        }
+                    </MDBSideNavCat>
+                    <MDBSideNavCat
+                        name='Phản hồi'
+                        id='replies'
+                        icon='tachometer-alt'
+                    >
+                        {rSNL('/replies/list', 'Xem phản hồi')}
+                    </MDBSideNavCat>
                 </MDBSideNavNav>
             </MDBSideNav>
         </div>

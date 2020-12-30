@@ -133,7 +133,8 @@ public class ReplyService {
             PetitionSearch petitionSearch = replySearch.getPetition();
             petitionSearch.setStatus(Status.REPLIED);
             
-            replySearch.setStatus(reply.getBody().getStatus());
+            replySearch.setPetition(petitionSearch);
+            replySearch.setStatus(Status.SENT_TO_USER);
         
             return replySearchRepository.save(replySearch);
         }).subscribe(Mono::subscribe);

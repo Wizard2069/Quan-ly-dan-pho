@@ -15,6 +15,12 @@ import {households, household} from './households';
 import {familyMembers, familyMember} from './familyMembers';
 import {corrections, correction} from './corrections';
 import {householdHistories} from './householdHistories';
+import {userPetitions, userPetition} from './userPetitions';
+import {petitions, petition} from './petitions';
+import {presidentPetitions, presidentPetition} from './presidentPetitions';
+import {userReplies, userReply} from './userReplies';
+import {replies, reply} from './replies';
+import {presidentReplies, presidentReply} from './presidentReplies';
 
 const rootReducer = combineReducers({
     user: auth,
@@ -41,7 +47,19 @@ const rootReducer = combineReducers({
     familyMember,
     corrections,
     correction,
-    householdHistories
+    householdHistories,
+    userPetitions,
+    userPetition,
+    petitions,
+    petition,
+    presidentPetitions,
+    presidentPetition,
+    userReplies,
+    userReply,
+    replies,
+    reply,
+    presidentReplies,
+    presidentReply
 });
 
 export default rootReducer;

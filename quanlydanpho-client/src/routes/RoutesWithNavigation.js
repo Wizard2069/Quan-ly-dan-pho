@@ -74,6 +74,21 @@ const RoutesWithNavigation = () => {
             case String(location.match(/\/households\/[0-9]+/g)):
                 locationString = 'Thông tin hộ khẩu';
                 break;
+            case '/petitions/list':
+                locationString = 'Kiến nghị';
+                break;
+            case '/petitions/add':
+                locationString = 'Tạo kiến nghị';
+                break;
+            case String(location.match(/\/petitions\/[0-9]+/g)):
+                locationString = 'Chi tiết kiến nghị';
+                break;
+            case '/replies/list':
+                locationString = 'Phản hồi';
+                break;
+            case String(location.match(/\/replies\/[0-9]+/g)):
+                locationString = 'Chi tiết phản hồi';
+                break;
             default:
         }
         

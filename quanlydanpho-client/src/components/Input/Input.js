@@ -3,7 +3,7 @@ import {MDBCol, MDBInput} from 'mdbreact';
 
 const Input = (props) => {
     return (
-        <MDBCol md='4'>
+        <MDBCol md={props.md ?? '4'}>
             <MDBInput
                 disabled={props.disabled}
                 outline

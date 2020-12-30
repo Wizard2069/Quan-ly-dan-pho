@@ -3,6 +3,7 @@ package com.company.qldp.requestmanagementservice.domain.assembler;
 import com.company.qldp.common.assembler.SimpleIdentifiableReactiveRepresentationModelAssembler;
 import com.company.qldp.domain.Reply;
 import com.company.qldp.elasticsearchservice.web.UserReplySearchController;
+import com.company.qldp.requestmanagementservice.web.UserReplyController;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
